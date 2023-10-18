@@ -18,11 +18,11 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('phoneNumber');
+            $table->string('password', 255);
+            $table->string('phoneNumber', 12);
             $table->enum("type", ["regular", "seller"]);
             $table->enum("gender", ["man", "woman", "other"]);
-            $table->string("profilePicture")->nullable();
+            $table->string("profilePicture", 255)->nullable();
             $table->double("saldo");
             $table->boolean("autoTopup");
             $table->rememberToken();
