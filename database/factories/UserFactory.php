@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,21 +24,25 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->name;
+        $faker = FakerFactory::create('id_ID');
         $type = ["regular", "seller"];
-        $gender = ["man", "woman", "other"];
+        $genderList = ["man", "woman", "other"];
+        $gender = $genderList[$faker->numberBetween(0, 2)];
+        $name = $faker->firstName($gender) . " " . $faker->lastName;
+        $expl = explode(" ", $name);
         return [
             'name' => $name,
-            'email' => $this->faker->unique()->safeEmail,
+            'username' => $expl[0],
+            'email' => "$expl[0].$expl[1]@gmail.com",
             'email_verified_at' => now(),
-            'password' => Hash::make(explode(" ", $name)[0]), // password
+            'password' => Hash::make($expl[0]), // password
             'remember_token' => Str::random(10),
-            'phoneNumber' => "08" . $this->faker->unique()->numerify("##########"),
-            "type" => $type[$this->faker->numberBetween(0, 1)],
-            "gender" => $gender[$this->faker->numberBetween(0, 1)],
-            "profilePicture" => $this->faker->imageUrl(360, 360, 'people', true),
-            "saldo" => $this->faker->numberBetween(1, 9) * 10000,
-            "autoTopup" => $this->faker->numberBetween(0, 1)
+            'phoneNumber' => "08" . $faker->unique()->numerify("##########"),
+            "type" => $type[$faker->numberBetween(0, 1)],
+            "gender" => $gender,
+            "profilePicture" => $faker->imageUrl(360, 360, 'people', true),
+            "saldo" => $faker->numberBetween(1, 9) * 10000,
+            "autoTopup" => $faker->numberBetween(0, 1)
         ];
     }
 }
