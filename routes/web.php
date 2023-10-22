@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
-Route::middleware("auth")->group(function () {
+Auth::routes(['verify' => true]);
+Route::middleware(["auth", 'verified'])->group(function () {
     Route::get('/', function () {
         return redirect("/home");
     });
