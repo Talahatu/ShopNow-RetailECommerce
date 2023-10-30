@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\JsonResponse;
 
 class VerificationController extends Controller
 {

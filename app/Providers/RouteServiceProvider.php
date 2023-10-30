@@ -19,6 +19,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
+    public const NOTICE = '/email/verify';
+
+    public const REG = '/register';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *

@@ -1,7 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes(['verify' => true]);
+Route::get('/', function () {
+    return redirect("/home");
+});
+
+Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::middleware(["auth", 'verified'])->group(function () {
-    Route::get('/', function () {
-        return redirect("/home");
-    });
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });

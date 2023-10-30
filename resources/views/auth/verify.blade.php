@@ -27,7 +27,8 @@
                                 @csrf
                                 <button type="submit"
                                     class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                            </form>
+                            </form><br>
+                            <a href="{{ route('reregister') }}">Wrong email? Please re-register again!</a>
                         </div>
                     </div>
                 </div>
