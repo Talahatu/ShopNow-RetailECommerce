@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('mdb5/css/mdb.min.css') }}" />
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @laravelPWA
 </head>
 
@@ -39,6 +40,7 @@
             })
         });
     </script>
+    @yield('js')
 </body>
 
 </html>

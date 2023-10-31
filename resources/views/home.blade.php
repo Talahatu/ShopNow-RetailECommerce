@@ -27,7 +27,7 @@
                             </h2>
                             <p class="text-white">No matter how far along you are in your sophistication as an amateur
                                 astronomer, there is always one.</p>
-                            <a href="#" class="btn btn-light shadow-0 text-dark"> View more </a>
+                            {{-- <a href="#" class="btn btn-light shadow-0 text-dark"> View more </a> --}}
                         </div>
                     </div>
                 </div>

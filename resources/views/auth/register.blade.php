@@ -106,6 +106,7 @@
                                             type="submit">{{ __('Register') }}</button>
                                     </div>
                                 </form>
+                                <h6><a href="{{ route('login') }}">Already have an account? Login now!</a></h6>
                             </div>
                         </div>
                     </div>
