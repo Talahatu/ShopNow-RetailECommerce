@@ -16,8 +16,10 @@
     <!-- MDB -->
     <link rel="stylesheet" href="{{ asset('mdb5/css/mdb.min.css') }}" />
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <!-- CSS -->
+    @yield('css')
     @laravelPWA
 </head>
 
@@ -34,7 +36,6 @@
     <!-- Custom scripts -->
     <script type="text/javascript">
         $(document).ready(function() {
-            console.log("Ready");
             $(document).on("click", "#logout", function() {
                 $(this).parent().submit()
             })

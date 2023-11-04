@@ -39,4 +39,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relationships
+    public function addresses()
+    {
+        $this->hasMany(Address::class, "user_id", "id");
+    }
+
+    //functions
+    public static function deleteUser($id)
+    {
+        return User::find($id)->delete();
+    }
 }

@@ -19,9 +19,14 @@
                                 target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i>
                                 <p class="d-none d-md-block mb-0">Wishlist</p>
                             </a>
-                            <a href="#" class="border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            <a href="#" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
                                 target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i>
                                 <p class="d-none d-md-block mb-0">My cart</p>
+                            </a>
+                            <a href="{{ route('seller.create') }}"
+                                class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                                <i class="fas fa-shopping-bag m-1 me-md-2"></i>
+                                <p class="d-none d-md-block mb-0">Seller Hub</p>
                             </a>
                         @endif
                         <a class="dropdown-toggle py-1 px-3 nav-link d-flex align-items-center hidden-arrow"
@@ -34,9 +39,6 @@
                             @if (Auth::check())
                                 <li>
                                     <a class="dropdown-item" href="{{ route('profile') }}">My profile</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Settings</a>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">

@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\User;
+use Database\Factories\AddressFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

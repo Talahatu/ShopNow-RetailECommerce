@@ -5,12 +5,14 @@
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col col-lg-10 col-md-10">
                 <div class="card" style="border-radius: 1rem;">
-                    <div class="row g-0">
-                        <div class="col-md-6 col-lg-5 d-none d-md-block">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 d-none d-md-block">
                             <img src="{{ asset('images/shoppingVector.jpg') }}" alt="login form" class="img-fluid"
-                                style="border-radius: 1rem 0 0 1rem;object-fit:cover;height:100%" />
+                                style="border-radius: 1rem 1rem 0 1rem;object-fit:cover;height:30vh;width:100%" />
                         </div>
-                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                    </div>
+                    <div class="row g-0">
+                        <div class="col-md-12 col-lg-12 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
                                 <form method="POST" action="{{ route('register') }}">
                                     @csrf
@@ -56,6 +58,7 @@
                                             class="form-control form-control-lg @error('address') is-invalid @enderror"
                                             name="address" value="{{ old('address') }}" required autofocus
                                             autocomplete="address" />
+                                        <input type="hidden" name="latlng" id="ll">
                                         <label class="form-label" for="address">{{ __('Home Address') }}</label>
                                         @error('address')
                                             <span class="invalid-feedback" role="alert">
@@ -63,6 +66,7 @@
                                             </span>
                                         @enderror
                                     </div>
+                                    <div id="map" style="height: 180px" class="mb-4"></div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="email"
@@ -114,4 +118,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/register.js') }}"></script>
 @endsection

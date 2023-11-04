@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,12 +28,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $categories = Category::all();
+        return view('home', compact("categories"));
     }
 
     public function reregister()
     {
-        User::find(Auth::user()->id)->delete();
+        User::deleteUser(Auth::user()->id);
         Cookie::queue(Cookie::forget(strtolower(config('app.name')) . '_session'));
         return redirect()->route('register')->with("verifyfailed", "Please re-register again!");
     }

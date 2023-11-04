@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -79,6 +80,7 @@ class RegisterController extends Controller
             : redirect($this->redirectPath());
     }
 
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -87,11 +89,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $latlng = explode(",", $data["latlng"]);
+        $u = User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        Address::create([
+            "user_id" => $u->id,
+            "name" => $data["address"],
+            "lat" => $latlng[0],
+            "long" => $latlng[1],
+            "current" => 1
+        ]);
+        return $u;
     }
 }

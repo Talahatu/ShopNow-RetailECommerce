@@ -1,0 +1,45 @@
+:root {
+    --navlink-hover: #f7f7f7;
+    --scrollbar-handle: #b3b3b3;
+    --scrollbar-handle-hover: #717171;
+    --logo-color: #5b86b9;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-handle-hover) var(--scrollbar-handle);
+}
+
+/* The scrollbar track */
+::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+}
+
+/* The scrollbar handle */
+::-webkit-scrollbar-thumb {
+    background: var(
+        --scrollbar-handle
+    ); /* Adjust the color of the scrollbar handle */
+    border-radius: 5px; /* Rounds the corners of the scrollbar handle */
+}
+
+/* The scrollbar handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(
+        --scrollbar-handle-hover
+    ); /* Adjust the color of the scrollbar handle on hover */
+}
+
+.nav-parent {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+.nav .nav-link {
+    background-color: white;
+}
+.nav .nav-link:hover {
+    background-color: var(--navlink-hover);
+}
+.card-banner {
+    background-color: var(--logo-color);
+}
