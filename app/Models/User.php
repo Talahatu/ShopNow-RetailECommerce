@@ -51,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return User::find($id)->delete();
     }
+
+    public static function checkVerifyEmail(User $u)
+    {
+        return $u->hasVerifiedEmail();
+    }
 }

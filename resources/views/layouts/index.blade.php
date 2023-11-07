@@ -39,6 +39,10 @@
             $(document).on("click", "#logout", function() {
                 $(this).parent().submit()
             })
+
+            $("#alertClose").on("click", function() {
+                ($(this).parent()[0]).remove()
+            });
         });
     </script>
     @yield('js')

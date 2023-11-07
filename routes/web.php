@@ -25,6 +25,11 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::middleware(["auth"])->group(function () {
+    Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');
+    Route::post("/change-email", [HomeController::class, 'changeEmail'])->name('change.email');
+    Route::get("/verify-email", [HomeController::class, "verifyLoggedEmail"])->name("verify.logged.email");
+
     Route::get("/profile", [UserController::class, "profile"])->name('profile');
+    Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
     Route::resource("seller", ShopController::class);
 });
