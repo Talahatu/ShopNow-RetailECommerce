@@ -4,31 +4,28 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
-var marker = L.marker();
+var marker = L.marker(L.latLng(3.57898, 98.635307)).addTo(map);
 $(document).ready(function () {
+    if ($("#address").val()) {
+        let address = $("#address").val();
+        geocodeRequest(address);
+    }
+
+    $(".changeCheck").on("change", function () {
+        if (
+            $("#address").val() != "" &&
+            $("#image").val() != "" &&
+            $("#name").val() != "" &&
+            $("#phoneNumber").val() != ""
+        )
+            $("#btnsbmt").attr("disabled", false);
+    });
     $("#address").on("change", function () {
         var address = $(this).val();
+        map.removeLayer(marker);
         map.on("click", onMapClick);
-        $.get(
-            location.protocol +
-                "//nominatim.openstreetmap.org/search?format=json&q=" +
-                address,
-            function (data) {
-                const location = data[0];
-                map.setView(L.latLng(location.lat, location.lon), 15);
-                $("#ll").val(`${location.lat},${location.lon}`);
-
-                // Draw map & marker
-                L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                    maxZoom: 19,
-                    attribution:
-                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                }).addTo(map);
-                marker = L.marker(L.latLng(location.lat, location.lon)).addTo(
-                    map
-                );
-            }
-        );
+        $("#btnsbmt").attr("disabled", true);
+        geocodeRequest(address);
     });
 
     $("#image").on("change", function (event) {
@@ -53,4 +50,26 @@ const displaySelectedImage = (event, elementId) => {
 
         reader.readAsDataURL(fileInput.files[0]);
     }
+};
+
+const geocodeRequest = (address) => {
+    $.get(
+        location.protocol +
+            "//nominatim.openstreetmap.org/search?format=json&q=" +
+            address,
+        function (data) {
+            const location = data[0];
+            map.setView(L.latLng(location.lat, location.lon), 15);
+            $("#ll").val(`${location.lat},${location.lon}`);
+
+            // Draw map & marker
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            }).addTo(map);
+            marker = L.marker(L.latLng(location.lat, location.lon)).addTo(map);
+            $("#btnsbmt").attr("disabled", false);
+        }
+    );
 };

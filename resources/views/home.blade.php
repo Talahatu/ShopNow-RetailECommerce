@@ -5,7 +5,7 @@
 @endsection
 @section('content')
     <!--  intro  -->
-    <div class="container mt-4">
+    <div class="container mt-4" id="categoryContainer">
         <main class="card p-3 shadow-2-strong">
             <div class="row">
                 <div class="col-lg-3 nav-parent">

@@ -3,6 +3,7 @@
     --scrollbar-handle: #b3b3b3;
     --scrollbar-handle-hover: #717171;
     --logo-color: #5b86b9;
+    --card-background: #191c24;
 }
 
 html {
@@ -41,5 +42,8 @@ html {
     background-color: var(--navlink-hover);
 }
 .card-banner {
-    background-color: var(--logo-color);
+    background-color: var(--card-background);
+}
+.categoryContainer {
+    background-color: var(--card-background);
 }

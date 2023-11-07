@@ -75,9 +75,9 @@
     <!-- Jumbotron -->
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient text-white">
+    {{-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient text-white">
         <!-- Container wrapper -->
-        {{-- <div class="container justify-content-center justify-content-md-between">
+        <div class="container justify-content-center justify-content-md-between">
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
                 data-mdb-target="#navbarLeftAlignExample" aria-controls="navbarLeftAlignExample" aria-expanded="false"
@@ -87,8 +87,8 @@
 
             <!-- Collapsible wrapper -->
             <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
-            <!-- Left links -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="#">Categories</a>
                     </li>
@@ -108,10 +108,10 @@
                         <a class="nav-link" href="#">Menu name</a>
                     </li>
                 </ul>
-            <!-- Left links -->
+                <!-- Left links -->
             </div>
         </div>
-        <!-- Container wrapper --> --}}
-    </nav>
+        <!-- Container wrapper -->
+    </nav> --}}
     <!-- Navbar -->
 </header>

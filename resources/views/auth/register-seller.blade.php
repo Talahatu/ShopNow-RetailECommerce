@@ -34,7 +34,7 @@
                                             <div class="btn btn-dark btn-rounded">
                                                 <label class="form-label text-white m-1" for="image">Choose
                                                     Image</label>
-                                                <input type="file" name="image" class="form-control d-none"
+                                                <input type="file" name="image" class="form-control d-none changeCheck"
                                                     id="image" />
                                                 @error('image')
                                                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
@@ -45,10 +45,10 @@
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="name"
-                                            class="form-control form-control-lg @error('name') is-invalid @enderror"
+                                            class="form-control form-control-lg @error('name') is-invalid @enderror changeCheck"
                                             name="name" value="{{ old('name') }}" required autofocus
                                             autocomplete="name" />
-                                        <label class="form-label" for="name">{{ __('Name') }}</label>
+                                        <label class="form-label" for="name">{{ __('Shop Name') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -56,10 +56,12 @@
                                         @enderror
                                     </div>
                                     <div class="form-outline mb-4">
-                                        <textarea type="text" id="desc" class="form-control form-control-lg @error('desc') is-invalid @enderror"
-                                            name="desc" value="{{ old('desc') }}" autofocus autocomplete="description" rows="2"></textarea>
-                                        <label class="form-label" for="desc">{{ __('Description') }}</label>
-                                        @error('desc')
+                                        <input type="tel" id="phoneNumber"
+                                            class="form-control form-control-lg @error('phoneNumber') is-invalid @enderror changeCheck"
+                                            name="phoneNumber" value="{{ old('phoneNumber') }}" autofocus
+                                            autocomplete="phoneNumber">
+                                        <label class="form-label" for="desc">{{ __('phoneNumber') }}</label>
+                                        @error('phoneNumber')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -67,22 +69,22 @@
                                     </div>
                                     <div class="form-outline mb-4">
                                         <input type="text" id="address"
-                                            class="form-control form-control-lg @error('address') is-invalid @enderror"
+                                            class="form-control form-control-lg @error('address') is-invalid @enderror changeCheck"
                                             name="address" value="{{ old('address') }}" required autofocus
                                             autocomplete="address" />
                                         <input type="hidden" name="latlng" id="ll">
                                         <label class="form-label" for="address">{{ __('Shop Address') }}</label>
-                                        @error('address')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
                                     </div>
+                                    @error('address')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                     <div id="map" style="height: 180px" class="mb-4"></div>
 
                                     <div class="pt-1 mb-4">
-                                        <button class="btn btn-dark btn-lg btn-block"
-                                            type="submit">{{ __('Open Account') }}</button>
+                                        <button class="btn btn-dark btn-lg btn-block" disabled type="submit"
+                                            id="btnsbmt">{{ __('Open Account') }}</button>
                                     </div>
                                 </form>
                             </div>

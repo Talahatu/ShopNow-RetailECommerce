@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
@@ -13,7 +15,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        //
+        return view('merchant.index');
     }
 
     /**
@@ -23,6 +25,8 @@ class ShopController extends Controller
      */
     public function create()
     {
+        $exists = Shop::where("user_id", Auth::user()->id)->get();
+        if ($exists) return redirect()->route('seller.index');
         return view('auth.register-seller');
     }
 
@@ -34,7 +38,29 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'phoneNumber' => 'required'
+        ]);
+        $latlong = explode(",", $request->get("latlng"));
+        $file = $request->file("image");
+        $ext = $file->getClientOriginalExtension();
+        $filename = "shop_" . time() . "." . $ext;
+        $path = public_path() . '/shopimages';
+        $file->move($path, $filename);
+
+        $newShop = new Shop();
+        $newShop->user_id = Auth::user()->id;
+        $newShop->name = $request->get("name");
+        $newShop->phoneNumber = $request->get("phoneNumber");
+        $newShop->address = $request->get("address");
+        $newShop->lat = $latlong[0];
+        $newShop->long = $latlong[1];
+        $newShop->logoImage = $filename;
+        $newShop->save();
+        return view('merchant.index', compact("newShop"));
     }
 
     /**
