@@ -1,10 +1,1 @@
-$(document).ready(function () {
-    $("#oc").hover(
-        function () {
-            // over
-        },
-        function () {
-            // out
-        }
-    );
-});
+$(document).ready(function () {});

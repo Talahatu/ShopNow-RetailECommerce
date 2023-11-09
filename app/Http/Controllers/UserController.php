@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +13,16 @@ class UserController extends Controller
     //
     public function profile()
     {
-        return view('regular.profile');
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('regular.profile', compact("shop"));
     }
 
+    public function getAddAddressForm(Request $request)
+    {
+        return response()->json([
+            "content" => view("regular.modals.newAddressForm")->render()
+        ]);
+    }
     public function updateProfile(Request $request)
     {
         $request->validate([
@@ -37,8 +45,10 @@ class UserController extends Controller
             $file->move($path, $filename);
             $user->profilePicture = $filename;
         }
-
         $user->save();
         return redirect()->route('profile');
+    }
+    public function addNewAddress(Request $request)
+    {
     }
 }

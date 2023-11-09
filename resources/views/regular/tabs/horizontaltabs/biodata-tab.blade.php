@@ -75,7 +75,6 @@
             {{ Auth::user()->gender == 'woman' ? 'Checked' : '' }}>
         <label class="form-check-label" for="woman">Woman</label>
     </div>
-
     <div class="form-check form-check-inline mb-4">
         <input class="form-check-input" type="radio" name="gender" id="other" value="other"
             {{ Auth::user()->gender == 'other' ? 'Checked' : '' }}>

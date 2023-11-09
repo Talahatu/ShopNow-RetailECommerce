@@ -5,7 +5,7 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 var popup = L.popup();
-var marker = L.marker();
+var marker = L.marker(L.latLng(3.57898, 98.635307)).addTo(map);
 $(document).ready(function () {
     $("#address").on("change", function () {
         var address = $(this).val();

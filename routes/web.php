@@ -31,5 +31,16 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get("/profile", [UserController::class, "profile"])->name('profile');
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
+
+    Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
+    Route::post("/add-new-address", [UserController::class, "addNewAddress"])->name("address.create");
+});
+
+Route::middleware(["auth", "seller"])->group(function () {
     Route::resource("seller", ShopController::class);
+});
+
+
+Route::get("/test", function () {
+    return view('regular.modals.newAddressForm');
 });

@@ -6,7 +6,7 @@
                 <!-- Left elements -->
                 <div class="col-lg-2 col-sm-4 col-4">
                     <a href="/" class="float-start">
-                        <img src="{{ asset('images/logoshpnw2_ver3.PNG') }}" height="50" />
+                        <img src="{{ asset('images/logoshpnw2_ver3.PNG') }}" height="35" />
                     </a>
                 </div>
                 <!-- Left elements -->
@@ -15,10 +15,6 @@
                 <div class="order-lg-last col-lg-5 col-sm-8 col-8">
                     <div class="d-flex float-end">
                         @if (Auth::check() && Auth::user()->hasVerifiedEmail())
-                            <a href="#" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
-                                target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i>
-                                <p class="d-none d-md-block mb-0">Wishlist</p>
-                            </a>
                             <a href="#" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
                                 target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i>
                                 <p class="d-none d-md-block mb-0">My cart</p>
@@ -39,6 +35,9 @@
                             @if (Auth::check())
                                 <li>
                                     <a class="dropdown-item" href="{{ route('profile') }}">My profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Wishlist</a>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">
@@ -103,44 +102,48 @@
     @endif
 
 
-    <!-- Navbar -->
-    {{-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient text-white">
-        <!-- Container wrapper -->
-        <div class="container justify-content-center justify-content-md-between">
-            <!-- Toggle button -->
-            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                data-mdb-target="#navbarLeftAlignExample" aria-controls="navbarLeftAlignExample" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
+    {{-- <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B"> --}}
+    <!-- Container wrapper -->
+    {{-- <div class="container-fluid">
 
-            <!-- Collapsible wrapper -->
-            <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
-                <!-- Left links -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Hot offers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Gift boxes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Menu item</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Menu name</a>
-                    </li>
-                </ul>
-                <!-- Left links -->
-            </div>
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="#">Categories:</a>
+
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <!-- Link -->
+                <li class="nav-item acitve">
+                    <a class="nav-link text-white" href="#">All</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Shirts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Sport wears</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Outwears</a>
+                </li>
+
+            </ul>
+
+            <!-- Search -->
+            <form class="w-auto py-1" style="max-width: 12rem">
+                <input type="search" class="form-control rounded-0" placeholder="Search" aria-label="Search">
+            </form>
+
         </div>
-        <!-- Container wrapper -->
-    </nav> --}}
+    </div> --}}
+    <!-- Container wrapper -->
+    {{-- </nav> --}}
     <!-- Navbar -->
 </header>

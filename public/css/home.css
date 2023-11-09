@@ -31,8 +31,11 @@ html {
     ); /* Adjust the color of the scrollbar handle on hover */
 }
 
-.nav-parent {
+.nav-parent,
+#navbarSupportedContent2 {
     max-height: 300px;
+}
+#navbarSupportedContent2 {
     overflow-y: scroll;
 }
 .nav .nav-link {
