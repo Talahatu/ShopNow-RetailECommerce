@@ -6,7 +6,7 @@
                 <!-- Left elements -->
                 <div class="col-lg-2 col-sm-4 col-4">
                     <a href="/" class="float-start">
-                        <img src="{{ asset('images/logoshpnw2_ver3.PNG') }}" height="35" />
+                        <img src="{{ asset('images/logoshpnw2_ver4.PNG') }}" height="35" />
                     </a>
                 </div>
                 <!-- Left elements -->

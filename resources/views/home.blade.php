@@ -213,6 +213,60 @@
         </div>
     </section>
     <!-- Products -->
+
+    <!-- Recently viewed -->
+    <section class="mt-5 mb-4">
+        <div class="container text-light">
+            <header class="">
+                <h3 class="section-title">Recently viewed</h3>
+            </header>
+
+            <div class="row gy-3">
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" />
+                    </a>
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/2.webp" />
+                    </a>
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/3.webp" />
+                    </a>
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/4.webp" />
+                    </a>
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" />
+                    </a>
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-2 col-md-4 col-4">
+                    <a href="#" class="img-wrap">
+                        <img height="200" width="200" class="img-thumbnail"
+                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Recently viewed -->
 @endsection
 @section('js')
     <script src="{{ asset('js/home.js') }}"></script>

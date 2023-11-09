@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="row w-100 ">
-            <div class="col-3 card p-3 shadow-2-strong overflow-auto d-none d-md-block" style="height:50vh;">
+            <div class="col-3 card p-3 shadow-2-strong overflow-auto d-none d-md-block" style="height:30vh;">
                 <!-- Tab navs -->
                 <div class="nav flex-column nav-tabs text-center" id="v-tabs-tab" role="tablist"
                     aria-orientation="vertical">

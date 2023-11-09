@@ -1,6 +1,11 @@
 :root {
     --dark-background: #191c24;
+    --dark-background-2: #353b4d;
 }
 body {
     background-color: var(--dark-background);
+}
+
+footer {
+    background-color: var(--dark-background-2);
 }
