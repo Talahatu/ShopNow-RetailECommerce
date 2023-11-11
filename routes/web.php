@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -34,10 +35,12 @@ Route::middleware(["auth"])->group(function () {
 
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/add-new-address", [UserController::class, "addNewAddress"])->name("address.create");
+    Route::post("/set-cur-addr", [UserController::class, "setCurAddr"])->name("address.set");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {
     Route::resource("seller", ShopController::class);
+    Route::resource('product', ProductController::class);
 });
 
 

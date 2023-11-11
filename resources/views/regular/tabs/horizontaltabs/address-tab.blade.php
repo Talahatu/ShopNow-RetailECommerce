@@ -4,24 +4,7 @@
     Add new address
 </button>
 
-<div class="list-group">
-    @foreach (Auth::user()->addresses as $item)
-        <a href="#" class="list-group-item list-group-item-action {{ $item->current == 1 ? 'active' : '' }}"
-            aria-current="true">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ $item->name }} <span class="badge bg-success">{{ __('Home') }}</span></h5>
-                <small>{{ $item->current == 1 ? 'Current' : '' }}</small>
-            </div>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-info btn-update">Ubah</button>
-                @if ($item->current != 1)
-                    <button type="button" class="btn btn-danger btn-delete" id="deleteAddress">Hapus</button>
-                    <button type="button" class="btn btn-outline-info btn-sm">Set as current address</button>
-                @endif
-                <input type="hidden" class="dia" attr-dia="{{ $item->id }}">
-            </div>
-        </a>
-    @endforeach
+<div class="list-group" id="list-address">
     @isset($shop)
         <a href="#" class="list-group-item list-group-item-warning" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
@@ -29,8 +12,30 @@
             </div>
             <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-info btn-update">Ubah</button>
-                <input type="hidden" class="dia" attr-dia="{{ $shop->id }}">
             </div>
+            <input type="hidden" class="dia" attr-dia="{{ $shop->id }}">
         </a>
     @endisset
+    @foreach (Auth::user()->addresses as $item)
+        <a href="#"
+            class="list-group-item list-group-item-action {{ $item->current == 1 ? 'active' : '' }} address-item"
+            aria-current="true">
+            <div class="d-flex w-100 justify-content-between address-content">
+                <h5 class="mb-1">{{ $item->name }} <span class="badge bg-success">{{ __('Home') }}</span></h5>
+                @if ($item->current == 1)
+                    <small>Current</small>
+                @else
+                    <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current
+                        address</button>
+                @endif
+            </div>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-info btn-update">Ubah</button>
+                @if ($item->current != 1)
+                    <button type="button" class="btn btn-danger btn-delete" id="deleteAddress">Hapus</button>
+                @endif
+            </div>
+            <input type="hidden" class="dia" attr-dia="{{ $item->id }}">
+        </a>
+    @endforeach
 </div>

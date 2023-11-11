@@ -70,10 +70,61 @@ $(function () {
                 latlng: $("#ll").val(),
             },
             success: function (response) {
-                console.log(response);
+                $a = response.data;
                 $("#exampleModal").modal("hide");
                 $("#modalTitle").html("");
                 $("#modalBody").html("");
+                $("#list-address").append(`
+                <a href="#" class="list-group-item list-group-item-action address-item" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between address-content">
+                        <h5 class="mb-1">${$a.name} <span class="badge bg-success">Home</span></h5>
+                        <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current address</button>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-info btn-update">Ubah</button>
+                        <button type="button" class="btn btn-danger btn-delete" id="deleteAddress">Hapus</button>
+                    </div>
+                    <input type="hidden" class="dia" attr-dia="${$a.id}">
+                </a>
+                `);
+            },
+        });
+    });
+
+    $(document).on("click", ".set-current-addr", function () {
+        const parent = $(this).parent().parent();
+        const i = $(parent).find(".dia");
+        $.ajax({
+            type: "POST",
+            url: "/set-cur-addr",
+            data: {
+                _token: csrfToken,
+                id: $(i).attr("attr-dia"),
+            },
+            success: function (response) {
+                if (response.status == "OK") {
+                    var prevCur = $(".address-item.active");
+                    $(prevCur).find("small").remove();
+                    $(prevCur)
+                        .find(".address-content")
+                        .append(
+                            `<button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current address</button>`
+                        );
+                    $(prevCur)
+                        .find(".btn-group")
+                        .append(
+                            `<button type="button" class="btn btn-danger btn-delete" id="deleteAddress">Hapus</button>`
+                        );
+                    $(prevCur).removeClass("active");
+                    console.log(prevCur);
+
+                    $(parent).addClass("active");
+                    $(parent).find(".set-current-addr").remove();
+                    $(parent)
+                        .find(".address-content")
+                        .append(`<small>Current</small>`);
+                    $(parent).find(".btn-delete").remove();
+                }
             },
         });
     });
