@@ -17,7 +17,7 @@ class CheckSeller
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->isSeller($request)) abort(Response::HTTP_UNAUTHORIZED);
+        if (!$this->isSeller($request)) return redirect('login');
         return $next($request);
     }
 
