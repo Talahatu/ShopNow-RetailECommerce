@@ -12,9 +12,12 @@ const mix = require("laravel-mix");
  */
 
 mix.js("resources/js/app.js", "public/js")
+    .js("resources/js/index.js", "public/js")
     .js("resources/js/profile.js", "public/js")
     .js("resources/js/register.js", "public/js")
     .js("resources/js/register-seller.js", "public/js")
     .js("resources/js/home.js", "public/js")
+    .js("resources/js/product.js", "public/js")
     .sass("resources/sass/app.scss", "public/css")
+    .copy("node_modules/leaflet/dist/images", "public/css/images")
     .sourceMaps();

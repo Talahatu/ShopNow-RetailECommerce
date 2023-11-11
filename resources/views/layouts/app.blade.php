@@ -17,13 +17,6 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- jQuery -->
-    <script src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
-
-    <!-- LeafletJS -->
-    <link rel="stylesheet" href="{{ asset('leafletjs/leaflet.css') }}" />
-    <script src="{{ asset('leafletjs/leaflet.js') }}"></script>
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>

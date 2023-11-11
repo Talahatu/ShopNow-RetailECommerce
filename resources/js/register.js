@@ -1,3 +1,15 @@
+import $ from "jquery";
+
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "/images/vendor/leaflet/dist/marker-icon-2x.png",
+    iconUrl: "/images/vendor/leaflet/dist/marker-icon.png",
+    shadowUrl: "/images/vendor/leaflet/dist/marker-shadow.png",
+});
+
 var map = L.map("map").setView([3.57898, 98.635307], 15);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 15,

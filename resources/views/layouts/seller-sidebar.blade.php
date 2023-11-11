@@ -49,7 +49,7 @@
         <li class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" id="navDashboard">
             <a class="nav-link" href="index.html">
                 <span class="menu-icon">
                     <i class="mdi mdi-speedometer"></i>
@@ -57,7 +57,7 @@
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" id="navProduct">
             <a class="nav-link" data-bs-toggle="collapse" href="#product-page" aria-expanded="false"
                 aria-controls="product-page">
                 <span class="menu-icon">
@@ -68,9 +68,11 @@
             </a>
             <div class="collapse" id="product-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">My Products</a>
+                    <li class="nav-item" id="myproduct"> <a class="nav-link" href="{{ route('product.index') }}">My
+                            Products</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('product.create') }}">Add new
+                    <li class="nav-item" id="newproduct"> <a class="nav-link" href="{{ route('product.create') }}">Add
+                            new
                             Product</a></li>
                 </ul>
             </div>

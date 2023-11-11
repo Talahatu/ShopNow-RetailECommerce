@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('corona/css/style.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('corona/images/favicon.png') }}" />
+    @yield('css')
 </head>
 
 <body>
@@ -67,13 +68,15 @@
     <!-- inject:js -->
     <script src="{{ asset('corona/js/off-canvas.js') }}"></script>
     <script src="{{ asset('corona/js/hoverable-collapse.js') }}"></script>
-    <script src="{{ asset('corona/js/misc.js') }}"></script>
+    {{-- <script src="{{ asset('corona/js/misc.js') }}"></script> --}}
     <script src="{{ asset('corona/js/settings.js') }}"></script>
     <script src="{{ asset('corona/js/todolist.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{{ asset('corona/js/dashboard.js') }}"></script>
     <!-- End custom js for this page -->
+
+    @yield('js')
 </body>
 
 </html>

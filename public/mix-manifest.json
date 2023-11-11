@@ -1,8 +1,15 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/index.js": "/js/index.js",
     "/js/profile.js": "/js/profile.js",
     "/js/register.js": "/js/register.js",
     "/js/register-seller.js": "/js/register-seller.js",
     "/js/home.js": "/js/home.js",
-    "/css/app.css": "/css/app.css"
+    "/js/product.js": "/js/product.js",
+    "/css/app.css": "/css/app.css",
+    "/css/images/layers-2x.png": "/css/images/layers-2x.png",
+    "/css/images/layers.png": "/css/images/layers.png",
+    "/css/images/marker-icon-2x.png": "/css/images/marker-icon-2x.png",
+    "/css/images/marker-icon.png": "/css/images/marker-icon.png",
+    "/css/images/marker-shadow.png": "/css/images/marker-shadow.png"
 }

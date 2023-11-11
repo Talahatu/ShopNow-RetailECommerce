@@ -16,11 +16,6 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
     <!-- MDB -->
     <link rel="stylesheet" href="{{ asset('mdb5/css/mdb.min.css') }}" />
-    <!-- LeafletJS -->
-    <link rel="stylesheet" href="{{ asset('leafletjs/leaflet.css') }}" />
-    <script src="{{ asset('leafletjs/leaflet.js') }}"></script>
-    <!-- jQuery -->
-    <script src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <!-- CSS -->
     @yield('css')
@@ -188,17 +183,7 @@
         integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
     </script>
     <!-- Custom scripts -->
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(document).on("click", "#logout", function() {
-                $(this).parent().submit()
-            })
-
-            $("#alertClose").on("click", function() {
-                ($(this).parent()[0]).remove()
-            });
-        });
-    </script>
+    <script src="{{ asset('js/index.js') }}"></script>
     @yield('js')
 </body>
 

@@ -1,4 +1,13 @@
-const { error } = require("jquery");
+import $ from "jquery";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "/images/vendor/leaflet/dist/marker-icon-2x.png",
+    iconUrl: "/images/vendor/leaflet/dist/marker-icon.png",
+    shadowUrl: "/images/vendor/leaflet/dist/marker-shadow.png",
+});
 
 var map;
 var marker;
@@ -8,7 +17,9 @@ $(function () {
         displaySelectedImage(e, "selectedAvatar");
     });
 
-    $("#exampleModal").on("show.bs.modal", function (e) {
+    // Bootstrap 5 event not compatible with JQuery
+    var myModal = document.getElementById("exampleModal");
+    myModal.addEventListener("show.bs.modal", function (e) {
         $("#btnSave").attr("disabled", true);
         const button = e.relatedTarget;
         const title = $(button).attr("data-bs-title");

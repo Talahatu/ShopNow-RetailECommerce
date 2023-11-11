@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Shop;
 use App\Models\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,6 +31,8 @@ class UserFactory extends Factory
         $gender = $genderList[$faker->numberBetween(0, 2)];
         $name = $faker->firstName($gender) . " " . $faker->lastName;
         $expl = explode(" ", $name);
+
+        $selectedType = $type[$faker->numberBetween(0, 1)];
         return [
             'name' => $name,
             'username' => $expl[0],
@@ -38,7 +41,7 @@ class UserFactory extends Factory
             'password' => Hash::make($expl[0]), // password
             'remember_token' => Str::random(10),
             'phoneNumber' => "08" . $faker->unique()->numerify("##########"),
-            "type" => $type[$faker->numberBetween(0, 1)],
+            "type" => $selectedType,
             "gender" => $gender,
             "profilePicture" => $faker->imageUrl(360, 360, 'people', true),
             "saldo" => $faker->numberBetween(1, 9) * 10000,
