@@ -7,6 +7,9 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+use function Ramsey\Uuid\v1;
 
 class UserController extends Controller
 {
@@ -50,5 +53,22 @@ class UserController extends Controller
     }
     public function addNewAddress(Request $request)
     {
+        $latlong = explode(",", $request->get("latlng"));
+        $newAddress = new Address();
+        $newAddress->user_id = Auth::user()->id;
+        $newAddress->name = $request->get("address");
+        $newAddress->lat = $latlong[0];
+        $newAddress->long = $latlong[1];
+        $newAddress->current = false;
+        $newAddress->save();
+        return response()->json(["data" => $newAddress]);
+    }
+    public function setCurAddr(Request $request)
+    {
+        DB::transaction(function () use ($request) {
+            Address::where("user_id", Auth::user()->id)->update(['current' => false]);
+            Address::where("id", $request->get("id"))->update(['current' => true]);
+        });
+        return response()->json(["status" => "OK"]);
     }
 }
