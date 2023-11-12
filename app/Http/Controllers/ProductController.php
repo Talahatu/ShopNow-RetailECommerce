@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -80,5 +82,19 @@ class ProductController extends Controller
     public function destroy($product)
     {
         //
+    }
+
+    public function fetchLive()
+    {
+        $data = Product::join("shops", "shops.id", "products.shop_id")
+            ->join("users", "users.id", "shops.user_id")
+            ->where([
+                ["products.status", "live"],
+                ["shops.user_id", Auth::user()->id]
+            ])->get(["products.id", "products.name", "products.SKU", 'products.price', 'products.stock']);
+        return response()->json(["data" => $data]);
+    }
+    public function fetchRepopulate(Request $request)
+    {
     }
 }

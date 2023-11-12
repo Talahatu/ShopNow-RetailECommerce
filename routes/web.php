@@ -41,6 +41,8 @@ Route::middleware(["auth"])->group(function () {
 Route::middleware(["auth", "seller"])->group(function () {
     Route::resource("seller", ShopController::class);
     Route::resource('product', ProductController::class);
+    Route::post('/fetch/product/live', [ProductController::class, "fetchLive"]);
+    Route::post('/fetch/product/repopulate', [ProductController::class, "fetchRepopulate"]);
 });
 
 

@@ -24,3 +24,9 @@ li.paginate_button.page-item > a:focus {
 #myTable_filter > label > input {
     color: white;
 }
+#myTable {
+    color: white;
+}
+.table-hover tbody tr:hover td {
+    color: #0090e7 !important;
+}
