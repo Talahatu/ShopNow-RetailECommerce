@@ -83,4 +83,8 @@ class UserController extends Controller
         });
         return response()->json(["status" => "OK"]);
     }
+    public function deleteAddress(Request $request)
+    {
+        return response()->json(Address::find($request->get("id"))->delete());
+    }
 }

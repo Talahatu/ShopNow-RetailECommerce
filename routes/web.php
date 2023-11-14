@@ -37,6 +37,7 @@ Route::middleware(["auth"])->group(function () {
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");
     Route::post("/add-new-address", [UserController::class, "addNewAddress"])->name("address.create");
+    Route::delete("/delete-address", [UserController::class, "deleteAddress"])->name("address.destroy");
     Route::post("/set-cur-addr", [UserController::class, "setCurAddr"])->name("address.set");
 });
 

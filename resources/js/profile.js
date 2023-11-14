@@ -206,6 +206,23 @@ $(function () {
             },
         });
     });
+    $(document).on("click", ".btn-delete", function () {
+        const result = confirm("Are you sure you want to delete this address?");
+        if (!result) return;
+        const a = $(this).parent().parent();
+        const id = $(a).find(".dia").attr("attr-dia");
+        $.ajax({
+            type: "DELETE",
+            url: "/delete-address",
+            data: {
+                _token: csrfToken,
+                id: id,
+            },
+            success: function (response) {
+                $(a).remove();
+            },
+        });
+    });
     $(".btnCloseModal").on("click", function () {
         $("#modalTitle").html("");
         $("#modalBody").html("");
