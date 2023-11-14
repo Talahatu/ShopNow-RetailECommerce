@@ -32,8 +32,8 @@
                         </li>
                     </ul>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-success create-new-button" id="addNewProduct"><i
-                                class="mdi mdi-plus"></i>Add new product</button>
+                        <a type="button" class="btn btn-success create-new-button" id="addNewProduct"
+                            href="{{ route('product.create') }}"><i class="mdi mdi-plus"></i>Add new product</a>
                     </div>
                     <div class="tab-content tab-content-custom-pill" id="pills-tabContent">
                         <table id="myTable" class="display table table-hover responsive nowrap"
