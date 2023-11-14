@@ -28,8 +28,9 @@
                         <a class="dropdown-toggle py-1 px-3 nav-link d-flex align-items-center hidden-arrow"
                             href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
                             aria-expanded="false">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
-                                height="25" alt="Black and White Portrait of a Man" loading="lazy" />
+                            <img src="{{ file_exists(public_path('profileimages/' . Auth::user()->profilePicture)) ? asset('profileimages/' . Auth::user()->profilePicture) : 'https://mdbcdn.b-cdn.net/img/new/avatars/2.webp' }}"
+                                class="rounded-circle" height="30" width="30"
+                                alt="Black and White Portrait of a Man" loading="lazy" style="object-fit: cover;" />
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                             @if (Auth::check())

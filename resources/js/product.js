@@ -55,7 +55,9 @@ $(function () {
                 type: type,
             },
             success: function (response) {
-                console.log(response);
+                const data = response.data;
+                table.clear().draw();
+                table.rows.add(data).draw();
             },
         });
     });

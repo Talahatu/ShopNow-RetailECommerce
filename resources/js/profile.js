@@ -18,10 +18,10 @@ $(function () {
     });
 
     // Bootstrap 5 event not compatible with JQuery
-    var myModal = document.getElementById("exampleModal");
-    myModal.addEventListener("show.bs.modal", function (e) {
+    var btnAdd = document.getElementById("btnAdd");
+    btnAdd.addEventListener("click", function (e) {
         $("#btnSave").attr("disabled", true);
-        const button = e.relatedTarget;
+        const button = $(this);
         const title = $(button).attr("data-bs-title");
         $("#modalTitle").html(title);
         $.ajax({
@@ -31,6 +31,7 @@ $(function () {
                 _token: csrfToken,
             },
             success: function (response) {
+                $("#exampleModal").attr("modal-tags", "add-home");
                 $("#modalBody").html(response.content);
                 document
                     .querySelectorAll(".form-outline")
@@ -71,7 +72,10 @@ $(function () {
         );
     });
 
-    $("#btnSave").on("click", function () {
+    $(document).on("click", "#btnSave", function () {
+        const tags = $("#exampleModal").attr("modal-tags");
+        const tagsArr = tags.split("-");
+        const id = $(this).attr("attr-dia");
         $.ajax({
             type: "POST",
             url: "/add-new-address",
@@ -79,23 +83,40 @@ $(function () {
                 _token: csrfToken,
                 address: $("#address").val(),
                 latlng: $("#ll").val(),
+                tags: tags,
+                id: id,
             },
             success: function (response) {
-                $a = response.data;
-                $("#exampleModal").modal("hide");
+                console.log(response);
+                const a = response.data;
+                $(".btnCloseModal").click();
                 $("#modalTitle").html("");
                 $("#modalBody").html("");
+                if (tagsArr[0] == "update") {
+                    if (tagsArr[1] == "home") {
+                        $("a[attr-int='" + id + "']").find(".address-name")
+                            .html(`${a.name} <span
+                            class="badge bg-success">Home</span>`);
+                        return;
+                    }
+                    $("a[addr-type='shop']")
+                        .find(".address-name")
+                        .html(
+                            `${a.address} <span class="badge bg-warning">Shop</span>`
+                        );
+                    return;
+                }
                 $("#list-address").append(`
                 <a href="#" class="list-group-item list-group-item-action address-item" aria-current="true">
                     <div class="d-flex w-100 justify-content-between address-content">
-                        <h5 class="mb-1">${$a.name} <span class="badge bg-success">Home</span></h5>
+                        <h5 class="mb-1">${a.name} <span class="badge bg-success">Home</span></h5>
                         <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current address</button>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-info btn-update">Ubah</button>
                         <button type="button" class="btn btn-danger btn-delete" id="deleteAddress">Hapus</button>
                     </div>
-                    <input type="hidden" class="dia" attr-dia="${$a.id}">
+                    <input type="hidden" class="dia" attr-dia="${a.id}">
                 </a>
                 `);
             },
@@ -139,14 +160,63 @@ $(function () {
             },
         });
     });
+
+    $(document).on("click", ".btn-update", function () {
+        $("#btnSave").attr("disabled", true);
+        const a = $(this).parent().parent();
+        const id = $(a).find(".dia").attr("attr-dia");
+        const title = $(this).attr("data-bs-title");
+        const type = $(a).attr("addr-type");
+        $("#modalTitle").html(title);
+        $.ajax({
+            type: "POST",
+            url: "/getUpdateAddAddressForm",
+            data: {
+                _token: csrfToken,
+                id: id,
+                type: type,
+            },
+            success: function (response) {
+                $("#exampleModal").attr(
+                    "modal-tags",
+                    type == "shop" ? "update-shop" : "update-home"
+                );
+                $("#btnSave").attr("attr-dia", id);
+                const data = response.data;
+                $("#ll").val(`${data.lat},${data.long}`);
+                $("#modalBody").html(response.content);
+                document
+                    .querySelectorAll(".form-outline")
+                    .forEach((formOutline) => {
+                        new mdb.Input(formOutline).init();
+                    });
+                $("#address").val(type == "shop" ? data.address : data.name);
+                map = L.map("map").setView([data.lat, data.long], 15);
+                L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    maxZoom: 18,
+                    minZoom: 5,
+                    attribution:
+                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                }).addTo(map);
+                map.on("click", onMapClick);
+                marker = L.marker(L.latLng(data.lat, data.long)).addTo(map);
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        });
+    });
     $(".btnCloseModal").on("click", function () {
         $("#modalTitle").html("");
         $("#modalBody").html("");
+        $("#exampleModal").attr("modal-tags", "");
     });
 });
 const onMapClick = (e) => {
     if (typeof marker !== "undefined") map.removeLayer(marker);
     marker = L.marker(e.latlng).addTo(map);
+    $("#btnSave").attr("disabled", false);
+    $("#ll").val(`${e.latlng.lat},${e.latlng.lng}`);
 };
 const displaySelectedImage = (event, elementId) => {
     const selectedImage = document.getElementById(elementId);

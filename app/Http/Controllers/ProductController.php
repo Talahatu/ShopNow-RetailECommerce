@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('merchant.product');
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('merchant.product', compact("shop"));
     }
 
     /**
@@ -25,7 +27,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('merchant.product-create');
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('merchant.product-create', compact("shop"));
     }
 
     /**
@@ -86,15 +89,13 @@ class ProductController extends Controller
 
     public function fetchLive()
     {
-        $data = Product::join("shops", "shops.id", "products.shop_id")
-            ->join("users", "users.id", "shops.user_id")
-            ->where([
-                ["products.status", "live"],
-                ["shops.user_id", Auth::user()->id]
-            ])->get(["products.id", "products.name", "products.SKU", 'products.price', 'products.stock']);
+        $data = Product::getProducts(Auth::user()->id, "live");
         return response()->json(["data" => $data]);
     }
     public function fetchRepopulate(Request $request)
     {
+        $type = $request->get("type");
+        $products = Product::getProducts(Auth::user()->id, $type);
+        return response()->json(["data" => $products]);
     }
 }

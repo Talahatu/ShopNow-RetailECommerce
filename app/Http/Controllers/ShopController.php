@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use function Ramsey\Uuid\v1;
+
 class ShopController extends Controller
 {
     /**
@@ -17,7 +19,8 @@ class ShopController extends Controller
      */
     public function index()
     {
-        return view('merchant.index');
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('merchant.index', compact('shop'));
     }
 
     /**

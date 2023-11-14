@@ -26,6 +26,15 @@ class UserController extends Controller
             "content" => view("regular.modals.newAddressForm")->render()
         ]);
     }
+    public function getUpdateAddAddressForm(Request $request)
+    {
+        $data = Address::find($request->get("id"));
+        if ($request->get("type") == "shop") $data = Shop::find($request->get("id"));
+        return response()->json([
+            "content" => view("regular.modals.newAddressForm")->render(),
+            "data" => $data
+        ]);
+    }
     public function updateProfile(Request $request)
     {
         $request->validate([
@@ -54,13 +63,16 @@ class UserController extends Controller
     public function addNewAddress(Request $request)
     {
         $latlong = explode(",", $request->get("latlng"));
-        $newAddress = new Address();
-        $newAddress->user_id = Auth::user()->id;
-        $newAddress->name = $request->get("address");
-        $newAddress->lat = $latlong[0];
-        $newAddress->long = $latlong[1];
-        $newAddress->current = false;
-        $newAddress->save();
+        $tags = explode("-", $request->get("tags"));
+        if ($tags[0] == "update") {
+            if ($tags[1] == "home") {
+                $updatedAddress = Address::updateAddress($request->get("address"), $request->get("id"), $latlong);
+                return response()->json(["data" => $updatedAddress, "type" => $tags]);
+            }
+            $updatedAddressShop = Address::updateShopAddress($request->get("address"), $request->get("id"), $latlong);
+            return response()->json(["data" => $updatedAddressShop, "type" => "Update Shop"]);
+        }
+        $newAddress = Address::addNewAddress($request->get("address"), Auth::user()->id, $latlong);
         return response()->json(["data" => $newAddress]);
     }
     public function setCurAddr(Request $request)

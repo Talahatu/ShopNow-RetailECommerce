@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::middleware(["auth"])->group(function () {
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
 
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
+    Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");
     Route::post("/add-new-address", [UserController::class, "addNewAddress"])->name("address.create");
     Route::post("/set-cur-addr", [UserController::class, "setCurAddr"])->name("address.set");
 });

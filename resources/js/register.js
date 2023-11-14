@@ -48,4 +48,5 @@ $(document).ready(function () {
 const onMapClick = (e) => {
     if (typeof marker !== "undefined") map.removeLayer(marker);
     marker = L.marker(e.latlng).addTo(map);
+    $("#ll").val(`${e.latlng.lat},${e.latlng.lng}`);
 };
