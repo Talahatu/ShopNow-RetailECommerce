@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
@@ -44,6 +46,8 @@ Route::middleware(["auth"])->group(function () {
 Route::middleware(["auth", "seller"])->group(function () {
     Route::resource("seller", ShopController::class);
     Route::resource('product', ProductController::class);
+    Route::post("/fetch-categories", [CategoryController::class, "getCategories"]);
+    Route::post("/fetch-brands", [BrandController::class, "getBrands"]);
     Route::post('/fetch/product/live', [ProductController::class, "fetchLive"]);
     Route::post('/fetch/product/repopulate', [ProductController::class, "fetchRepopulate"]);
 });

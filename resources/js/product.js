@@ -1,4 +1,5 @@
-import DataTable from "datatables.net-bs5";
+import $ from "jquery";
+import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
 import "datatables.net-fixedcolumns-bs5";
 import "datatables.net-fixedheader-bs5";
@@ -12,12 +13,18 @@ $(function () {
     $("#navProduct > div").addClass("show");
     $("#myproduct > a").addClass("active");
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
-    let table = new DataTable("#myTable", {
+    var table = $("#myTable").DataTable({
         responsive: true,
+        language: {
+            emptyTable: "No product available",
+        },
         columns: [
             { data: "name" },
             { data: "SKU" },
-            { data: "price" },
+            {
+                data: "price",
+                render: $.fn.dataTable.render.number(".", ",", 0, "Rp "),
+            },
             { data: "stock" },
             {
                 data: null,
@@ -34,6 +41,7 @@ $(function () {
             },
         ],
     });
+
     $.ajax({
         type: "POST",
         url: "/fetch/product/live",

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -39,7 +40,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'desc' => 'required',
+            'category' => 'required',
+            'weight' => 'required|numeric',
+            'price' => 'required',
+            'stock' => 'required|numeric'
+        ]);
+        $data = $request->all();
+        $data["price"] = str_replace(",", "", $request->get("price"));
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        Product::insertNewProduct($data, $shop->id);
+        return redirect()->route('product.index');
     }
 
     /**

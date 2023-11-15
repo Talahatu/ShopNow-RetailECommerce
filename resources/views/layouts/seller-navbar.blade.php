@@ -15,11 +15,11 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item dropdown d-none d-lg-block">
+            {{-- <li class="nav-item dropdown d-none d-lg-block">
                 <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" aria-expanded="false"
                     href="#">+ Create New
                     Project</a>
-            </li>
+            </li> --}}
             <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#"
                     data-bs-toggle="dropdown" aria-expanded="false">
