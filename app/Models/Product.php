@@ -43,6 +43,20 @@ class Product extends Model
         return true;
     }
 
+    public static function updateProduct($datas, $prodID)
+    {
+        $prod = Product::find($prodID);
+        $prod->category_id = $datas['category'];
+        $prod->brand_id = $datas['brand'];
+        $prod->name = $datas["name"];
+        $prod->description = $datas["desc"];
+        $prod->weight = $datas["weight"];
+        $prod->stock = $datas["stock"];
+        $prod->price = $datas["price"];
+        $prod->save();
+        return $prod;
+    }
+
     private function getSKU($category, $brand, $name)
     {
         return substr($category, 0, 1) . substr($brand, 0, 1) . substr($name, 0, 1) . now()->format("Ymds");

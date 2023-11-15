@@ -3,21 +3,23 @@
     <link rel="stylesheet" href="{{ asset('css/product-create.css') }}">
 @endsection
 @section('content-wrapper')
+    <input type="hidden" name="dia" id="dia" value="{{ $data->category_id }}-{{ $data->brand_id }}">
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">Add New Product</h3>
+            <h3 class="page-title">Update Existing Product</h3>
         </div>
         <div class="row">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Please Fill The Form!</h4>
-                    <p class="card-description"> Product's Information </p>
-                    <form class="forms-sample" action="{{ route('product.store') }}" method="POST">
+                    <p class="card-description"> {{ $data->name }}'s Information </p>
+                    <form class="forms-sample" action="{{ route('product.update', $data->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="form-group">
                             <label for="inputName">Name</label>
                             <input type="text" class="form-control text-light @error('name') is-invalid @enderror"
-                                value="{{ old('name') }}" id="inputName" name="name" placeholder="Name">
+                                value="{{ $data->name }}" id="inputName" name="name" placeholder="Name">
                             @error('name')
                                 <label id="name-error" class="error mt-2 text-danger" for="name">
                                     {{ $message }}</label>
@@ -25,8 +27,8 @@
                         </div>
                         <div class="form-group">
                             <label for="inputDesc">Description</label>
-                            <textarea class="form-control text-light @error('desc') is-invalid @enderror" id="inputDesc" value="{{ old('desc') }}"
-                                name="desc" placeholder="Description" rows="4"></textarea>
+                            <textarea class="form-control text-light @error('desc') is-invalid @enderror" id="inputDesc" name="desc"
+                                placeholder="Description" rows="4">{{ $data->description }}</textarea>
                             @error('desc')
                                 <label id="desc-error" class="error mt-2 text-danger" for="desc">
                                     {{ $message }}</label>
@@ -35,7 +37,9 @@
                         <div class="form-group mb-4">
                             <label for="">Choose a category</label>
                             <select class="form-control text-light @error('category') is-invalid @enderror" name="category"
-                                id="selectCategory"></select>
+                                id="selectCategory">
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            </select>
                             @error('category')
                                 <label id="category-error" class="error mt-2 text-danger" for="category">
                                     {{ $message }}</label>
@@ -44,7 +48,9 @@
                         <div class="form-group mb-4">
                             <label for="">Choose a brand</label>
                             <select class="form-control text-light  @error('brand') is-invalid @enderror" name="brand"
-                                id="selectBrand"></select>
+                                id="selectBrand">
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            </select>
                             @error('brand')
                                 <label id="brand-error" class="error mt-2 text-danger" for="brand">
                                     {{ $message }}</label>
@@ -54,7 +60,7 @@
                             <label for="inputWeight">Weight</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('weight') is-invalid @enderror"
-                                    value="{{ old('weight') }}" id="inputWeight" name="weight" placeholder="Weight"
+                                    value="{{ $data->weight }}" id="inputWeight" name="weight" placeholder="Weight"
                                     min="1">
                                 <div class="input-group-append">
                                     <span class="input-group-text text-light">gr</span>
@@ -69,7 +75,7 @@
                             <label for="inputStock">Stock</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('stock') is-invalid @enderror"
-                                    value="{{ old('stock') }}" id="inputStock" name="stock" placeholder="Stock"
+                                    value="{{ $data->stock }}" id="inputStock" name="stock" placeholder="Stock"
                                     min="1">
                             </div>
                             @error('stock')
@@ -84,7 +90,7 @@
                                     <span class="input-group-text">Rp.</span>
                                 </div>
                                 <input type="text" class="form-control text-light @error('price') is-invalid @enderror"
-                                    aria-label="Amount (to the nearest rupiah)" value="{{ old('price') }}" id="inputPrice"
+                                    aria-label="Amount (to the nearest rupiah)" value="{{ $data->price }}" id="inputPrice"
                                     name="price">
                             </div>
                             @error('price')
@@ -102,5 +108,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('js/product-create.js') }}"></script>
+    <script src="{{ asset('js/product-update.js') }}"></script>
 @endsection

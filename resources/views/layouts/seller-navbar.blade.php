@@ -15,11 +15,6 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-            {{-- <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" aria-expanded="false"
-                    href="#">+ Create New
-                    Project</a>
-            </li> --}}
             <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -151,16 +146,19 @@
                         </div>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-logout text-danger"></i>
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button class="dropdown-item preview-item" type="submit">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-dark rounded-circle">
+                                    <i class="mdi mdi-logout text-danger"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <p class="preview-subject mb-1">Log out</p>
-                        </div>
-                    </a>
+                            <div class="preview-item-content">
+                                <p class="preview-subject mb-1">Log out</p>
+                            </div>
+                        </button>
+                    </form>
                 </div>
             </li>
         </ul>

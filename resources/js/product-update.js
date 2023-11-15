@@ -4,6 +4,7 @@ import "select2-bootstrap-theme/dist/select2-bootstrap.min.css";
 import "select2";
 import AutoNumeric from "autonumeric";
 $(function () {
+    const idDia = $("#dia").val().split("-");
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     $.fn.select2.defaults.set("theme", "bootstrap");
     $("#navProduct").addClass("active");
@@ -14,6 +15,7 @@ $(function () {
         ajax: {
             type: "POST",
             url: "/fetch-categories",
+            delay: 250,
             data: function (params) {
                 return { _token: csrfToken, q: params.term };
             },
@@ -31,7 +33,6 @@ $(function () {
     });
     $("#selectBrand").select2({
         placeholder: "Select a brand (pick a category first)",
-        disabled: true,
         ajax: {
             type: "POST",
             url: "/fetch-brands",
@@ -62,8 +63,8 @@ $(function () {
         upDownStep: "1000",
         minimumValue: "0",
     });
-
     $("#selectCategory").on("change", function () {
+        console.log("CHANGE");
         $("#selectBrand").attr("disabled", false);
     });
 });

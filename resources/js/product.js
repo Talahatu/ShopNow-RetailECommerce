@@ -13,12 +13,9 @@ $(function () {
     $("#navProduct > div").addClass("show");
     $("#myproduct > a").addClass("active");
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
-    var table = $("#myTable").DataTable({
-        responsive: true,
-        language: {
-            emptyTable: "No product available",
-        },
-        columns: [
+
+    var DTcolumns = (optionType = "live") => {
+        return [
             { data: "name" },
             { data: "SKU" },
             {
@@ -29,17 +26,47 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return `
-                        <div class="d-flex flex-column">
-                        <button class="btn btn-block btn-icon-text btn-info btn-rounded mb-2" data-dia="${data.id}">
-                            <i class="mdi mdi-pencil btn-icon-prepend"></i>Update
-                        </button>
-                        <button class="btn btn-block btn-icon-text btn-danger btn-rounded" data-dia="${data.id}">
-                            <i class="mdi mdi-delete btn-icon-prepend"></i>Delete
-                        </button></div>`;
+                    if (optionType == "live") {
+                        return `
+                        <div class="d-flex flex-column btn-group-vertical">
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                            <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
+                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                            </ul>
+                        </div>
+                            <button class="btn btn-block btn-lg btn-outline-info btn-archive p-2" data-dia="${data.id}"><i class="mdi mdi-archive btn-icon-prepend"></i>Archive</button>
+                        </div>`;
+                    } else if (optionType == "archive") {
+                        return `
+                        <div class="d-flex flex-column btn-group-vertical">
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                            <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
+                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                            </ul>
+                        </div>
+                            <button class="btn btn-block btn-lg btn-outline-success btn-live p-2" data-dia="${data.id}"><i class="mdi mdi-folder-lock-open btn-icon-prepend"></i>Live</button>
+                        </div>`;
+                    } else if (optionType == "problem") {
+                    } else {
+                        // Empty
+                    }
                 },
             },
-        ],
+        ];
+    };
+    var table = $("#myTable").DataTable({
+        responsive: true,
+        language: {
+            emptyTable: "No product available",
+        },
+        rowId: function (row) {
+            return "row_" + row.id;
+        },
+        columns: DTcolumns(),
     });
 
     $.ajax({
@@ -53,6 +80,37 @@ $(function () {
             table.rows.add(data).draw();
         },
     });
+    $(document).on("click", ".btn-delete", function () {
+        let result = confirm(
+            "Are you sure you want to delete this product from your shops?"
+        );
+        if (!result) return;
+        const id = $(this).attr("data-dia");
+        $.ajax({
+            type: "DELETE",
+            url: "/product/" + id,
+            headers: { "X-CSRF-TOKEN": csrfToken },
+            success: function (response) {
+                if (!response) return;
+                $("#row_" + id).remove();
+            },
+        });
+    });
+    $(document).on("click", ".btn-archive", function () {
+        const id = $(this).attr("data-dia");
+        $.ajax({
+            type: "PUT",
+            url: "/archive/product",
+            data: {
+                _token: csrfToken,
+                id: id,
+            },
+            success: function (response) {
+                const data = response.data;
+                $("#row_" + data.id).remove();
+            },
+        });
+    });
     $(document).on("click", ".product-type", function () {
         const type = $(this).attr("data-type");
         $.ajax({
@@ -64,7 +122,19 @@ $(function () {
             },
             success: function (response) {
                 const data = response.data;
+                console.log(data);
                 table.clear().draw();
+                table.destroy();
+                table = $("#myTable").DataTable({
+                    responsive: true,
+                    language: {
+                        emptyTable: "No product available",
+                    },
+                    rowId: function (row) {
+                        return "row_" + row.id;
+                    },
+                    columns: DTcolumns(type),
+                });
                 table.rows.add(data).draw();
             },
         });

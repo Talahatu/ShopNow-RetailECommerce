@@ -50,6 +50,7 @@ Route::middleware(["auth", "seller"])->group(function () {
     Route::post("/fetch-brands", [BrandController::class, "getBrands"]);
     Route::post('/fetch/product/live', [ProductController::class, "fetchLive"]);
     Route::post('/fetch/product/repopulate', [ProductController::class, "fetchRepopulate"]);
+    Route::put("/archive/product", [ProductController::class, "archiveProduct"]);
 });
 
 
