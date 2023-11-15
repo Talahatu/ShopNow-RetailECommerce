@@ -30,7 +30,7 @@ $(function () {
         },
     });
     $("#selectBrand").select2({
-        placeholder: "Select a brand",
+        placeholder: "Select a brand (pick a category first)",
         disabled: true,
         ajax: {
             type: "POST",
@@ -60,6 +60,7 @@ $(function () {
         decimalPlaces: "0",
         modifyValueOnUpDownArrow: true,
         upDownStep: "1000",
+        minimumValue: "1000",
     });
 
     $("#selectCategory").on("change", function () {
