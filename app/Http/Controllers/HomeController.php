@@ -33,10 +33,10 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        if (!Auth::check()) {
-            $products = Product::all();
+        $products = Product::with("images", "brand", "category")->get();
+        if (Auth::check()) {
         }
-        return view('home', compact("categories"));
+        return view('home', compact("categories", "products"));
     }
 
     public function reregister()

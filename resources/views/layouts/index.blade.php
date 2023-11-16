@@ -16,8 +16,10 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
     <!-- MDB -->
     <link rel="stylesheet" href="{{ asset('mdb5/css/mdb.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+
     <!-- CSS -->
+    {{-- <link rel="stylesheet" href="{{ asset('css/style-canvas.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @yield('css')
     @laravelPWA
 </head>

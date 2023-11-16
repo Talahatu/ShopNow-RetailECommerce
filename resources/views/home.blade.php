@@ -60,155 +60,54 @@
     </div>
     <!-- container end.// -->
 
+    <a href="/test">Test Page</a>
     <!-- Products -->
     <section>
         <div class="container my-5">
             <header class="mb-4 text-white">
-                <h3>New products</h3>
+                <a href="#" class="text-white">
+                    <h3>New products <i class="fas fa-arrow-right"></i> </h3>
+                </a>
             </header>
-
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <div class="mask" style="height: 50px;">
-                                <div class="d-flex justify-content-start align-items-start h-100 m-2">
-                                    <h6><span class="badge bg-success pt-2">Offer</span></h6>
+                @for ($i = 0; $i < 8; $i++)
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4 mb-lg-4">
+                        <div class="card">
+                            <img src="{{ isset($products[$i]->images[0]->name) ? asset('productimages/' . $products[$i]->images[0]->name) : 'https://mdbootstrap.com/img/Photos/Others/placeholder.jpg' }}"
+                                class="card-img-top" alt="Laptop" style="aspect-ratio:1/1; object-fit:cover" />
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small"><a href="#!"
+                                            class="text-muted">{{ $products[$i]->category->name }}</a></p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-1">
+                                    <h5 class="mb-0 d-inline-block text-truncate" style="max-width: 100%;">
+                                        {{ $products[$i]->name }}</h5>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="text-dark mb-0">Rp. {{ number_format($products[$i]->price, 0, '.', ',') }}
+                                    </h5>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <p class="text-muted mb-0"><span class="fw-bold">{{ $products[$i]->stock }}</span>
+                                        In Stock</p>
+                                    <div class="ms-auto text-warning">
+                                        @for ($j = 0; $j < floor($products[$i]->rating); $j++)
+                                            <i class="fa fa-star"></i>
+                                        @endfor
+                                        @if (fmod($products[$i]->rating, 1) != '0.0')
+                                            <i class="fa-regular fa-star-half-stroke"></i>
+                                        @endif
+                                        @for ($j = 0; $j < floor(5 - $products[$i]->rating); $j++)
+                                            <i class="far fa-star"></i>
+                                        @endfor
+                                    </div>
                                 </div>
                             </div>
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/12.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-3">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">GoPro action camera 4K</p>
-                            <p class="text-muted">
-                                Model: X-200
-                            </p>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$590.00</h5>
-                            <p class="card-text mb-0">Canon EOS professional</p>
-                            <p class="text-muted">
-                                Capacity: 128GB
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">Modern product name here</p>
-                            <p class="text-muted">
-                                Sizes: S, M, XL
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$1099.00</h5>
-                            <p class="card-text mb-0">Apple iPhone 13 Pro max</p>
-                            <p class="text-muted">
-                                Color: Black, Memory: 128GB
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">Modern product name here</p>
-                            <p class="text-muted">
-                                Sizes: S, M, XL
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">Modern product name here</p>
-                            <p class="text-muted">
-                                Model: X-200
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">Modern product name here</p>
-                            <p class="text-muted">
-                                Sizes: S, M, XL
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card my-2 shadow-0">
-                        <a href="#" class="img-wrap">
-                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-                                class="card-img-top" style="aspect-ratio: 1 / 1">
-                        </a>
-                        <div class="card-body p-0 pt-2">
-                            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-                                    class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                            <h5 class="card-title">$29.95</h5>
-                            <p class="card-text mb-0">Modern product name here</p>
-                            <p class="text-muted">
-                                Material: Jeans
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                @endfor
             </div>
         </div>
     </section>

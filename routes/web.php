@@ -56,5 +56,5 @@ Route::middleware(["auth", "seller"])->group(function () {
 
 
 Route::get("/test", function () {
-    return view('regular.modals.newAddressForm');
+    return view('regular.product-info');
 });

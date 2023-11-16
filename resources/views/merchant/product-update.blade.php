@@ -36,6 +36,12 @@
                                                     class="d-block w-100" style="object-fit: cover" alt="selecteddImages">
                                             </div>
                                         @endfor
+                                        @if (count($images) == 0)
+                                            <div class="carousel-item {{ $i == 0 ? 'active' : '' }}">
+                                                <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                                                    class="d-block w-100" style="object-fit: cover" alt="selecteddImages">
+                                            </div>
+                                        @endif
                                     </div>
                                     <button class="carousel-control-prev" type="button"
                                         data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
