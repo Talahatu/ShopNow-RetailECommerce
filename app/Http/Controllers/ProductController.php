@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -44,16 +46,17 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'image' => 'required',
+            'image.*' => "mimes:jpg,png,jpeg|max:4000",
             'desc' => 'required',
             'category' => 'required',
             'weight' => 'required|numeric',
             'price' => 'required',
             'stock' => 'required|numeric'
         ]);
-        $data = $request->all();
-        $data["price"] = str_replace(".", "", $request->get("price"));
+        $price = str_replace(".", "", $request->get("price"));
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        Product::insertNewProduct($data, $shop->id);
+        Product::insertNewProduct($request, $shop->id, $price);
         return redirect()->route('product.index');
     }
 
@@ -80,7 +83,8 @@ class ProductController extends Controller
         $category = Category::find($data->category_id);
         $brand = Brand::find($data->brand_id);
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('merchant.product-update', compact("data", "category", "brand", "shop"));
+        $images = Image::where("product_id", $id)->get();
+        return view('merchant.product-update', compact("data", "category", "brand", "shop", "images"));
     }
 
     /**
@@ -98,11 +102,11 @@ class ProductController extends Controller
             'category' => 'required',
             'weight' => 'required|numeric',
             'price' => 'required',
-            'stock' => 'required|numeric'
+            'stock' => 'required|numeric',
+            'image.*' => "mimes:jpg,png,jpeg|max:4000",
         ]);
-        $data = $request->all();
-        $data["price"] = str_replace(".", "", $request->get("price"));
-        Product::updateProduct($data, $id);
+        $price = str_replace(".", "", $request->get("price"));
+        Product::updateProduct($request, $id, $price);
         return redirect()->route('product.index');
     }
 
@@ -114,7 +118,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return response()->json(Product::find($id)->delete());
+        DB::transaction(function () use ($id) {
+            Product::deleteImages($id);
+            Product::find($id)->delete();
+        });
+        return response()->json(true);
     }
 
     public function fetchLive()
@@ -133,6 +141,13 @@ class ProductController extends Controller
     {
         $prod = Product::find($request->get("id"));
         $prod->status = "archive";
+        $prod->save();
+        return response()->json(["status" => "OK", "data" => $prod]);
+    }
+    public function liveProduct(Request $request)
+    {
+        $prod = Product::find($request->get("id"));
+        $prod->status = "live";
         $prod->save();
         return response()->json(["status" => "OK", "data" => $prod]);
     }

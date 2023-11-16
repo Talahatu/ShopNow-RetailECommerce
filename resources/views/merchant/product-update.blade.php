@@ -13,9 +13,55 @@
                 <div class="card-body">
                     <h4 class="card-title">Please Fill The Form!</h4>
                     <p class="card-description"> {{ $data->name }}'s Information </p>
-                    <form class="forms-sample" action="{{ route('product.update', $data->id) }}" method="POST">
+                    <form class="forms-sample" action="{{ route('product.update', $data->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <div class="shopPhotoContainer mb-4">
+                            {{-- Carousel --}}
+                            <div class="mb-4 d-flex justify-content-center img-container">
+                                <div id="carouselExampleIndicators" class="carousel slide w-50 mb-4"
+                                    data-bs-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        @for ($i = 0; $i < count($images); $i++)
+                                            <button type="button" data-bs-target="#carouselExampleIndicators"
+                                                data-bs-slide-to="{{ $i }}" class="{{ $i == 0 ? 'active' : '' }}"
+                                                aria-current="true" aria-label="Slide {{ $i }}"></button>
+                                        @endfor
+                                    </div>
+                                    <div class="carousel-inner">
+                                        @for ($i = 0; $i < count($images); $i++)
+                                            <div class="carousel-item {{ $i == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('productimages/' . $images[$i]->name) }}"
+                                                    class="d-block w-100" style="object-fit: cover" alt="selecteddImages">
+                                            </div>
+                                        @endfor
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- Button Choose Image --}}
+                            <div class="d-flex justify-content-center">
+                                <div class="btn btn-dark btn-rounded">
+                                    <label class="form-label text-white m-1" for="image">Choose
+                                        Image</label>
+                                    <input type="file" name="image[]" class="form-control d-none" id="image"
+                                        multiple />
+                                    @error('image')
+                                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="inputName">Name</label>
                             <input type="text" class="form-control text-light @error('name') is-invalid @enderror"
@@ -59,7 +105,8 @@
                         <div class="form-group">
                             <label for="inputWeight">Weight</label>
                             <div class="input-group">
-                                <input type="number" class="form-control text-light @error('weight') is-invalid @enderror"
+                                <input type="number"
+                                    class="form-control text-light @error('weight') is-invalid @enderror"
                                     value="{{ $data->weight }}" id="inputWeight" name="weight" placeholder="Weight"
                                     min="1">
                                 <div class="input-group-append">
@@ -90,8 +137,8 @@
                                     <span class="input-group-text">Rp.</span>
                                 </div>
                                 <input type="text" class="form-control text-light @error('price') is-invalid @enderror"
-                                    aria-label="Amount (to the nearest rupiah)" value="{{ $data->price }}" id="inputPrice"
-                                    name="price">
+                                    aria-label="Amount (to the nearest rupiah)" value="{{ $data->price }}"
+                                    id="inputPrice" name="price">
                             </div>
                             @error('price')
                                 <label id="price-error" class="error mt-2 text-danger" for="price">

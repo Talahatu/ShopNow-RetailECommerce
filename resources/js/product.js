@@ -51,8 +51,27 @@ $(function () {
                             <button class="btn btn-block btn-lg btn-outline-success btn-live p-2" data-dia="${data.id}"><i class="mdi mdi-folder-lock-open btn-icon-prepend"></i>Live</button>
                         </div>`;
                     } else if (optionType == "problem") {
+                        return `
+                        <div class="d-flex flex-column btn-group-vertical">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
+                                <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
+                                <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>`;
                     } else {
-                        // Empty
+                        return `
+                        <div class="d-flex flex-column btn-group-vertical">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
+                                <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
+                                <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>`;
                     }
                 },
             },
@@ -94,6 +113,9 @@ $(function () {
                 if (!response) return;
                 $("#row_" + id).remove();
             },
+            error: function (er) {
+                console.log(er);
+            },
         });
     });
     $(document).on("click", ".btn-archive", function () {
@@ -101,6 +123,21 @@ $(function () {
         $.ajax({
             type: "PUT",
             url: "/archive/product",
+            data: {
+                _token: csrfToken,
+                id: id,
+            },
+            success: function (response) {
+                const data = response.data;
+                $("#row_" + data.id).remove();
+            },
+        });
+    });
+    $(document).on("click", ".btn-live", function () {
+        const id = $(this).attr("data-dia");
+        $.ajax({
+            type: "PUT",
+            url: "/live/product",
             data: {
                 _token: csrfToken,
                 id: id,
@@ -122,7 +159,6 @@ $(function () {
             },
             success: function (response) {
                 const data = response.data;
-                console.log(data);
                 table.clear().draw();
                 table.destroy();
                 table = $("#myTable").DataTable({

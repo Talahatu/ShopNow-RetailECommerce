@@ -40,7 +40,7 @@ class UserController extends Controller
         $request->validate([
             "name" => "required|string",
             "username" => "required|string",
-            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         $user = User::find(Auth::user()->id);
