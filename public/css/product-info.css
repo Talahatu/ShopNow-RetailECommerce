@@ -1,0 +1,73 @@
+:root {
+    --bg-quantity: #e9ecef;
+    --scrollbar-background-color: white;
+    --scrollbar-bar-color: #584c4c;
+}
+
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-bar-color)
+        var(--scrollbar-background-color);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--scrollbar-background-color);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-bar-color);
+    border-radius: 20px;
+    border: 3px solid var(--scrollbar-background-color);
+}
+
+.carousel-button {
+    height: 25%;
+    top: 50%;
+    transform: translate(0%, -50%);
+}
+
+.bg-quantity {
+    background-color: var(--bg-quantity);
+    border: none;
+}
+
+/* For desktops and larger screens */
+@media (min-width: 992px) {
+    .responsive-car-image {
+        /* Your styles for desktops here */
+        height: 75vh;
+    }
+    .input-quantity-width {
+        width: 25vh;
+    }
+}
+
+/* For tablets and small laptops */
+@media (min-width: 768px) and (max-width: 991px) {
+    .responsive-car-image {
+        /* Your styles for tablets here */
+        height: 70vh;
+    }
+    .input-quantity-width {
+        width: 222px;
+    }
+    .btn-group-shop {
+        width: 100%;
+    }
+}
+
+/* For smartphones */
+@media (max-width: 767px) {
+    .input-quantity-width {
+        width: 222px;
+    }
+    .btn-group-shop {
+        width: 100%;
+    }
+}

@@ -38,6 +38,13 @@ class HomeController extends Controller
         }
         return view('home', compact("categories", "products"));
     }
+    public function showProduct($id)
+    {
+        $prod = Product::find($id);
+        $prod->load("category", "brand", "images", "shop");
+        $relatedProd = Product::where("category_id", $prod->category_id)->orWhere("brand_id", $prod->brand_id)->get();
+        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd]);
+    }
 
     public function reregister()
     {

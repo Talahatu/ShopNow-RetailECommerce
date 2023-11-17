@@ -27,6 +27,7 @@ Route::get('/', function () {
     return redirect("/home");
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get("/show-product/{id}", [HomeController::class, "showProduct"])->name("show.product");
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::middleware(["auth"])->group(function () {
     Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');

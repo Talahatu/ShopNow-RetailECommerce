@@ -13,4 +13,9 @@ class Shop extends Model
     protected $fillable = [
         'name', 'description', 'address', 'lat', 'long', 'logoImage', 'saldo_pending', 'saldo_release', 'user_id'
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, "shop_id", "id");
+    }
 }

@@ -28,6 +28,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, "category_id", "id");
     }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, "shop_id", "id");
+    }
 
 
     public static function getProducts($userID, $type)
