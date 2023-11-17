@@ -34,15 +34,36 @@ class HomeController extends Controller
     {
         $categories = Category::all();
         $products = Product::with("images", "brand", "category")->get();
+        $recent = null;
         if (Auth::check()) {
         }
-        return view('home', compact("categories", "products"));
+        if (session()->has("rvp")) {
+            $rvp = session('rvp', []);
+            $recent = Product::with('images', 'brand', 'category')->whereIn("id", $rvp)->get();
+        }
+        return view('home', compact("categories", "products", "recent"));
     }
     public function showProduct($id)
     {
         $prod = Product::find($id);
         $prod->load("category", "brand", "images", "shop");
-        $relatedProd = Product::where("category_id", $prod->category_id)->orWhere("brand_id", $prod->brand_id)->get();
+        $relatedProd = Product::where("id", "!=", $id)
+            ->where(function ($query) use ($prod) {
+                $query->where("category_id", $prod->category_id)->orWhere("brand_id", $prod->brand_id);
+            })->get();
+        if (session()->has("rvp")) {
+            if (!in_array($id, session('rvp'))) {
+                if (count(session('rvp')) == 4) {
+                    $rvp = session('rvp');
+                    array_shift($rvp);
+                    session(["rvp" => $rvp]);
+                }
+                session()->push("rvp", $id);
+            }
+        } else {
+            session()->push("rvp", $id);
+        }
+
         return view("regular.product-info", ["data" => $prod, "related" => $relatedProd]);
     }
 

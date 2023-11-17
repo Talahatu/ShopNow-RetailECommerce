@@ -114,55 +114,59 @@
     </section>
     <!-- Products -->
 
+    {{-- @dd($recent) --}}
     <!-- Recently viewed -->
     <section class="mt-5 mb-4">
         <div class="container text-light">
             <header class="">
                 <h3 class="section-title">Recently viewed</h3>
             </header>
-
             <div class="row gy-3">
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" />
-                    </a>
-                </div>
-                <!-- col.// -->
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/2.webp" />
-                    </a>
-                </div>
-                <!-- col.// -->
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/3.webp" />
-                    </a>
-                </div>
-                <!-- col.// -->
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/4.webp" />
-                    </a>
-                </div>
-                <!-- col.// -->
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" />
-                    </a>
-                </div>
-                <!-- col.// -->
-                <div class="col-lg-2 col-md-4 col-4">
-                    <a href="#" class="img-wrap">
-                        <img height="200" width="200" class="img-thumbnail"
-                            src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp" />
-                    </a>
-                </div>
+                @if (isset($recent))
+                    @for ($i = 0; $i < min(count($recent), 4); $i++)
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4 mb-lg-4">
+                            <a href="{{ route('show.product', $recent[$i]->id) }}">
+                                <div class="card">
+                                    <img src="{{ isset($recent[$i]->images[0]->name) ? asset('productimages/' . $recent[$i]->images[0]->name) : 'https://mdbootstrap.com/img/Photos/Others/placeholder.jpg' }}"
+                                        class="card-img-top" alt="Laptop" style="aspect-ratio:1/1; object-fit:cover" />
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="small"><a href="#!"
+                                                    class="text-muted">{{ $recent[$i]->category->name }}</a></p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <h5 class="mb-0 d-inline-block text-truncate text-dark"
+                                                style="max-width: 100%;">
+                                                {{ $recent[$i]->name }}</h5>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <h5 class="text-dark mb-0">Rp.
+                                                {{ number_format($recent[$i]->price, 0, '.', ',') }}
+                                            </h5>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <p class="text-muted mb-0"><span
+                                                    class="fw-bold">{{ $recent[$i]->stock }}</span>
+                                                In Stock</p>
+                                            <div class="ms-auto text-warning">
+                                                @for ($j = 0; $j < floor($recent[$i]->rating); $j++)
+                                                    <i class="fa fa-star"></i>
+                                                @endfor
+                                                @if (fmod($recent[$i]->rating, 1) != '0.0')
+                                                    <i class="fa-regular fa-star-half-stroke"></i>
+                                                @endif
+                                                @for ($j = 0; $j < floor(5 - $recent[$i]->rating); $j++)
+                                                    <i class="far fa-star"></i>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endfor
+                @endif
             </div>
         </div>
     </section>
