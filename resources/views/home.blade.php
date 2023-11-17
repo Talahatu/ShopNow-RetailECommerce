@@ -64,7 +64,7 @@
         <div class="container my-5">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
-                    <h3>New products <i class="fas fa-arrow-right"></i> </h3>
+                    <h3>Closest To You! <i class="fas fa-arrow-right"></i> </h3>
                 </a>
             </header>
             <div class="row">
