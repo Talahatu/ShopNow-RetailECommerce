@@ -10,7 +10,7 @@
                 <div class="page-title-row">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#" class=" text-light">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/" class=" text-light">Home</a></li>
                             <li class="breadcrumb-item"><a href="#"
                                     class=" text-light">{{ $data->category->name }}</a>
                             </li>
@@ -110,7 +110,7 @@
                                     <hr class="mt-1 mb-3">
 
                                     <!-- Product Single - Quantity & Cart Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ============================================= -->
                                     <div class="cart mb-0  d-block d-lg-flex justify-content-between align-items-center">
                                         <div class="input-group m-lg-0 mb-3 input-quantity-width">
                                             <button class="btn  btn-dark" type="button" id="button-minus"
@@ -135,7 +135,7 @@
                                                     cart</button>
                                             </div>
                                         @else
-                                            Login to access full feature!
+                                            Login to purchase this product!
                                         @endif
                                     </div><!-- Product Single - Quantity & Cart Button End -->
 

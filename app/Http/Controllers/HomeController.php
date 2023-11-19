@@ -33,15 +33,12 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $products = Product::with("images", "brand", "category")->get();
         $recent = null;
-        if (Auth::check()) {
-        }
         if (session()->has("rvp")) {
             $rvp = session('rvp', []);
             $recent = Product::with('images', 'brand', 'category')->whereIn("id", $rvp)->get();
         }
-        return view('home', compact("categories", "products", "recent"));
+        return view('home', compact("categories", "recent"));
     }
     public function showProduct($id)
     {

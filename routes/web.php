@@ -29,6 +29,7 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get("/show-product/{id}", [HomeController::class, "showProduct"])->name("show.product");
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
+Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
 Route::middleware(["auth"])->group(function () {
     Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');
     Route::post("/change-email", [HomeController::class, 'changeEmail'])->name('change.email');

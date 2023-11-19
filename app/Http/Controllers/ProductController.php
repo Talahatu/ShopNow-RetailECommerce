@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
@@ -150,5 +151,31 @@ class ProductController extends Controller
         $prod->status = "live";
         $prod->save();
         return response()->json(["status" => "OK", "data" => $prod]);
+    }
+    public function loadProduct(Request $request)
+    {
+        $lat = $request->get("lat");
+        $long = $request->get("long");
+        if (Auth::check()) {
+            $addr = Address::where([
+                ["user_id", Auth::user()->id],
+                ["current", true]
+            ])->first();
+            $lat = $addr->lat;
+            $long = $addr->long;
+        }
+        $products =
+            Product::select('products.id', 'products.name as pname', "products.stock", "products.rating", "products.weight", "products.price", 'categories.name as cname', 'brands.name as bname', DB::raw('MIN(images.name) as iname'), DB::raw('SQRT(
+                POW((RADIANS(MIN(shops.long)) - RADIANS(' . $long . ')) * COS((RADIANS(' . $lat . ') + RADIANS(MIN(shops.lat))) / 2), 2) +
+                POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $lat . ')), 2)
+            ) * 6371 AS distance'))
+            ->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('brands', 'brands.id', '=', 'products.brand_id')
+            ->join('shops', 'shops.id', '=', 'products.shop_id')
+            ->leftJoin('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(['products.id', 'pname', "products.stock", "products.rating", "products.weight", "products.price", 'cname', 'bname'])
+            ->orderBy('distance')
+            ->get();
+        return response()->json(compact("products"));
     }
 }
