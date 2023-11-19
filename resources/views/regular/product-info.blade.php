@@ -119,7 +119,7 @@
                                             </button>
                                             <input type="number" step="1" min="1" class="form-control"
                                                 value="1" name="quantity" aria-label="Example text with button addon"
-                                                aria-describedby="button-addon1" />
+                                                aria-describedby="button-addon1" id="qty-input" />
                                             <button class="btn btn-dark" type="button" id="button-plus"
                                                 data-mdb-ripple-color="dark" style="width: 50px">
                                                 <i class="fa-solid fa-plus"></i>
