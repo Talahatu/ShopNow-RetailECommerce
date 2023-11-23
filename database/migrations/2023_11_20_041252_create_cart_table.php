@@ -22,6 +22,7 @@ class CreateCartTable extends Migration
             $table->integer("qty");
             $table->integer("price");
             $table->double("distance");
+            $table->boolean("selected")->default(false);
             $table->foreign("product_id")->references("id")->on("products");
             $table->foreign("user_id")->references("id")->on("users");
             $table->timestamps();

@@ -50,6 +50,8 @@ Route::middleware(["auth"])->group(function () {
     Route::get('/cart', [ProductController::class, "showCart"])->name("cart.show");
     Route::post("/cart/add", [ProductController::class, "addToCart"])->name("cart.add");
     Route::delete("/cart/delete", [ProductController::class, "removeFromCart"])->name("cart.remove");
+    Route::post("/cart/updateQuantity", [ProductController::class, "updateCartQuantity"])->name("cart.updateQTY");
+    Route::post("/cart/updateSelected", [ProductController::class, "updateCartSelected"])->name("cart.updateSelected");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {

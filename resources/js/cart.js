@@ -12,36 +12,43 @@ $(function () {
     $(".button-minus").on("click", function () {
         const parent = $(this).parent().parent().parent();
         const qty = $(parent).find("#qty-input");
+        const id = $(parent).attr("attr-dia");
         let val = parseInt($(qty).val());
         if (val <= 1) return;
         val -= 1;
-        $(qty).val(val);
-        let price = parseInt($(parent).find(".item-price").val());
-        let total = price * parseInt(val);
-        $(parent).find(".item-total").val(total);
-        $(parent).find(".item-total-label").html(formatter.format(total));
-        if ($(parent).find(".item-selected").is(":checked")) {
-            calculateTotal();
-        }
+        updateQTY(val, qty, parent, id);
     });
     $(".button-plus").on("click", function () {
         const parent = $(this).parent().parent().parent();
         const qty = $(parent).find("#qty-input");
+        const id = $(parent).attr("attr-dia");
         let val = parseInt($(qty).val());
         val += 1;
-        $(qty).val(val);
-        let price = parseInt($(parent).find(".item-price").val());
-        let total = price * parseInt(val);
-
-        $(parent).find(".item-total").val(total);
-        $(parent).find(".item-total-label").html(formatter.format(total));
-        if ($(parent).find(".item-selected").is(":checked")) {
-            calculateTotal();
-        }
+        updateQTY(val, qty, parent, id);
     });
 
     $(".item-selected").on("click", function () {
-        calculateTotal();
+        const parent = $(this).parent().parent();
+        const id = $(parent).attr("attr-dia");
+        const value = $(this).is(":checked");
+
+        $.ajax({
+            type: "POST",
+            url: "/cart/updateSelected",
+            data: {
+                _token: csrfToken,
+                id: id,
+                value: value,
+            },
+            success: function (response) {
+                console.log(response);
+                if (!response) return;
+                calculateTotal();
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        });
     });
     $(".btn-remove-cart").on("click", function () {
         const parent = $(this).parent().parent();
@@ -61,6 +68,8 @@ $(function () {
             },
         });
     });
+
+    $("#btn-checkout").on("click", function () {});
 
     const calculateTotal = () => {
         const allSelected = $(".item-selected:checked");
@@ -139,5 +148,29 @@ $(function () {
             result = 15000;
         }
         return result;
+    };
+    const updateQTY = (qty, el, elParent, id) => {
+        $.ajax({
+            type: "POST",
+            url: "/cart/updateQuantity",
+            data: {
+                _token: csrfToken,
+                qty: qty,
+                id: id,
+            },
+            success: function (response) {
+                if (!response) return;
+                $(el).val(qty);
+                let price = parseInt($(elParent).find(".item-price").val());
+                let total = price * parseInt(qty);
+                $(elParent).find(".item-total").val(total);
+                $(elParent)
+                    .find(".item-total-label")
+                    .html(formatter.format(total));
+                if ($(elParent).find(".item-selected").is(":checked")) {
+                    calculateTotal();
+                }
+            },
+        });
     };
 });

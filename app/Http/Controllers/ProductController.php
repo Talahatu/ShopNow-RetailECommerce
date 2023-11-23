@@ -226,4 +226,18 @@ class ProductController extends Controller
             ->get(["p.name AS pname", "cart.price", "cart.qty", "cart.distance", "p.weight", "i.name AS iname", "cart.id", "p.id AS pid"]);
         return view('regular.cart', compact("data"));
     }
+    public function updateCartQuantity(Request $request)
+    {
+        $cart = Cart::find($request->get("id"));
+        $cart->qty = $request->get("qty");
+        $cart->save();
+        return response()->json($cart);
+    }
+    public function updateCartSelected(Request $request)
+    {
+        $cart = Cart::find($request->get("id"));
+        $cart->selected = $request->get("value") == "true" ? true : false;
+        $cart->save();
+        return response()->json(["data" => $cart]);
+    }
 }

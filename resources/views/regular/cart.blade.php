@@ -5,7 +5,7 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
@@ -45,7 +45,7 @@
                                             <td class="cart-product-check align-middle">
                                                 <input type="checkbox"
                                                     class="text-dark custom-checkbox-control item-selected"
-                                                    name="selected[]" value="{{ $item->pid }}">
+                                                    name="selected[]" value="{{ $item->id }}">
                                             </td>
                                             <td class="cart-product-remove align-middle">
                                                 <a href="#" class="btn-remove-cart text-danger"
@@ -143,7 +143,8 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <a href="shop.html" class="btn btn-dark d-block text-center m-0">Proceed to
+                                        <a href="#" class="btn btn-dark d-block text-center m-0"
+                                            id="btn-checkout">Proceed to
                                             Checkout</a>
                                     </div>
                                 </div>
