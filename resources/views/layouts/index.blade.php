@@ -35,7 +35,7 @@
 
 
     <!-- Footer -->
-    <footer class="text-center text-lg-start text-muted">
+    <footer class="text-center text-lg-start text-muted mt-4">
         <!-- Section: Links  -->
         <section class="">
             <div class="container text-center text-md-start pt-4 pb-4">
@@ -44,11 +44,11 @@
                     <!-- Grid column -->
                     <div class="col-12 col-lg-3 col-sm-12 mb-2">
                         <!-- Content -->
-                        <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
-                            MDB
+                        <a href="/" target="_blank" class="text-white h2">
+                            ShopNow
                         </a>
                         <p class="mt-1 text-white">
-                            © 2023 Copyright: MDBootstrap.com
+                            © 2023 Copyright: MDBootstrap.com & Canvas
                         </p>
                     </div>
                     <!-- Grid column -->

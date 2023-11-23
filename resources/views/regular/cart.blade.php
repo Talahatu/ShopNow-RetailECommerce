@@ -5,7 +5,7 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
@@ -143,8 +143,8 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <a href="#" class="btn btn-dark d-block text-center m-0"
-                                            id="btn-checkout">Proceed to
+                                        <a href="{{ route('checkout.show') }}"
+                                            class="btn btn-dark d-block text-center m-0" id="btn-checkout">Proceed to
                                             Checkout</a>
                                     </div>
                                 </div>

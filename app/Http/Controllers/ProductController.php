@@ -240,4 +240,9 @@ class ProductController extends Controller
         $cart->save();
         return response()->json(["data" => $cart]);
     }
+
+    public function showCheckout()
+    {
+        return view("regular.checkout");
+    }
 }

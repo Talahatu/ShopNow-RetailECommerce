@@ -69,8 +69,6 @@ $(function () {
         });
     });
 
-    $("#btn-checkout").on("click", function () {});
-
     const calculateTotal = () => {
         const allSelected = $(".item-selected:checked");
         let cartTotal = 0;

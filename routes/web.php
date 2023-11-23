@@ -52,6 +52,8 @@ Route::middleware(["auth"])->group(function () {
     Route::delete("/cart/delete", [ProductController::class, "removeFromCart"])->name("cart.remove");
     Route::post("/cart/updateQuantity", [ProductController::class, "updateCartQuantity"])->name("cart.updateQTY");
     Route::post("/cart/updateSelected", [ProductController::class, "updateCartSelected"])->name("cart.updateSelected");
+
+    Route::get("/checkout", [ProductController::class, "showCheckout"])->name("checkout.show");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {
