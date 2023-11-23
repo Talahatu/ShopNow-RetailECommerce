@@ -17,7 +17,7 @@
         </div>
     </section>
     <section>
-        <div class="container my-5">
+        <div class="container my-4">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
                     <h3>Search Result: </h3>

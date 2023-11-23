@@ -29,7 +29,7 @@ Route::get('/', function () {
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
-Route::get("/categories", [HomeController::class, "categoriesShow"])->name("show.categories");
+Route::get("/categories", [CategoryController::class, "categoriesShow"])->name("show.categories");
 Route::get("/show-product/{id}", [ProductController::class, "showProduct"])->name("show.product");
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
@@ -54,6 +54,8 @@ Route::middleware(["auth"])->group(function () {
     Route::post("/cart/updateSelected", [ProductController::class, "updateCartSelected"])->name("cart.updateSelected");
 
     Route::get("/checkout", [ProductController::class, "showCheckout"])->name("checkout.show");
+
+    Route::get("/wishlist", [ProductController::class, "showWishlist"])->name("wishlist.show");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {

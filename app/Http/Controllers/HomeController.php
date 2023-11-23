@@ -40,11 +40,6 @@ class HomeController extends Controller
         }
         return view('home', compact("categories", "recent"));
     }
-    public function categoriesShow()
-    {
-        $categories = Category::all();
-        return view('regular.category', compact("categories"));
-    }
     public function searchShow($query)
     {
         return view('regular.search', compact("query"));

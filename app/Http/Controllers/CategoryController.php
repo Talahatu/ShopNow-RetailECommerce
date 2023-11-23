@@ -14,4 +14,9 @@ class CategoryController extends Controller
         ])->get(["name", "id"]);
         return response()->json($data);
     }
+    public function categoriesShow()
+    {
+        $categories = Category::all();
+        return view('regular.category', compact("categories"));
+    }
 }

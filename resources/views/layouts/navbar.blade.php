@@ -39,7 +39,7 @@
                                     <a class="dropdown-item" href="{{ route('profile') }}">My profile</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">Wishlist</a>
+                                    <a class="dropdown-item" href="{{ route('wishlist.show') }}">Wishlist</a>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">

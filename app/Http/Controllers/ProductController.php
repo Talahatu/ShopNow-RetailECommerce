@@ -245,4 +245,9 @@ class ProductController extends Controller
     {
         return view("regular.checkout");
     }
+
+    public function showWishlist()
+    {
+        return view('regular.wishlist');
+    }
 }
