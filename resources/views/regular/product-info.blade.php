@@ -22,14 +22,32 @@
 
                 </div>
             </div>
-        </section><!-- .page-title end -->
+        </section>
+        <!-- .page-title end -->
+
+        {{-- Toast Start --}}
+        {{-- <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> --}}
+
+        <div class="toast position-fixed top-0 end-0 p-3 m-4" id="myToast" data-bs-autohide="false" style="z-index: 9999">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastHeader"><i class="bi-gift-fill"></i> We miss you!</strong>
+                <button type="button" class="btn-close" id="toastClose" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                It's been a long time since you visited us. We've something special for you. <a href="#">Click
+                    here!</a>
+            </div>
+        </div>
+
+        {{-- Toast End --}}
 
         <!-- Content============================================= -->
         <section id="content">
             <div class="content-wrap card p-4">
                 <div class="page-title-row mb-2">
                     <div class="page-title-content">
-                        <h1>{{ $data->name }}</h1>
+                        <h1>{{ $data->name }} <a href="#" class="add-to-wishlist text-danger"><i
+                                    class="fa-regular fa-heart"></i></a></h1>
                     </div>
                 </div>
                 <hr class="my-3">
@@ -91,7 +109,8 @@
                                         <!-- Product Single - Price  - Rating ============================================= -->
                                         <div class="product-price mt-4 ms-2 w-100 d-flex justify-content-between">
                                             <h2>Rp.
-                                                {{ number_format($data->price, 0, '.', ',') }}</h2>
+                                                {{ number_format($data->price, 0, '.', ',') }} <input type="hidden"
+                                                    name="price" id="price" value="{{ $data->price }}"></h2>
                                             <div class="ms-auto text-warning">
                                                 @for ($j = 0; $j < floor($data->rating); $j++)
                                                     <i class="fa fa-star"></i>
@@ -110,7 +129,7 @@
                                     <hr class="mt-1 mb-3">
 
                                     <!-- Product Single - Quantity & Cart Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ============================================= -->
                                     <div class="cart mb-0  d-block d-lg-flex justify-content-between align-items-center">
                                         <div class="input-group m-lg-0 mb-3 input-quantity-width">
                                             <button class="btn  btn-dark" type="button" id="button-minus"
@@ -118,7 +137,8 @@
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
                                             <input type="number" step="1" min="1" class="form-control"
-                                                value="1" name="quantity" aria-label="Example text with button addon"
+                                                value="1" name="quantity"
+                                                aria-label="Example text with button addon"
                                                 aria-describedby="button-addon1" id="qty-input" />
                                             <button class="btn btn-dark" type="button" id="button-plus"
                                                 data-mdb-ripple-color="dark" style="width: 50px">
@@ -129,9 +149,10 @@
                                         @if (Auth::check() && Auth::user()->hasVerifiedEmail())
                                             <div class="btn-group m-0" role="group">
 
-                                                <button type="button" class="add-to-cart btn btn-outline-dark">Buy
+                                                <button type="button" class="buy-now btn btn-outline-dark">Buy
                                                     Now</button>
-                                                <button type="button" class="add-to-cart btn btn-dark">Add to
+                                                <button type="button" class="add-to-cart btn btn-dark"
+                                                    attr-dia="{{ $data->id }}">Add to
                                                     cart</button>
                                             </div>
                                         @else

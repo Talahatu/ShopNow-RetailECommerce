@@ -1,6 +1,8 @@
-import $, { isNumeric } from "jquery";
-$(document).ready(function () {
+import $ from "jquery";
+
+$(function () {
     const baseUrl = window.location.protocol + "//" + window.location.host;
+    const query = $("#query").val();
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -10,21 +12,26 @@ $(document).ready(function () {
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
-
     function successCallback(position) {
         const lat = position.coords.latitude;
         const long = position.coords.longitude;
-
         $.ajax({
             type: "POST",
-            url: "/loadProduct",
+            url: "/searchProduct",
             data: {
                 _token: csrfToken,
                 lat: lat,
                 long: long,
+                query: query,
             },
             success: function (response) {
                 const products = response.products;
+                if (products.length == 0) {
+                    $("#products-row")
+                        .html(`<h1 class="text-light">No Product matched the keywords...</h1>
+                    `);
+                    return;
+                }
                 let formatter = new Intl.NumberFormat("id-ID", {
                     style: "currency",
                     currency: "IDR",

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use function Ramsey\Uuid\v1;
@@ -125,5 +126,66 @@ class Product extends Model
             }
         }
         return $status;
+    }
+
+    public static function getClosestProduct($latitude, $longitude, $query = '')
+    {
+        $modQuery = "%$query%";
+        return Product::select(
+            'products.id',
+            'products.name as pname',
+            "products.stock",
+            "products.rating",
+            "products.weight",
+            "products.price",
+            'categories.name as cname',
+            'brands.name as bname',
+            DB::raw('MIN(images.name) as iname'),
+            DB::raw('SQRT(
+            POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
+            + RADIANS(MIN(shops.lat))) / 2), 2) +
+            POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
+            ) * 6371 AS distance')
+        )
+            ->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('brands', 'brands.id', '=', 'products.brand_id')
+            ->join('shops', 'shops.id', '=', 'products.shop_id')
+            ->leftJoin('images', 'images.product_id', '=', 'products.id')
+            ->where("products.name", "LIKE", $modQuery)
+            ->orWhere("categories.name", "LIKE", $modQuery)
+            ->orWhere("brands.name", "LIKE", $modQuery)
+            ->groupBy(['products.id', 'pname', "products.stock", "products.rating", "products.weight", "products.price", 'cname', 'bname'])
+            ->orderBy('distance')
+            ->get();
+    }
+
+    public static function insertCart($request)
+    {
+        DB::transaction(function () use ($request) {
+            $address = User::join("addresses", "addresses.user_id", "users.id")
+                ->where([
+                    ["addresses.current", true],
+                    ["addresses.user_id", Auth::user()->id]
+                ])->first(["lat", "long"]);
+            $distance = Product::getDistance($request->get("id"), $address->lat, $address->long);
+            $newCart = new Cart();
+            $newCart->user_id = Auth::user()->id;
+            $newCart->product_id = $request->get("id");
+            $newCart->qty = $request->get("qty");
+            $newCart->price = $request->get("price");
+            $newCart->distance = $distance;
+            $newCart->save();
+        });
+        return true;
+    }
+
+    public static function getDistance($id, $latitude, $longitude)
+    {
+        $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')->select(DB::raw('SQRT(
+            POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
+            + RADIANS(MIN(shops.lat))) / 2), 2) +
+            POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
+            ) * 6371 AS distance'))->where("products.id", $id)->first();
+        return $product->distance;
     }
 }

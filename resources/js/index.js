@@ -8,4 +8,8 @@ $(document).ready(function () {
     $("#alertClose").on("click", function () {
         $(this).parent()[0].remove();
     });
+    $("#btnSearch").on("click", function () {
+        let query = $("#searchInput").val() ? $("#searchInput").val() : "all";
+        $(this).attr("href", "/search/" + query);
+    });
 });

@@ -40,28 +40,14 @@ class HomeController extends Controller
         }
         return view('home', compact("categories", "recent"));
     }
-    public function showProduct($id)
+    public function categoriesShow()
     {
-        $prod = Product::find($id);
-        $prod->load("category", "brand", "images", "shop");
-        $relatedProd = Product::where("id", "!=", $id)
-            ->where(function ($query) use ($prod) {
-                $query->where("category_id", $prod->category_id)->orWhere("brand_id", $prod->brand_id);
-            })->get();
-        if (session()->has("rvp")) {
-            if (!in_array($id, session('rvp'))) {
-                if (count(session('rvp')) == 4) {
-                    $rvp = session('rvp');
-                    array_shift($rvp);
-                    session(["rvp" => $rvp]);
-                }
-                session()->push("rvp", $id);
-            }
-        } else {
-            session()->push("rvp", $id);
-        }
-
-        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd]);
+        $categories = Category::all();
+        return view('regular.category', compact("categories"));
+    }
+    public function searchShow($query)
+    {
+        return view('regular.search', compact("query"));
     }
 
     public function reregister()

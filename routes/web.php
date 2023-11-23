@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,9 +28,12 @@ Route::get('/', function () {
     return redirect("/home");
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get("/show-product/{id}", [HomeController::class, "showProduct"])->name("show.product");
+Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
+Route::get("/categories", [HomeController::class, "categoriesShow"])->name("show.categories");
+Route::get("/show-product/{id}", [ProductController::class, "showProduct"])->name("show.product");
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
+Route::post('/searchProduct', [ProductController::class, "searchProduct"])->name('searchProduct');
 Route::middleware(["auth"])->group(function () {
     Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');
     Route::post("/change-email", [HomeController::class, 'changeEmail'])->name('change.email');
@@ -37,12 +41,15 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get("/profile", [UserController::class, "profile"])->name('profile');
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
-
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");
     Route::post("/add-new-address", [UserController::class, "addNewAddress"])->name("address.create");
     Route::delete("/delete-address", [UserController::class, "deleteAddress"])->name("address.destroy");
     Route::post("/set-cur-addr", [UserController::class, "setCurAddr"])->name("address.set");
+
+    Route::get('/cart', [ProductController::class, "showCart"])->name("cart.show");
+    Route::post("/cart/add", [ProductController::class, "addToCart"])->name("cart.add");
+    Route::delete("/cart/delete", [ProductController::class, "removeFromCart"])->name("cart.remove");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {

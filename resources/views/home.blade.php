@@ -12,11 +12,12 @@
                     <nav class="nav flex-column nav-pills mb-md-2 d-none d-lg-block d-md-none">
                         <!-- 8 categories -->
                         @for ($i = 0; $i < 8; $i++)
-                            <a class="nav-link my-0 py-2 ps-3" href="#">{{ $categories[$i]->name }}</a>
+                            <a class="nav-link my-0 py-2 ps-3"
+                                href="{{ route('show.search', $categories[$i]->name) }}">{{ $categories[$i]->name }}</a>
                         @endfor
-                        <a class="nav-link my-0 py-2 ps-3" href="#">Other Categories</a>
+                        <a class="nav-link my-0 py-2 ps-3" href="{{ route('show.categories') }}">Other Categories</a>
                     </nav>
-                    <nav class="nav flex-column nav-pills mb-md-2 d-block d-md-none">
+                    <nav class="nav flex-column nav-pills mb-md-2 d-block d-lg-none">
                         <div class="container-fluid mb-1">
                             <!-- Toggle button -->
                             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
@@ -32,11 +33,12 @@
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 @for ($i = 0; $i < count($categories); $i++)
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">{{ $categories[$i]->name }}</a>
+                                        <a class="nav-link"
+                                            href="{{ route('show.search', $categories[$i]->name) }}">{{ $categories[$i]->name }}</a>
                                     </li>
                                 @endfor
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Other Categories</a>
+                                    <a class="nav-link" href="{{ route('show.categories') }}">Other Categories</a>
                                 </li>
                             </ul>
                         </div>
@@ -64,7 +66,7 @@
         <div class="container my-5">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
-                    <h3>Closest To You! <i class="fas fa-arrow-right"></i> </h3>
+                    <h3>Closest To You! </h3>
                 </a>
             </header>
             <div class="row" id="products-row"></div>
@@ -103,7 +105,8 @@
                                             </h5>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
-                                            <p class="text-muted mb-0"><span class="fw-bold">{{ $recent[$i]->stock }}</span>
+                                            <p class="text-muted mb-0"><span
+                                                    class="fw-bold">{{ $recent[$i]->stock }}</span>
                                                 In Stock</p>
                                             <div class="ms-auto text-warning">
                                                 @for ($j = 0; $j < floor($recent[$i]->rating); $j++)
