@@ -85,6 +85,7 @@
                                     <div class="pt-1 mb-4">
                                         <button class="btn btn-dark btn-lg btn-block" disabled type="submit"
                                             id="btnsbmt">{{ __('Open Account') }}</button>
+                                        <a href="/" class="btn btn-outline-dark btn-lg btn-block">Back</a>
                                     </div>
                                 </form>
                             </div>

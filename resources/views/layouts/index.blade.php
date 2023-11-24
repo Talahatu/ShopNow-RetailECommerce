@@ -27,7 +27,6 @@
 <body class="d-flex flex-column min-vh-100">
     <!-- Header -->
     @include('layouts.navbar')
-
     <!-- Content -->
     <div class="container my-4">
         @yield('content')

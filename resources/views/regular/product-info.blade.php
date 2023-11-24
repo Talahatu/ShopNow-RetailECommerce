@@ -40,14 +40,16 @@
         </div>
 
         {{-- Toast End --}}
-
         <!-- Content============================================= -->
         <section id="content">
             <div class="content-wrap card p-4">
                 <div class="page-title-row mb-2">
                     <div class="page-title-content">
-                        <h1>{{ $data->name }} <a href="#" class="add-to-wishlist text-danger"><i
-                                    class="fa-regular fa-heart"></i></a></h1>
+                        <h1>{{ $data->name }} <a href="#" class="add-to-wishlist text-danger"
+                                attr-dia="{{ $data->id }}"><i
+                                    class="{{ $wishlist ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                    id="wishlistStatus"></i></a>
+                        </h1>
                     </div>
                 </div>
                 <hr class="my-3">
@@ -129,7 +131,7 @@
                                     <hr class="mt-1 mb-3">
 
                                     <!-- Product Single - Quantity & Cart Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ============================================= -->
                                     <div class="cart mb-0  d-block d-lg-flex justify-content-between align-items-center">
                                         <div class="input-group m-lg-0 mb-3 input-quantity-width">
                                             <button class="btn  btn-dark" type="button" id="button-minus"

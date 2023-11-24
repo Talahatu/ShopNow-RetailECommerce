@@ -2,6 +2,8 @@
     --dark-background: #191c24;
     --dark-background-v2: #242937;
     --dark-background-2: #353b4d;
+    --scrollbar-handle: #b3b3b3;
+    --scrollbar-handle-hover: #717171;
 }
 body {
     background-color: var(--dark-background-v2);
@@ -9,4 +11,24 @@ body {
 
 footer {
     background-color: var(--dark-background-2);
+}
+
+/* The scrollbar track */
+::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+}
+
+/* The scrollbar handle */
+::-webkit-scrollbar-thumb {
+    background: var(
+        --scrollbar-handle
+    ); /* Adjust the color of the scrollbar handle */
+    border-radius: 5px; /* Rounds the corners of the scrollbar handle */
+}
+
+/* The scrollbar handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(
+        --scrollbar-handle-hover
+    ); /* Adjust the color of the scrollbar handle on hover */
 }

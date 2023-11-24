@@ -4,6 +4,9 @@ $(function () {
     const baseUrl = window.location.protocol + "//" + window.location.host;
     const query = $("#query").val();
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
+    let lat;
+    let long;
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             successCallback,
@@ -12,9 +15,64 @@ $(function () {
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
+
+    $(".category-check").on("click", function () {
+        updateFilter();
+    });
+    $(".brand-check").on("click", function () {
+        updateFilter();
+    });
+    $("#btnApplyFilter").on("click", function () {
+        updateFilter();
+    });
+
     function successCallback(position) {
-        const lat = position.coords.latitude;
-        const long = position.coords.longitude;
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
+        loadProducts(lat, long, query);
+    }
+    function errorCallback(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("An unknown error occurred.");
+                break;
+        }
+    }
+
+    const updateFilter = () => {
+        let allCateChecked = $(".category-check:checked")
+            .map(function () {
+                return this.value;
+            })
+            .get();
+        let allBrandChecked = $(".brand-check:checked")
+            .map(function () {
+                return this.value;
+            })
+            .get();
+        const priceFrom = $("#price-from").val() ? $("#price-from").val() : "0";
+        const priceTo = $("#price-to").val() ? $("#price-to").val() : "0";
+
+        const filter = {
+            categories: allCateChecked,
+            brands: allBrandChecked,
+            priceFrom: priceFrom,
+            priceTo: priceTo,
+        };
+
+        loadProducts(lat, long, query, filter);
+    };
+
+    const loadProducts = (lat, long, query, filter = null) => {
         $.ajax({
             type: "POST",
             url: "/searchProduct",
@@ -23,6 +81,7 @@ $(function () {
                 lat: lat,
                 long: long,
                 query: query,
+                filter: filter,
             },
             success: function (response) {
                 const products = response.products;
@@ -113,21 +172,5 @@ $(function () {
                 console.log(err);
             },
         });
-    }
-    function errorCallback(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                console.log("User denied the request for Geolocation.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                console.log("Location information is unavailable.");
-                break;
-            case error.TIMEOUT:
-                console.log("The request to get user location timed out.");
-                break;
-            case error.UNKNOWN_ERROR:
-                console.log("An unknown error occurred.");
-                break;
-        }
-    }
+    };
 });

@@ -9,10 +9,12 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PDO;
 
 class ProductController extends Controller
 {
@@ -173,6 +175,7 @@ class ProductController extends Controller
         $lat = $request->get("lat");
         $long = $request->get("long");
         $query = $request->get("query");
+        $filter = $request->get("filter");
         if (Auth::check()) {
             $addr = Address::where([
                 ["user_id", Auth::user()->id],
@@ -182,7 +185,7 @@ class ProductController extends Controller
             $long = $addr->long;
         }
         $products = Product::getClosestProduct($lat, $long, $query == "all" ? "" : $query);
-        return response()->json(compact("products", "query"));
+        return response()->json(compact("products"));
     }
     public function showProduct($id)
     {
@@ -192,6 +195,8 @@ class ProductController extends Controller
             ->where(function ($query) use ($prod) {
                 $query->where("category_id", $prod->category_id)->orWhere("brand_id", $prod->brand_id);
             })->get();
+        $wishlistStat = Product::join("wishlist", "wishlist.product_id", "products.id")->where("wishlist.product_id", $id)->first();
+
         if (session()->has("rvp")) {
             if (!in_array($id, session('rvp'))) {
                 if (count(session('rvp')) == 4) {
@@ -205,7 +210,7 @@ class ProductController extends Controller
             session()->push("rvp", $id);
         }
 
-        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd]);
+        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd, "wishlist" => $wishlistStat]);
     }
     public function addToCart(Request $request)
     {
@@ -243,11 +248,51 @@ class ProductController extends Controller
 
     public function showCheckout()
     {
-        return view("regular.checkout");
+        $address = Address::where([
+            ["user_id", Auth::user()->id],
+            ["current", 1]
+        ])->first();
+        $carts = Product::join("cart", "cart.product_id", "products.id")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["selected", 1]
+            ])->get();
+        return view("regular.checkout", compact("carts", "address"));
+    }
+    public function getShipModal(Request $request)
+    {
+        $addresses = Address::where("user_id", Auth::user()->id)->get();
+        $id = $request->get("id");
+        return response()->json([
+            "content" => view("regular.modals.changeShipAddress", compact("addresses", "id"))->render()
+        ]);
     }
 
     public function showWishlist()
     {
-        return view('regular.wishlist');
+        $products = Product::select(DB::raw("MIN(images.name) AS iname"), "products.name AS pname", "categories.name AS cname", "products.price", "products.stock", "products.rating", "products.id")
+            ->join("wishlist", 'wishlist.product_id', "products.id")
+            ->join("categories", "categories.id", "products.category_id")
+            ->leftJoin("images", "images.product_id", "products.id")
+            ->where("wishlist.user_id", Auth::user()->id)
+            ->groupBy(['products.id', 'pname', "products.stock", "products.rating", "products.price", 'cname'])
+            ->get();
+        return view('regular.wishlist', compact("products"));
+    }
+    public function toggleWishlist(Request $request)
+    {
+        $prod = Product::find($request->get("id"));
+        if ($request->get("state") == "true") {
+            $new = new Wishlist();
+            $new->product_id = $request->get("id");
+            $new->user_id = Auth::user()->id;
+            $new->save();
+            return response()->json($prod);
+        }
+        Wishlist::where([
+            ["user_id", Auth::user()->id],
+            ["product_id", $request->get("id")]
+        ])->delete();
+        return response()->json($prod);
     }
 }

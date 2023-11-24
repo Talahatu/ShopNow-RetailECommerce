@@ -8,7 +8,7 @@
                     <div class="col mx-1 my-2 px-2 text-center">
                         <a href="{{ route('show.search', $item->name) }}">
                             <div class="card">
-                                <div class="card-body">
+                                <div class="card-body text-dark">
                                     {{ $item->name }}
                                 </div>
                             </div>

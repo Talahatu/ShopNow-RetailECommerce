@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -42,7 +43,16 @@ class HomeController extends Controller
     }
     public function searchShow($query)
     {
-        return view('regular.search', compact("query"));
+        $var = "%$query%";
+        $check = Product::where("name", "LIKE", $var)->first();
+        if ($check) {
+            $categories = Category::join("brand_categories AS bc", "bc.category_id", "categories.id")->where("brand_id", $check->brand_id)->get();
+            $brands = Brand::join("brand_categories AS bc", "bc.brand_id", "brands.id")->where("category_id", $check->category_id)->get();
+        } else {
+            $categories = Category::all();
+            $brands = Brand::all();
+        }
+        return view('regular.search', compact("query", "categories", "brands"));
     }
 
     public function reregister()

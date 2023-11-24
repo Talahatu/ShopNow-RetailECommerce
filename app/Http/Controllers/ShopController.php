@@ -31,7 +31,9 @@ class ShopController extends Controller
     public function create()
     {
         $exists = Shop::where("user_id", Auth::user()->id)->get();
-        if ($exists) return redirect()->route('seller.index');
+        if (count($exists) > 0) {
+            return redirect()->route('seller.index');
+        }
         return view('auth.register-seller');
     }
 

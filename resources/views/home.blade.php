@@ -4,47 +4,44 @@
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 @endsection
 @section('content')
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white card">
+        <!-- Container wrapper -->
+        <div class="container justify-content-center justify-content-md-between">
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarLeftAlignExample"
+                aria-controls="navbarLeftAlignExample" aria-expanded="false" aria-label="Toggle navigation"><i
+                    class="fas fa-bars"></i>
+            </button>
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- 8 categories -->
+                        @for ($i = 0; $i < 8; $i++)
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('show.search', $categories[$i]->name) }}">{{ $categories[$i]->name }}</a>
+                            </li>
+                        @endfor
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('show.categories') }}">Other Categories</a>
+                        </li>
+                    </ul>
+                    <!-- Left links -->
+                </ul>
+                <!-- Left links -->
+            </div>
+        </div>
+        <!-- Container wrapper -->
+    </nav>
     <!--  intro  -->
     <div class="container mt-4" id="categoryContainer">
         <main class="card p-3 shadow-2-strong">
             <div class="row">
-                <div class="col-lg-3 nav-parent mb-2">
-                    <nav class="nav flex-column nav-pills mb-md-2 d-none d-lg-block d-md-none">
-                        <!-- 8 categories -->
-                        @for ($i = 0; $i < 8; $i++)
-                            <a class="nav-link my-0 py-2 ps-3"
-                                href="{{ route('show.search', $categories[$i]->name) }}">{{ $categories[$i]->name }}</a>
-                        @endfor
-                        <a class="nav-link my-0 py-2 ps-3" href="{{ route('show.categories') }}">Other Categories</a>
-                    </nav>
-                    <nav class="nav flex-column nav-pills mb-md-2 d-block d-lg-none">
-                        <div class="container-fluid mb-1">
-                            <!-- Toggle button -->
-                            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                                data-mdb-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
-                                aria-expanded="false" aria-label="Toggle navigation" class="d-flex justify-content-between"
-                                style="width: 100%">
-                                <strong>Categories</strong>
-                                <i class="fas fa-caret-down"></i>
-                            </button>
-                        </div>
-                        <!-- Collapsible wrapper -->
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                @for ($i = 0; $i < count($categories); $i++)
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="{{ route('show.search', $categories[$i]->name) }}">{{ $categories[$i]->name }}</a>
-                                    </li>
-                                @endfor
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('show.categories') }}">Other Categories</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-                <div class="col-lg-9">
+                <div class="col-lg-12">
                     <div class="card-banner h-auto p-5 bg-gradient rounded-5" style="height: 350px;">
                         <div>
                             <h2 class="text-white">
@@ -53,7 +50,6 @@
                             </h2>
                             <p class="text-white">Provide the nearest products just for your needs whenever and wherever.
                                 Together lets shop happily with ShopNow!</p>
-                            {{-- <a href="#" class="btn btn-light shadow-0 text-dark"> View more </a> --}}
                         </div>
                     </div>
                 </div>
@@ -105,8 +101,7 @@
                                             </h5>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
-                                            <p class="text-muted mb-0"><span
-                                                    class="fw-bold">{{ $recent[$i]->stock }}</span>
+                                            <p class="text-muted mb-0"><span class="fw-bold">{{ $recent[$i]->stock }}</span>
                                                 In Stock</p>
                                             <div class="ms-auto text-warning">
                                                 @for ($j = 0; $j < floor($recent[$i]->rating); $j++)

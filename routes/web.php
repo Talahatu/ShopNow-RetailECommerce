@@ -54,8 +54,10 @@ Route::middleware(["auth"])->group(function () {
     Route::post("/cart/updateSelected", [ProductController::class, "updateCartSelected"])->name("cart.updateSelected");
 
     Route::get("/checkout", [ProductController::class, "showCheckout"])->name("checkout.show");
+    Route::post("/getShipAddressModal", [ProductController::class, "getShipModal"])->name("checkout.ship.modal");
 
     Route::get("/wishlist", [ProductController::class, "showWishlist"])->name("wishlist.show");
+    Route::post("/wishlist/toggle", [ProductController::class, "toggleWishlist"])->name("wishlist.toggle");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {
@@ -71,5 +73,5 @@ Route::middleware(["auth", "seller"])->group(function () {
 
 
 Route::get("/test", function () {
-    return view('regular.product-info');
+    return view('layouts.index2');
 });

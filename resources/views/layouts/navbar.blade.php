@@ -2,7 +2,7 @@
     <!-- Jumbotron -->
     <div class="p-3 text-center bg-white border-bottom">
         <div class="container">
-            <div class="row gy-3">
+            <div class="row gy-3 d-flex justify-content-between justify-content-lg-start">
                 <!-- Left elements -->
                 <div class="col-lg-2 col-sm-4 col-4">
                     <a href="/" class="float-start">
@@ -10,7 +10,6 @@
                     </a>
                 </div>
                 <!-- Left elements -->
-
                 <!-- Center elements -->
                 <div class="order-lg-last col-lg-5 col-sm-8 col-8">
                     <div class="d-flex float-end">
@@ -56,7 +55,6 @@
                     </div>
                 </div>
                 <!-- Center elements -->
-
                 <!-- Right elements -->
                 <div class="col-lg-5 col-md-12 col-12">
                     <div class="input-group float-center">
