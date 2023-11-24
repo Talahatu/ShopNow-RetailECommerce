@@ -175,7 +175,10 @@ class ProductController extends Controller
         $lat = $request->get("lat");
         $long = $request->get("long");
         $query = $request->get("query");
-        $filter = $request->get("filter");
+        $filter = null;
+        if ($request->get("filter")) {
+            $filter = $request->get("filter");
+        }
         if (Auth::check()) {
             $addr = Address::where([
                 ["user_id", Auth::user()->id],
@@ -184,7 +187,7 @@ class ProductController extends Controller
             $lat = $addr->lat;
             $long = $addr->long;
         }
-        $products = Product::getClosestProduct($lat, $long, $query == "all" ? "" : $query);
+        $products = Product::getClosestProduct($lat, $long, $query == "all" ? "" : $query, $filter);
         return response()->json(compact("products"));
     }
     public function showProduct($id)

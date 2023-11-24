@@ -59,7 +59,7 @@
                 <div class="col-lg-5 col-md-12 col-12">
                     <div class="input-group float-center">
                         <div class="form-outline">
-                            <input type="search" id="searchInput" name="searchInput" value=""
+                            <input type="search" id="searchInput" name="searchInput" value="{{ old('searchInput') }}"
                                 class="form-control" placeholder="Search product's name, category, or brand" />
                         </div>
                         <a href="/search/" id="btnSearch" class="btn btn-dark shadow-0">

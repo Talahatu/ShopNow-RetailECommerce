@@ -128,7 +128,7 @@ class Product extends Model
         return $status;
     }
 
-    public static function getClosestProduct($latitude, $longitude, $query = '')
+    public static function getClosestProduct($latitude, $longitude, $query = '', $filter = null)
     {
         $modQuery = "%$query%";
         return Product::select(
@@ -142,18 +142,36 @@ class Product extends Model
             'brands.name as bname',
             DB::raw('MIN(images.name) as iname'),
             DB::raw('SQRT(
-            POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
-            + RADIANS(MIN(shops.lat))) / 2), 2) +
-            POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
-            ) * 6371 AS distance')
+                POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
+                + RADIANS(MIN(shops.lat))) / 2), 2) +
+                POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
+                ) * 6371 AS distance')
         )
             ->join('categories', 'categories.id', '=', 'products.category_id')
             ->join('brands', 'brands.id', '=', 'products.brand_id')
             ->join('shops', 'shops.id', '=', 'products.shop_id')
             ->leftJoin('images', 'images.product_id', '=', 'products.id')
-            ->where("products.name", "LIKE", $modQuery)
-            ->orWhere("categories.name", "LIKE", $modQuery)
-            ->orWhere("brands.name", "LIKE", $modQuery)
+            ->when($filter != null, function ($q) use ($filter) {
+                return $q->where(function ($q2) use ($filter) {
+                    return $q2->when($filter["categories"] != "empty", function ($query) use ($filter) {
+                        return $query->whereIn("products.category_id", $filter["categories"]);
+                    })->when($filter["brands"] != "empty", function ($query) use ($filter) {
+                        return $query->orWhereIn("products.brand_id", $filter["brands"]);
+                    });
+                })->when($filter["priceFrom"] > 0 && $filter["priceTo"] > 0, function ($query) use ($filter) {
+                    return $query->whereBetween("products.price", [$filter["priceFrom"], $filter["priceTo"]]);
+                })->when($filter["priceFrom"] > 0, function ($query) use ($filter) {
+                    return $query->where("products.price", ">=", $filter["priceFrom"]);
+                })->when($filter["priceTo"] > 0, function ($query) use ($filter) {
+                    return $query->where("products.price", "<=", $filter["priceTo"]);
+                });
+            })
+            ->where(function ($query) use ($modQuery) {
+                return $query
+                    ->where("products.name", "LIKE", $modQuery)
+                    ->orWhere("categories.name", "LIKE", $modQuery)
+                    ->orWhere("brands.name", "LIKE", $modQuery);
+            })
             ->groupBy(['products.id', 'pname', "products.stock", "products.rating", "products.weight", "products.price", 'cname', 'bname'])
             ->orderBy('distance')
             ->get();

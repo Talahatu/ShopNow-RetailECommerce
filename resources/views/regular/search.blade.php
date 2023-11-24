@@ -61,7 +61,7 @@
                                 @foreach ($brands as $item)
                                     <li class="list-group-item"><input type="checkbox" class="brand-check"
                                             name="brand-check" id="brand-check"
-                                            {{ $item->id }}>&nbsp;{{ $item->name }}</li>
+                                            value="{{ $item->id }}">&nbsp;{{ $item->name }}</li>
                                 @endforeach
                             </ul>
                         </div>

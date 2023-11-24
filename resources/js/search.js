@@ -61,14 +61,12 @@ $(function () {
             .get();
         const priceFrom = $("#price-from").val() ? $("#price-from").val() : "0";
         const priceTo = $("#price-to").val() ? $("#price-to").val() : "0";
-
         const filter = {
-            categories: allCateChecked,
-            brands: allBrandChecked,
+            categories: allCateChecked.length > 0 ? allCateChecked : "empty",
+            brands: allBrandChecked.length > 0 ? allBrandChecked : "empty",
             priceFrom: priceFrom,
             priceTo: priceTo,
         };
-
         loadProducts(lat, long, query, filter);
     };
 
