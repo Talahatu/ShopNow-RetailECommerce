@@ -44,8 +44,9 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($categories as $item)
                                     <li class="list-group-item"><input type="checkbox" class="category-check"
-                                            name="category-check" id="category-check"
-                                            value="{{ $item->id }}">&nbsp;{{ $item->name }}</li>
+                                            name="category-check" id="category-check" value="{{ $item->id }}"
+                                            {{ $checkCate && $checkCate->id == $item->id ? 'checked' : '' }}>&nbsp;{{ $item->name }}
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -60,8 +61,9 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($brands as $item)
                                     <li class="list-group-item"><input type="checkbox" class="brand-check"
-                                            name="brand-check" id="brand-check"
-                                            value="{{ $item->id }}">&nbsp;{{ $item->name }}</li>
+                                            name="brand-check" id="brand-check" value="{{ $item->id }}"
+                                            {{ $checkBrand && $checkBrand->id == $item->id ? 'checked' : '' }}>&nbsp;{{ $item->name }}
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>

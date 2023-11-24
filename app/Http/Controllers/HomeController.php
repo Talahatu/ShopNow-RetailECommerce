@@ -45,6 +45,8 @@ class HomeController extends Controller
     {
         $var = "%$query%";
         $check = Product::where("name", "LIKE", $var)->first();
+        $checkCate = Category::where("name", $query)->first("id");
+        $checkBrand = Brand::where("name", $query)->first("id");
         if ($check) {
             $categories = Category::join("brand_categories AS bc", "bc.category_id", "categories.id")->where("brand_id", $check->brand_id)->get();
             $brands = Brand::join("brand_categories AS bc", "bc.brand_id", "brands.id")->where("category_id", $check->category_id)->get();
@@ -52,7 +54,7 @@ class HomeController extends Controller
             $categories = Category::all();
             $brands = Brand::all();
         }
-        return view('regular.search', compact("query", "categories", "brands"));
+        return view('regular.search', compact("query", "categories", "brands", "checkCate", "checkBrand"));
     }
 
     public function reregister()
