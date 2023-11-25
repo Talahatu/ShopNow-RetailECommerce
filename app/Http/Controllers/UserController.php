@@ -31,14 +31,42 @@ class UserController extends Controller
     }
     public function profileOrder()
     {
-        $orders = Order::with("shop", "details.product.images")
+        $pendings = Order::with("shop", "details.product.images")
             ->where([
                 ["user_id", Auth::user()->id],
                 ["orderStatus", "new"]
             ])
             ->orderBy("shop_id")
             ->get();
-        return view('regular.tabs.order-tab', compact("orders"));
+        $processed = Order::with("shop", "details.product.images")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", "accepted"]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        $sents = Order::with("shop", "details.product.images")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", "sent"]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        $finished = Order::with("shop", "details.product.images")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", "done"]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        $cancelled = Order::with("shop", "details.product.images")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", "cancel"]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        return view('regular.tabs.order-tab', compact("pendings", "processed", "sents", "finished", "cancelled"));
     }
 
     public function getAddAddressForm(Request $request)
