@@ -19,6 +19,11 @@ class UserController extends Controller
         $shop = Shop::where("user_id", Auth::user()->id)->first();
         return view('regular.profile', compact("shop"));
     }
+    public function profileTabs($tabs)
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('regular.profile', compact("shop", "tabs"));
+    }
 
     public function getAddAddressForm(Request $request)
     {
@@ -86,5 +91,12 @@ class UserController extends Controller
     public function deleteAddress(Request $request)
     {
         return response()->json(Address::find($request->get("id"))->delete());
+    }
+    public function topup(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->saldo = $user->saldo + $request->get("value");
+        $user->save();
+        return response()->json($user);
     }
 }

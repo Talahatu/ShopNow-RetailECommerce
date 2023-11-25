@@ -16,7 +16,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" class="text-light">Home</a></li>
-                            <li class="breadcrumb-item"><a href="/Cart" class="text-light">Cart</a></li>
+                            <li class="breadcrumb-item"><a href="/cart" class="text-light">Cart</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Checkout</li>
                         </ol>
                     </nav>
@@ -24,8 +24,6 @@
                 </div>
             </div>
         </section><!-- .page-title end -->
-
-
         <!-- Content ============================================= -->
         <section id="content">
             <div class="content-wrap card p-4">
@@ -37,7 +35,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Shipping Address</h5>
                                     <div class="card-content d-flex flex-column justify-content-center">
-                                        <address class="m-0">{{ $address->name }} &nbsp;<button
+                                        <address class="m-0" id="address-ship">{{ $address->name }} &nbsp;<button
                                                 class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#exampleModal" attr-dia="{{ $address->id }}"
                                                 data-bs-title="Change Shipping Address" id="btnChangeShip">Change</button>
@@ -51,7 +49,7 @@
                     <div class="row col-mb-50 gutter-50">
                         <div class="w-100"></div>
                         {{-- Products List --}}
-                        <div class="col-lg-6">
+                        <div class="col-lg-8">
                             <h4>Your Orders</h4>
                             <div class="table-responsive">
                                 <table class="table cart">
@@ -59,72 +57,45 @@
                                         <tr>
                                             <th class="cart-product-thumbnail">&nbsp;</th>
                                             <th class="cart-product-name">Product</th>
+                                            <th class="cart-product-price">Price</th>
                                             <th class="cart-product-quantity">Quantity</th>
                                             <th class="cart-product-subtotal">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="cart_item">
-                                            <td class="cart-product-thumbnail">
-                                                <a href="#"><img width="64" height="64"
-                                                        src="{{ asset('images/dress/3.jpg') }}"
-                                                        alt="Pink Printed Dress"></a>
-                                            </td>
-                                            <td class="cart-product-name">
-                                                <a href="#">Pink Printed Dress</a>
-                                            </td>
-                                            <td class="cart-product-quantity">
-                                                <div class="quantity">
-                                                    1x2
-                                                </div>
-                                            </td>
-                                            <td class="cart-product-subtotal">
-                                                <span class="amount">$39.98</span>
-                                            </td>
-                                        </tr>
-                                        <tr class="cart_item">
-                                            <td class="cart-product-thumbnail">
-                                                <a href="#"><img width="64" height="64"
-                                                        src="{{ asset('images/dress/3-1.jpg') }}"
-                                                        alt="Checked Canvas Shoes"></a>
-                                            </td>
-                                            <td class="cart-product-name">
-                                                <a href="#">Checked Canvas Shoes</a>
-                                            </td>
-                                            <td class="cart-product-quantity">
-                                                <div class="quantity">
-                                                    1x1
-                                                </div>
-                                            </td>
-                                            <td class="cart-product-subtotal">
-                                                <span class="amount">$24.99</span>
-                                            </td>
-                                        </tr>
-                                        <tr class="cart_item">
-                                            <td class="cart-product-thumbnail">
-                                                <a href="#"><img width="64" height="64"
-                                                        src="{{ asset('images/dress/3-2.jpg') }}"
-                                                        alt="Pink Printed Dress"></a>
-                                            </td>
-                                            <td class="cart-product-name">
-                                                <a href="#">Blue Men Tshirt</a>
-                                            </td>
-                                            <td class="cart-product-quantity">
-                                                <div class="quantity">
-                                                    1x3
-                                                </div>
-                                            </td>
-                                            <td class="cart-product-subtotal">
-                                                <span class="amount">$41.97</span>
-                                            </td>
-                                        </tr>
+                                        @foreach ($carts as $item)
+                                            <tr class="cart_item">
+                                                <td class="cart-product-thumbnail align-middle">
+                                                    <a href="/show-product/{{ $item->id }}"><img width="64"
+                                                            height="64"
+                                                            src="{{ asset('productimages/' . $item->iname) }}"
+                                                            alt="Pink Printed Dress"></a>
+                                                </td>
+                                                <td class="cart-product-name align-middle">
+                                                    <a href="/show-product/{{ $item->id }}"
+                                                        class="text-dark">{{ $item->pname }}</a>
+                                                </td>
+                                                <td class="cart-product-price align-middle">
+                                                    Rp {{ number_format($item->price, 0, ',', '.') }}
+                                                </td>
+                                                <td class="cart-product-quantity align-middle text-center">
+                                                    1x{{ $item->qty }}
+                                                </td>
+                                                <td class="cart-product-subtotal align-middle">
+                                                    <span class="amount">Rp
+                                                        {{ number_format($item->price * $item->qty, 0, ',', '.') }}</span>
+                                                    <input type="hidden" name="total-row" class="total-row"
+                                                        value="{{ $item->price * $item->qty }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         {{-- Total & Payment --}}
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <h4>Cart Totals</h4>
                             <div class="table-responsive">
                                 <table class="table cart">
@@ -135,7 +106,7 @@
                                             </td>
 
                                             <td class="border-top-0 cart-product-name">
-                                                <span class="amount">$106.94</span>
+                                                <span class="amount">Rp {{ number_format($cartTotal, 0, ',', '.') }}</span>
                                             </td>
                                         </tr>
                                         <tr class="cart_item">
@@ -144,7 +115,8 @@
                                             </td>
 
                                             <td class="cart-product-name">
-                                                <span class="amount">Free Delivery</span>
+                                                <span class="amount">Rp
+                                                    {{ number_format($shippingFee, 0, ',', '.') }}</span>
                                             </td>
                                         </tr>
                                         <tr class="cart_item">
@@ -153,19 +125,31 @@
                                             </td>
 
                                             <td class="cart-product-name">
-                                                <span class="amount color lead"><strong>$106.94</strong></span>
+                                                <span class="amount color lead"><strong>Rp
+                                                        {{ number_format($total, 0, ',', '.') }}</strong></span>
+                                                <input type="hidden" name="total-checkout" id="total-checkout"
+                                                    value="{{ $total }}">
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div class="payment-method btn-group w-100" role="group" aria-label="Payments Button">
-                                <button class="btn btn-dark">Saldo ShopNow</button>
-                                <button class="btn btn-outline-dark">Cash On Delivery</button>
+                            <small class="text-danger">{{ Auth::user()->saldo < $total ? 'Saldo not enough...' : '' }}</small>
+                            <div class="btn-group payment-method w-100">
+                                <input type="radio" class="btn-check btn-method" name="options" id="option1"
+                                    autocomplete="off" value="ew"
+                                    {{ Auth::user()->saldo < $total ? 'disabled' : 'checked' }} />
+                                <label class="btn btn-secondary" for="option1" data-mdb-ripple-init>Saldo ShopNow</label>
+
+                                <input type="radio" class="btn-check btn-method" name="options" id="option2"
+                                    autocomplete="off" value="cod"
+                                    {{ Auth::user()->saldo < $total ? 'checked' : '' }} />
+                                <label class="btn btn-secondary" for="option2" data-mdb-ripple-init>Cash On
+                                    Delivery</label>
                             </div>
                             <div class="d-flex justify-content-end my-4">
-                                <a href="#" class="btn btn-dark btn-lg btn-block">Checkout</a>
+                                <button class="btn btn-dark btn-lg btn-block" id="btnCheckout">Checkout</button>
                             </div>
                         </div>
                     </div>

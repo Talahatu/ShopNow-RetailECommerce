@@ -215,6 +215,15 @@ class ProductController extends Controller
 
         return view("regular.product-info", ["data" => $prod, "related" => $relatedProd, "wishlist" => $wishlistStat]);
     }
+    public function buyNowCart(Request $request)
+    {
+        Product::uncheckAllCartItem();
+        $idCart = Product::insertCart($request);
+        $cart = Cart::find($idCart);
+        $cart->selected = 1;
+        $cart->save();
+        return response()->json($idCart);
+    }
     public function addToCart(Request $request)
     {
         $result = Product::insertCart($request);
@@ -231,8 +240,17 @@ class ProductController extends Controller
         $data = Cart::join("products AS p", "p.id", "cart.product_id")
             ->join("images AS i", "i.product_id", "p.id")
             ->where("cart.user_id", Auth::user()->id)
-            ->get(["p.name AS pname", "cart.price", "cart.qty", "cart.distance", "p.weight", "i.name AS iname", "cart.id", "p.id AS pid"]);
-        return view('regular.cart', compact("data"));
+            ->get(["p.name AS pname", "cart.price", "cart.qty", "cart.selected", "cart.distance", "p.weight", "i.name AS iname", "cart.id", "p.id AS pid"]);
+
+        $cartTotal = 0;
+        $shippingFee = 0;
+        $total = 0;
+        if (count($data) > 0) {
+            $cartTotal = Product::cartTotal(Auth::user()->id);
+            $shippingFee = Product::shippingFee(Auth::user()->id);
+            $total = $cartTotal + $shippingFee;
+        }
+        return view('regular.cart', compact("data", "cartTotal", "shippingFee", "total"));
     }
     public function updateCartQuantity(Request $request)
     {
@@ -255,12 +273,17 @@ class ProductController extends Controller
             ["user_id", Auth::user()->id],
             ["current", 1]
         ])->first();
-        $carts = Product::join("cart", "cart.product_id", "products.id")
+        $carts = Product::select("products.id", "products.name AS pname", "cart.price", "products.weight", "cart.qty", "cart.distance", "images.name AS iname")
+            ->join("cart", "cart.product_id", "products.id")
+            ->leftJoin("images", "images.product_id", "products.id")
             ->where([
                 ["user_id", Auth::user()->id],
                 ["selected", 1]
             ])->get();
-        return view("regular.checkout", compact("carts", "address"));
+        $cartTotal = Product::cartTotal(Auth::user()->id);
+        $shippingFee = Product::shippingFee(Auth::user()->id);
+        $total = $cartTotal + $shippingFee;
+        return view("regular.checkout", compact("carts", "address", "cartTotal", "shippingFee", "total"));
     }
     public function getShipModal(Request $request)
     {

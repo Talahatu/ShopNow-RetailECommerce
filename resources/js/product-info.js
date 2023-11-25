@@ -17,6 +17,26 @@ $(function () {
             $(qty).val(val + 1);
         }
     });
+
+    $(".buy-now").on("click", function () {
+        const id = $(this).attr("attr-dia");
+        const qty = $("#qty-input").val();
+        const price = $("#price").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/cart/buynow",
+            data: {
+                _token: csrfToken,
+                id: id,
+                qty: qty,
+                price: price,
+            },
+            success: function (response) {
+                window.location.href = "/cart";
+            },
+        });
+    });
     $(".add-to-cart").on("click", function () {
         const id = $(this).attr("attr-dia");
         const qty = $("#qty-input").val();

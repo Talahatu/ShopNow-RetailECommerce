@@ -11,8 +11,8 @@
                             role="tab" aria-controls="v-tabs-profile" aria-selected="true">Profile</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="v-tabs-order-tab" data-mdb-toggle="tab" href="#v-tabs-order" role="tab"
-                            aria-controls="v-tabs-order" aria-selected="false">Orders</a>
+                        <a class="nav-link tabs-order" id="v-tabs-order-tab" data-mdb-toggle="tab" href="#v-tabs-order"
+                            role="tab" aria-controls="v-tabs-order" aria-selected="false">Orders</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="v-tabs-notif-tab" data-mdb-toggle="tab" href="#v-tabs-notif" role="tab"
@@ -28,8 +28,8 @@
                     aria-orientation="vertical">
                     <a class="nav-link active" id="v-tabs-profile-tab" data-mdb-toggle="tab" href="#v-tabs-profile"
                         role="tab" aria-controls="v-tabs-profile" aria-selected="true">Profile</a>
-                    <a class="nav-link" id="v-tabs-order-tab" data-mdb-toggle="tab" href="#v-tabs-order" role="tab"
-                        aria-controls="v-tabs-order" aria-selected="false">Orders</a>
+                    <a class="nav-link tabs-order" id="v-tabs-order-tab-lg" data-mdb-toggle="tab" href="#v-tabs-order"
+                        role="tab" aria-controls="v-tabs-order" aria-selected="false">Orders</a>
                     <a class="nav-link" id="v-tabs-notif-tab" data-mdb-toggle="tab" href="#v-tabs-notif" role="tab"
                         aria-controls="v-tabs-notif" aria-selected="false">Notifications</a>
                 </div>

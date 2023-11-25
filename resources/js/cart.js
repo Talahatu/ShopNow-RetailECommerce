@@ -28,9 +28,11 @@ $(function () {
     });
 
     $(".item-selected").on("click", function () {
+        const allSelected = $(".item-selected:checked");
         const parent = $(this).parent().parent();
         const id = $(parent).attr("attr-dia");
         const value = $(this).is(":checked");
+        const btnCheckout = $("#btn-checkout");
 
         $.ajax({
             type: "POST",
@@ -41,9 +43,15 @@ $(function () {
                 value: value,
             },
             success: function (response) {
-                console.log(response);
                 if (!response) return;
                 calculateTotal();
+                if (allSelected.length > 0) {
+                    $(btnCheckout).removeClass("disabled disable-link");
+                    $(btnCheckout).addClass("enable-link");
+                } else {
+                    $(btnCheckout).removeClass("enable-link");
+                    $(btnCheckout).addClass("disabled disable-link");
+                }
             },
             error: function (err) {
                 console.log(err);

@@ -1,3 +1,9 @@
+.disable-link {
+    pointer-events: none;
+}
+.enable-link {
+    pointer-events: all;
+}
 .cart-product-name > a {
     font-weight: 600;
     font-size: 1rem;

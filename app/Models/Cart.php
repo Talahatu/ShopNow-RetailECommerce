@@ -10,4 +10,9 @@ class Cart extends Model
     use HasFactory;
     protected $table = "cart";
     protected $fillable = ["product_id", "user_id", "qty", "price"];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, "product_id", "id");
+    }
 }

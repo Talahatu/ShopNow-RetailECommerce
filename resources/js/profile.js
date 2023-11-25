@@ -12,6 +12,12 @@ L.Icon.Default.mergeOptions({
 var map;
 var marker;
 const csrfToken = $('meta[name="csrf-token"]').attr("content");
+let formatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+});
 $(function () {
     $("#image").on("change", function (e) {
         displaySelectedImage(e, "selectedAvatar");
@@ -227,6 +233,27 @@ $(function () {
         $("#modalTitle").html("");
         $("#modalBody").html("");
         $("#exampleModal").attr("modal-tags", "");
+    });
+});
+
+$("#btnTopup").on("click", function () {
+    const value = $("#topup").val();
+    $.ajax({
+        type: "POST",
+        url: "/saldo/topup",
+        data: {
+            _token: csrfToken,
+            value: value,
+        },
+        success: function (response) {
+            if (!response) return;
+            $("#balance").html(
+                formatter.format(
+                    parseInt($("#balance-val").val()) + parseInt(value)
+                )
+            );
+            $("#topup").val(0);
+        },
     });
 });
 const onMapClick = (e) => {

@@ -5,7 +5,7 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
@@ -45,7 +45,8 @@
                                             <td class="cart-product-check align-middle">
                                                 <input type="checkbox"
                                                     class="text-dark custom-checkbox-control item-selected"
-                                                    name="selected[]" value="{{ $item->id }}">
+                                                    name="selected[]" {{ $item->selected == 1 ? 'checked' : '' }}
+                                                    value="{{ $item->id }}">
                                             </td>
                                             <td class="cart-product-remove align-middle">
                                                 <a href="#" class="btn-remove-cart text-danger"
@@ -60,8 +61,8 @@
                                                 <a href="#">{{ $item->pname }}</a>
                                             </td>
                                             <td class="cart-product-price align-middle">
-                                                <span
-                                                    class="amount">Rp.{{ number_format($item->price, 0, '.', ',') }}</span>
+                                                <span class="amount">Rp
+                                                    {{ number_format($item->price, 0, ',', '.') }}</span>
                                                 <input type="hidden" name="price" class="item-price"
                                                     value="{{ $item->price }}">
                                                 <input type="hidden" name="distance" class="item-distance"
@@ -76,8 +77,8 @@
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                     <input type="number" step="1" min="1"
-                                                        class="form-control item-qty" value="1" name="quantity"
-                                                        aria-label="Example text with button addon"
+                                                        class="form-control item-qty" value="{{ $item->qty }}"
+                                                        name="quantity" aria-label="Example text with button addon"
                                                         aria-describedby="button-addon1" id="qty-input" />
                                                     <button class="btn btn-dark btn-sm button-plus" type="button"
                                                         data-mdb-ripple-color="dark">
@@ -86,10 +87,10 @@
                                                 </div>
                                             </td>
                                             <td class="cart-product-subtotal align-middle">
-                                                <span
-                                                    class="amount item-total-label">Rp.{{ number_format($item->price * $item->qty, 0, '.', ',') }}</span>
+                                                <span class="amount item-total-label">Rp
+                                                    {{ number_format($item->price * $item->qty, 0, ',', '.') }}</span>
                                                 <input type="hidden" class="item-total" name="item-total"
-                                                    value="{{ $item->price }}">
+                                                    value="{{ $item->price * $item->qty }}">
                                             </td>
                                         </tr>
                                     @endforeach
@@ -109,10 +110,10 @@
                                                             <h5 class="mb-0">Cart Subtotal</h5>
                                                         </td>
                                                         <td class="cart-product-name text-end">
-                                                            <span class="amount"
-                                                                id="cartTotalLabel">Rp.{{ number_format('0', 0, '.', ',') }}</span>
+                                                            <span class="amount" id="cartTotalLabel">Rp
+                                                                {{ number_format($cartTotal, 0, ',', '.') }}</span>
                                                             <input type="hidden" name="cartTotal" id="cartTotal"
-                                                                value="0">
+                                                                value="{{ $cartTotal }}">
                                                         </td>
                                                     </tr>
                                                     <tr class="cart_item">
@@ -120,10 +121,10 @@
                                                             <h5 class="mb-0">Shipping</h5>
                                                         </td>
                                                         <td class="cart-product-name text-end">
-                                                            <span class="amount"
-                                                                id="shippingLabel">Rp.{{ number_format('0', 0, '.', ',') }}</span>
+                                                            <span class="amount" id="shippingLabel">Rp
+                                                                {{ number_format($shippingFee, 0, ',', '.') }}</span>
                                                             <input type="hidden" name="shipping" id="shipping"
-                                                                value="0">
+                                                                value="{{ $shippingFee }}">
                                                         </td>
                                                     </tr>
                                                     <tr class="cart_item">
@@ -132,10 +133,10 @@
                                                         </td>
 
                                                         <td class="cart-product-name text-end">
-                                                            <span class="amount color lead fw-medium"
-                                                                id="totalLabel">Rp.{{ number_format('0', 0, '.', ',') }}</span>
+                                                            <span class="amount color lead fw-medium" id="totalLabel">Rp
+                                                                {{ number_format($total, 0, ',', '.') }}</span>
                                                             <input type="hidden" name="total" id="total"
-                                                                value="0">
+                                                                value="{{ $total }}">
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -144,7 +145,8 @@
                                     </div>
                                     <div class="col-12">
                                         <a href="{{ route('checkout.show') }}"
-                                            class="btn btn-dark d-block text-center m-0" id="btn-checkout">Proceed to
+                                            class="btn btn-dark d-block text-center m-0 {{ $total > 0 ? '' : 'disable-link disabled' }}"
+                                            id="btn-checkout">Proceed to
                                             Checkout</a>
                                     </div>
                                 </div>

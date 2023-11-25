@@ -33,6 +33,10 @@ class Product extends Model
     {
         return $this->belongsTo(Shop::class, "shop_id", "id");
     }
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, "product_id", "id");
+    }
 
 
     public static function getProducts($userID, $type)
@@ -177,24 +181,43 @@ class Product extends Model
             ->get();
     }
 
+    public static function uncheckAllCartItem()
+    {
+        return Cart::where("user_id", Auth::user()->id)->update(["selected" => 0]);
+    }
+
     public static function insertCart($request)
     {
-        DB::transaction(function () use ($request) {
+        $cartID = null;
+        DB::transaction(function () use ($request, &$cartID) {
             $address = User::join("addresses", "addresses.user_id", "users.id")
                 ->where([
                     ["addresses.current", true],
                     ["addresses.user_id", Auth::user()->id]
                 ])->first(["lat", "long"]);
             $distance = Product::getDistance($request->get("id"), $address->lat, $address->long);
-            $newCart = new Cart();
-            $newCart->user_id = Auth::user()->id;
-            $newCart->product_id = $request->get("id");
-            $newCart->qty = $request->get("qty");
-            $newCart->price = $request->get("price");
-            $newCart->distance = $distance;
-            $newCart->save();
+
+            $existsCart = Cart::where([
+                ["product_id", $request->get("id")],
+                ["user_id", Auth::user()->id]
+            ])->first();
+
+            if ($existsCart) {
+                $existsCart->qty = $existsCart->qty + $request->get("qty");
+                $existsCart->save();
+                $cartID = $existsCart->id;
+            } else {
+                $newCart = new Cart();
+                $newCart->user_id = Auth::user()->id;
+                $newCart->product_id = $request->get("id");
+                $newCart->qty = $request->get("qty");
+                $newCart->price = $request->get("price");
+                $newCart->distance = $distance;
+                $newCart->save();
+                $cartID = $newCart->id;
+            }
         });
-        return true;
+        return $cartID;
     }
 
     public static function getDistance($id, $latitude, $longitude)
@@ -205,5 +228,26 @@ class Product extends Model
             POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
             ) * 6371 AS distance'))->where("products.id", $id)->first();
         return $product->distance;
+    }
+
+    public static function cartTotal($userID)
+    {
+        $result = Product::select(DB::raw("SUM(cart.qty * cart.price) AS cartTotal"))
+            ->join("cart", "cart.product_id", "products.id")
+            ->where([
+                ["cart.user_id", $userID],
+                ["cart.selected", 1]
+            ])->first();
+        return $result->cartTotal;
+    }
+    public static function shippingFee($userID)
+    {
+        $result = Product::select(DB::raw("SUM(CalculateFeeByWeight(products.weight*cart.qty) + CalculateFeeByDistance(cart.distance)) AS shippingFee"))
+            ->join("cart", "cart.product_id", "products.id")
+            ->where([
+                ["cart.user_id", $userID],
+                ["cart.selected", 1]
+            ])->first();
+        return $result->shippingFee;
     }
 }
