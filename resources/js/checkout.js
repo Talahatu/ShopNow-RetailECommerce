@@ -58,7 +58,7 @@ $(function () {
                 total: total,
             },
             success: function (response) {
-                window.location.href = "/home";
+                window.location.href = "/profile/order";
             },
             error: function (err) {
                 console.log(err);

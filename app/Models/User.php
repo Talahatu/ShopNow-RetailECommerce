@@ -45,6 +45,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Address::class, "user_id", "id");
     }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, "user_id", "id");
+    }
 
     //functions
     public static function deleteUser($id)

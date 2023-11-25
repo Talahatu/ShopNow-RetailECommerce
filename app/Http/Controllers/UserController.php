@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
@@ -22,7 +23,8 @@ class UserController extends Controller
 
     public function profileNotif()
     {
-        return view('regular.tabs.notif-tab');
+        $notifs = Notification::where("user_id", Auth::user()->id)->get();
+        return view('regular.tabs.notif-tab', compact("notifs"));
     }
     public function profileBio()
     {
