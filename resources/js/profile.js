@@ -19,6 +19,10 @@ let formatter = new Intl.NumberFormat("id-ID", {
     maximumFractionDigits: 0,
 });
 $(function () {
+    $(".nav-link-profile").removeClass("active");
+    $("#v-tabs-profile-tab-lg").addClass("active");
+    $("#v-tabs-profile-tab").addClass("active");
+
     $("#image").on("change", function (e) {
         displaySelectedImage(e, "selectedAvatar");
     });

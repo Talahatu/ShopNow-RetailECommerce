@@ -2,6 +2,8 @@
     "/js/app.js": "/js/app.js",
     "/js/index.js": "/js/index.js",
     "/js/profile.js": "/js/profile.js",
+    "/js/profile-order.js": "/js/profile-order.js",
+    "/js/profile-notif.js": "/js/profile-notif.js",
     "/js/register.js": "/js/register.js",
     "/js/register-seller.js": "/js/register-seller.js",
     "/js/home.js": "/js/home.js",

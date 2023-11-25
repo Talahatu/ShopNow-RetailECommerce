@@ -44,6 +44,10 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/verify-email", [HomeController::class, "verifyLoggedEmail"])->name("verify.logged.email");
 
     Route::get("/profile", [UserController::class, "profile"])->name('profile');
+    Route::get("/profile/notif", [UserController::class, "profileNotif"])->name("profile.notif");
+    Route::get("/profile/order", [UserController::class, "profileOrder"])->name("profile.order");
+    Route::get("/profile/bio", [UserController::class, "profileBio"])->name("profile.bio");
+
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");

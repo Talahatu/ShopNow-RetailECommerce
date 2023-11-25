@@ -20,6 +20,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, "order_id", "id");
     }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, "shop_id", "id");
+    }
 
     public static function createOrder($addressID, $payment, $total)
     {
@@ -65,6 +69,8 @@ class Order extends Model
                 $newOrder->payment_method = $payment;
                 $newOrder->payment_status = "onhold";
                 $newOrder->total = $total;
+                $newOrder->subtotal = $aggregateData->cartTotal;
+                $newOrder->shippingFee = $aggregateData->shippingFee;
                 $newOrder->save();
 
                 $cartProductsByShop = Cart::join("products", "products.id", "cart.product_id")

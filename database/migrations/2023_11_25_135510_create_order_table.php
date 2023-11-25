@@ -30,6 +30,8 @@ class CreateOrderTable extends Migration
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->timestamps();
             $table->integer("total");
+            $table->integer("subtotal");
+            $table->integer("shippingFee");
         });
     }
 

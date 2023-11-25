@@ -14,6 +14,8 @@ const mix = require("laravel-mix");
 mix.js("resources/js/app.js", "public/js")
     .js("resources/js/index.js", "public/js")
     .js("resources/js/profile.js", "public/js")
+    .js("resources/js/profile-order.js", "public/js")
+    .js("resources/js/profile-notif.js", "public/js")
     .js("resources/js/register.js", "public/js")
     .js("resources/js/register-seller.js", "public/js")
     .js("resources/js/home.js", "public/js")

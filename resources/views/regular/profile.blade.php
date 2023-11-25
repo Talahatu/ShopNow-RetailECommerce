@@ -7,16 +7,18 @@
                 <!-- Tab navs -->
                 <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="v-tabs-profile-tab" data-mdb-toggle="tab" href="#v-tabs-profile"
-                            role="tab" aria-controls="v-tabs-profile" aria-selected="true">Profile</a>
+                        <a class="nav-link nav-link-profile active" id="v-tabs-profile-tab" data-mdb-toggle="tab"
+                            href="#v-tabs-profile" role="tab" aria-controls="v-tabs-profile"
+                            aria-selected="true">Profile</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link tabs-order" id="v-tabs-order-tab" data-mdb-toggle="tab" href="#v-tabs-order"
-                            role="tab" aria-controls="v-tabs-order" aria-selected="false">Orders</a>
+                        <a class="nav-link nav-link-profile tabs-order" id="v-tabs-order-tab" data-mdb-toggle="tab"
+                            href="#v-tabs-order" role="tab" aria-controls="v-tabs-order"
+                            aria-selected="false">Orders</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="v-tabs-notif-tab" data-mdb-toggle="tab" href="#v-tabs-notif" role="tab"
-                            aria-controls="v-tabs-notif" aria-selected="false">Notifications</a>
+                        <a class="nav-link nav-link-profile" id="v-tabs-notif-tab" href="{{ route('profile.notif') }}"
+                            aria-selected="false">Notifications</a>
                     </li>
                 </ul>
             </div>
@@ -26,12 +28,12 @@
                 <!-- Tab navs -->
                 <div class="nav flex-column nav-tabs text-center" id="v-tabs-tab" role="tablist"
                     aria-orientation="vertical">
-                    <a class="nav-link active" id="v-tabs-profile-tab" data-mdb-toggle="tab" href="#v-tabs-profile"
-                        role="tab" aria-controls="v-tabs-profile" aria-selected="true">Profile</a>
-                    <a class="nav-link tabs-order" id="v-tabs-order-tab-lg" data-mdb-toggle="tab" href="#v-tabs-order"
-                        role="tab" aria-controls="v-tabs-order" aria-selected="false">Orders</a>
-                    <a class="nav-link" id="v-tabs-notif-tab" data-mdb-toggle="tab" href="#v-tabs-notif" role="tab"
-                        aria-controls="v-tabs-notif" aria-selected="false">Notifications</a>
+                    <a class="nav-link nav-link-profile active" id="v-tabs-profile-tab-lg"
+                        href="{{ route('profile.bio') }}">Profile</a>
+                    <a class="nav-link nav-link-profile tabs-order" id="v-tabs-order-tab-lg"
+                        href="{{ route('profile.order') }}">Orders</a>
+                    <a class="nav-link nav-link-profile" id="v-tabs-notif-tab-lg"
+                        href="{{ route('profile.notif') }}">Notifications</a>
                 </div>
                 <!-- Tab navs -->
             </div>
@@ -39,18 +41,8 @@
             <div class="col-md-9 col-sm-12 ms-auto">
                 <!-- Tab content -->
                 <div class="tab-content" id="v-tabs-tabContent">
-                    <div class="tab-pane fade show active" id="v-tabs-profile" role="tabpanel"
-                        aria-labelledby="v-tabs-profile-tab">
-
-                        @include('regular.tabs.profile-tab')
-                    </div>
-                    <div class="tab-pane fade" id="v-tabs-order" role="tabpanel" aria-labelledby="v-tabs-profile-tab">
-
-                        @include('regular.tabs.order-tab')
-                    </div>
-                    <div class="tab-pane fade" id="v-tabs-notif" role="tabpanel" aria-labelledby="v-tabs-notif-tab">
-
-                        @include('regular.tabs.notif-tab')
+                    <div class="tab-pane fade show active" id="v-tabs" role="tabpanel" aria-labelledby="v-tabstab">
+                        @yield('contentProfile')
                     </div>
                 </div>
                 <!-- Tab content -->
@@ -81,5 +73,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('js/profile.js') }}"></script>
+    @yield('profilejs')
 @endsection

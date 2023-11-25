@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,13 +17,28 @@ class UserController extends Controller
     //
     public function profile()
     {
-        $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('regular.profile', compact("shop"));
+        return redirect()->route('profile.bio');
     }
-    public function profileTabs($tabs)
+
+    public function profileNotif()
+    {
+        return view('regular.tabs.notif-tab');
+    }
+    public function profileBio()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('regular.profile', compact("shop", "tabs"));
+        return view('regular.tabs.profile-tab', compact("shop"));
+    }
+    public function profileOrder()
+    {
+        $orders = Order::with("shop", "details.product.images")
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", "new"]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        return view('regular.tabs.order-tab', compact("orders"));
     }
 
     public function getAddAddressForm(Request $request)
