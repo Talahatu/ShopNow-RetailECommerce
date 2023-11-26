@@ -8,6 +8,7 @@
     "/js/register-seller.js": "/js/register-seller.js",
     "/js/home.js": "/js/home.js",
     "/js/search.js": "/js/search.js",
+    "/js/order.js": "/js/order.js",
     "/js/product.js": "/js/product.js",
     "/js/product-create.js": "/js/product-create.js",
     "/js/product-update.js": "/js/product-update.js",
