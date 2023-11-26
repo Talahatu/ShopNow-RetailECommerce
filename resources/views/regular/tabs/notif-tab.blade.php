@@ -5,13 +5,15 @@
         <h1>{{ Auth::user()->name }}'s Notifications</h1>
         <div class="list-group p-2">
             {{-- Start Here --}}
-            <div class="list-group-item list-group-item card" aria-current="true">
-                <div class="product-items card-body">
-                    <h3>Header</h3>
-                    <small class="text-muted">Date</small>
-                    <p>Content</p>
+            @foreach ($notifs as $item)
+                <div class="list-group-item list-group-item card my-2" aria-current="true">
+                    <div class="product-items card-body">
+                        <h3>{{ $item->header }}</h3>
+                        <small class="text-muted">{{ $item->date }}</small>
+                        <p>{{ $item->content }}</p>
+                    </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </main>
 @endsection

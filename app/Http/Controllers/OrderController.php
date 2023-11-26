@@ -31,4 +31,24 @@ class OrderController extends Controller
         $result = Order::createOrder($destinationAddressID, $payment, $total);
         return response()->json(["data" => $result]);
     }
+
+    public function ordersIndex()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('merchant.orders', compact("shop"));
+    }
+    public function fetchRepopulate(Request $request)
+    {
+        $type = $request->get("type");
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        $orders = Order::getOrder($shop->id, $type);
+        return response()->json(["data" => $orders]);
+    }
+
+    public function fetchNewOrder()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        $data = Order::getOrder($shop->id, "new");
+        return response()->json(["data" => $data]);
+    }
 }

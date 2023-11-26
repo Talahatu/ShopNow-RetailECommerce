@@ -20,7 +20,7 @@ class ShopController extends Controller
     public function index()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('merchant.index', compact('shop'));
+        return view('merchant.product', compact('shop'));
     }
 
     /**

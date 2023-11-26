@@ -1,5 +1,12 @@
 import $ from "jquery";
+import { now } from "lodash";
+import Push from "push.js";
 $(function () {
+    const baseUrl = window.location.protocol + "//" + window.location.host;
+
+    if (!Push.Permission.has()) {
+        Push.Permission.request(onGranted, onDenied);
+    }
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     // Bootstrap 5 event not compatible with JQuery
@@ -58,6 +65,21 @@ $(function () {
                 total: total,
             },
             success: function (response) {
+                if (Push.Permission.has()) {
+                    Push.create("New order created!", {
+                        body:
+                            "Your new order is successfully created at " +
+                            new Date() +
+                            ". Waiting for your order to be accepted by seller.",
+                        icon: baseUrl + "/images/logoshpnw2_ver4.png",
+                        link: "/profile/notif",
+                        timeout: 4000,
+                        onClick: function () {
+                            window.focus();
+                            this.close();
+                        },
+                    });
+                }
                 window.location.href = "/profile/order";
             },
             error: function (err) {

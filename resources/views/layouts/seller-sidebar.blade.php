@@ -1,9 +1,10 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="index.html"><img src="{{ asset('corona/images/logo.svg') }}"
-                alt="logo" /></a>
-        <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{{ asset('corona/images/logo-mini.svg') }}"
-                alt="logo" /></a>
+        <a class="sidebar-brand brand-logo" href="{{ route('seller.index') }}"><img
+                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px;" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="{{ route('seller.index') }}"><img
+                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px;" /></a>
+
     </div>
     <ul class="nav">
         <li class="nav-item profile">
@@ -33,30 +34,11 @@
                             <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
                         </div>
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-onepassword  text-info"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
-                        </div>
-                    </a>
                 </div>
             </div>
         </li>
         <li class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
-        </li>
-        <li class="nav-item menu-items" id="navDashboard">
-            <a class="nav-link" href="index.html">
-                <span class="menu-icon">
-                    <i class="mdi mdi-speedometer"></i>
-                </span>
-                <span class="menu-title">Dashboard</span>
-            </a>
         </li>
         <li class="nav-item menu-items" id="navProduct">
             <a class="nav-link" data-bs-toggle="collapse" href="#product-page" aria-expanded="false"
@@ -78,7 +60,7 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" id="navOrder">
             <a class="nav-link" data-bs-toggle="collapse" href="#order-page" aria-expanded="false"
                 aria-controls="order-page">
                 <span class="menu-icon">
@@ -89,9 +71,9 @@
             </a>
             <div class="collapse" id="order-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">My Orders</a>
+                    <li class="nav-item" id="myorder"> <a class="nav-link" href="{{ route('order.index') }}">My
+                            Orders</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Refunded</a></li>
                 </ul>
             </div>
         </li>

@@ -1,0 +1,32 @@
+div.dataTables_length select,
+li.paginate_button.page-item > a {
+    color: white !important;
+}
+li.paginate_button.page-item > a,
+li.paginate_button.page-item.disabled > a {
+    background-color: transparent;
+    border: none;
+}
+li.paginate_button.page-item.disabled > a {
+    color: #505a60 !important;
+}
+li.paginate_button.page-item.active > a {
+    background-color: #424549;
+    border-radius: 10%;
+}
+li.paginate_button.page-item > a:active,
+li.paginate_button.page-item > a:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+#myTable_filter > label > input {
+    color: white;
+}
+#myTable {
+    color: white;
+}
+.table-hover tbody tr:hover td {
+    color: #0090e7 !important;
+}

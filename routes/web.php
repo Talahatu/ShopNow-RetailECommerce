@@ -74,6 +74,10 @@ Route::middleware(["auth"])->group(function () {
 Route::middleware(["auth", "seller"])->group(function () {
     Route::resource("seller", ShopController::class);
     Route::resource('product', ProductController::class);
+    Route::get('/myorder', [OrderController::class, "ordersIndex"])->name("order.index");
+    Route::post("/fetch/order/repopulate", [OrderController::class, "fetchRepopulate"]);
+    Route::post("/fetch/order/new", [OrderController::class, "fetchNewOrder"])->name("order.new");
+
     Route::post("/fetch-categories", [CategoryController::class, "getCategories"]);
     Route::post("/fetch-brands", [BrandController::class, "getBrands"]);
     Route::post('/fetch/product/live', [ProductController::class, "fetchLive"]);

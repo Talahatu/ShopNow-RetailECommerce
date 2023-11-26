@@ -71,6 +71,7 @@ class Order extends Model
                 $newOrder->total = $total;
                 $newOrder->subtotal = $aggregateData->cartTotal;
                 $newOrder->shippingFee = $aggregateData->shippingFee;
+                $newOrder->orderID = Order::getOrderID();
                 $newOrder->save();
 
                 $cartProductsByShop = Cart::join("products", "products.id", "cart.product_id")
@@ -102,7 +103,27 @@ class Order extends Model
                 $user->saldo = $user->saldo - $total;
                 $user->save();
             }
+
+            $newNotif = new Notification();
+            $newNotif->header = "New order created!";
+            $newNotif->content = "Your order has been succesfully created. Waiting for seller acceptance and packaging";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = Auth::user()->id;
+            $newNotif->save();
         });
         return $deletedCart;
+    }
+    private function getOrderID()
+    {
+        return "OD" . now()->format("Ymds");
+    }
+
+    public static function getOrder($shopID, $type)
+    {
+        return Order::join("order_details AS od", "od.order_id", "orders.id")
+            ->where([
+                ["orders.shop_id", $shopID],
+                ["orders.orderStatus", $type]
+            ])->get(["orders.id", "orders.destination_address", DB::raw("ROUND(od.distance,0) AS distance"), "orders.payment_method", "orders.orderID"]);
     }
 }
