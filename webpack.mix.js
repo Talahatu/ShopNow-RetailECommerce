@@ -27,6 +27,7 @@ mix.js("resources/js/app.js", "public/js")
     .js("resources/js/product-info.js", "public/js")
     .js("resources/js/cart.js", "public/js")
     .js("resources/js/checkout.js", "public/js")
+    .js("resources/js/shop.js", "public/js")
     .sass("resources/sass/app.scss", "public/css")
     .copy("node_modules/leaflet/dist/images", "public/css/images")
     .sourceMaps();

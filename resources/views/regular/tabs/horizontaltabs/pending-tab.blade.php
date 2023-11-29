@@ -2,7 +2,7 @@
     @if (count($pendings) > 0)
         @foreach ($pendings as $item)
             <div class="list-group-item list-group-item card" aria-current="true">
-                <a href="#" class="shop card-header d-flex align-items-center">
+                <a href="{{ route('shop.show', $item->shop->id) }}" class="shop card-header d-flex align-items-center">
                     <img src="{{ file_exists(public_path('shopimages/' . $item->shop->logoImage)) ? asset('shopimages/' . $item->shop->logoImage) : 'https://mdbcdn.b-cdn.net/img/new/avatars/2.webp' }}"
                         alt="Image" style="width: 100px; height: 100px; object-fit: cover;" class="rounded-circle">
                     <h1 class="ms-4">{{ $item->shop->name }} <i class="fa-solid fa-chevron-right"></i></h1>

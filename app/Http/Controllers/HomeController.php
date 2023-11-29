@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -84,5 +85,11 @@ class HomeController extends Controller
     {
         User::find(Auth::user()->id)->sendEmailVerificationNotification();
         return redirect()->route('verification.notice');
+    }
+
+    public function showShop($id)
+    {
+        $shop = Shop::with(["products.category", "products.images"])->where("id", $id)->first();
+        return view('regular.shop', compact("shop"));
     }
 }

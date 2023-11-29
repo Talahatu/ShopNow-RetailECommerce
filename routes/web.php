@@ -38,6 +38,7 @@ Route::get("/show-product/{id}", [ProductController::class, "showProduct"])->nam
 Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
 Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
 Route::post('/searchProduct', [ProductController::class, "searchProduct"])->name('searchProduct');
+Route::get("/shop/{id}", [HomeController::class, "showShop"])->name("shop.show");
 Route::middleware(["auth"])->group(function () {
     Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');
     Route::post("/change-email", [HomeController::class, 'changeEmail'])->name('change.email');
