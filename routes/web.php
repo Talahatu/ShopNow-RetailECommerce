@@ -1,17 +1,21 @@
 <?php
 
+use App\Events\Chat;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PusherController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +74,9 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get("/wishlist", [ProductController::class, "showWishlist"])->name("wishlist.show");
     Route::post("/wishlist/toggle", [ProductController::class, "toggleWishlist"])->name("wishlist.toggle");
+
+    Route::get("/chat/{id}", [HomeController::class, "showChat"])->name("chat.show");
+    Route::post("/chat/loadChats", [ChatController::class, "loadChats"])->name("chat.load");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {
@@ -85,41 +92,56 @@ Route::middleware(["auth", "seller"])->group(function () {
     Route::post('/fetch/product/repopulate', [ProductController::class, "fetchRepopulate"]);
     Route::put("/archive/product", [ProductController::class, "archiveProduct"]);
     Route::put("/live/product", [ProductController::class, "liveProduct"]);
+
+    Route::get("/seller/chat/show", [ShopController::class, "showChat"])->name("seller.chat");
 });
 
+Route::post('/pusher/auth', [PusherController::class, "auth"]);
 
-Route::get("/test", function () {
-    return view('layouts.index2');
+
+Route::get("/test", function (Request $request) {
+    Chat::dispatch("lorem ipsum");
+    // $options = array(
+    //     'cluster' => 'ap1',
+    //     'useTLS' => true
+    // );
+    // $pusher = new Pusher\Pusher(
+    //     'c58a82be41ea6c60c1d7',
+    //     '8264fc21e2b5035cc329',
+    //     '1716744',
+    //     $options
+    // );
+
+    // $data['message'] = 'hello world';
+    // $pusher->trigger('my-channel', 'my-event', $data);
+
+    // event(new Chat("1", "2", "test"));
+    return view('welcome');
 });
 
-Route::get("/test2", function () {
-    $cart = Shop::with(['products.carts' => function ($query) {
-        $query->where("user_id", Auth::user()->id)->where("selected", "1");
-    }])
-        ->where("shops.id", 1)
-        ->get();
+Route::post("/sendMessage", function (Request $request) {
+    $message = $request->get("content");
+    $sellerID = $request->get("sellerID");
+    $id = Auth::user()->id;
 
-    $carts = Cart::join("products", "products.id", "cart.product_id")
-        ->join("shops", "shops.id", "products.shop_id")
-        ->where([
-            ["cart.user_id", Auth::user()->id],
-            ["cart.selected", "1"]
-        ])
-        ->orderBy("products.shop_id")
-        ->get(["products.shop_id"]);
-    $allShopID = $carts->unique('shop_id')->pluck("shop_id")->values();
+    $options = array(
+        'cluster' => 'ap1',
+        'useTLS' => true
+    );
+    $pusher = new Pusher\Pusher(
+        'c58a82be41ea6c60c1d7',
+        '8264fc21e2b5035cc329',
+        '1716744',
+        $options
+    );
 
+    $data['message'] = $message;
+    $data["key"] = "regular";
 
-    $shopProductCart = Cart::join("products", "products.id", "cart.product_id")
-        ->join("shops", "shops.id", "products.shop_id")
-        ->where("products.shop_id", 2)
-        ->where([
-            ["cart.user_id", Auth::user()->id],
-            ["cart.selected", "1"]
-        ])
-        ->get();
-    dd($shopProductCart);
+    // regular-seller
+    $pusher->trigger('private-my-channel-' . $id . '-' . $sellerID, 'client-load-chats', $data);
+    return response()->json($data);
+});
 
-    dd($cart[0]->products[1]->carts);
-    return true;
+Route::get("/getMessage", function () {
 });

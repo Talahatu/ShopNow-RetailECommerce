@@ -21,13 +21,14 @@
             <div class="card-body align-items-center">
                 <div class="shop-img-container w-100 mb-2 mb-lg-0 d-flex align-items-center">
                     <a href="{{ route('shop.show', $shop->id) }}">
-                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="SellerImage" height="50"
-                            width="50" class="rounded-circle" loading="lazy" style="object-fit: cover;">
+                        <img src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : 'https://mdbcdn.b-cdn.net/img/new/avatars/2.webp' }}"
+                            alt="SellerImage" height="50" width="50" class="rounded-circle" loading="lazy"
+                            style="object-fit: cover;">
                     </a>
                     <h1 class="ms-4 mb-0">{{ $shop->name }}</h1>
                     <div class="shop-content ms-4">
                         <div class="btn-group btn-group-shop">
-                            <a class="btn btn-dark btn-chat">Chat</a>
+                            <a href="{{ route('chat.show', $shop->id) }}" class="btn btn-dark btn-chat">Chat</a>
                         </div>
                     </div>
                 </div>

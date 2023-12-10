@@ -120,4 +120,10 @@ class ShopController extends Controller
     {
         //
     }
+
+    public function showChat()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view('merchant.chat', compact("shop"));
+    }
 }
