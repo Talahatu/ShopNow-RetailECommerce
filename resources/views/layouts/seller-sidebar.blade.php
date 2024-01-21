@@ -1,10 +1,7 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <a class="sidebar-brand brand-logo" href="{{ route('seller.index') }}"><img
-                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px;" /></a>
-        <a class="sidebar-brand brand-logo-mini" href="{{ route('seller.index') }}"><img
-                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px;" /></a>
-
+                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px;width:124px" /></a>
     </div>
     <ul class="nav">
         <li class="nav-item profile">
@@ -17,7 +14,7 @@
                         <span class="count bg-success"></span>
                     </div>
                     <div class="profile-name">
-                        <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
+                        <h5 class="mb-0 font-weight-normal">{{ $shop->name }}</h5>
                     </div>
                 </div>
                 <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i

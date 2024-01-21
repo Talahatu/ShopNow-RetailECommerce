@@ -1,7 +1,7 @@
 <nav class="navbar p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
         <a class="navbar-brand brand-logo-mini" href="{{ route('seller.index') }}"><img
-                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" height="35" />
+                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px; width:100%" />
         </a>
     </div>
     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
@@ -114,7 +114,8 @@
                         <img class="img-xs rounded-circle"
                             src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : asset('corona/images/faces/face15.jpg') }}"
                             alt="Seller Profile Image">
-                        <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ Auth::user()->name }}</p>
+                        <p class="mb-0 d-none d-sm-block navbar-profile-name">
+                            {{ $shop->name }}</p>
                         <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                     </div>
                 </a>

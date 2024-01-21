@@ -81,6 +81,9 @@ Route::middleware(["auth"])->group(function () {
     Route::post("/chat/loadChats", [ChatController::class, "loadChats"])->name("chat.load");
     Route::post("/sendMessage", [ChatController::class, "sendMessage"])->name("chat.send");
 
+    Route::get("/openSellerAcc", [UserController::class, "openAccount"])->name('seller.hub');
+    Route::post("/processAcc", [UserController::class, "processSellerAcc"])->name('seller.acc.process');
+
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });
 
@@ -103,9 +106,6 @@ Route::middleware(["auth", "seller"])->group(function () {
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);
 
-Route::get('/chat', function () {
-    return view('regular.chat');
-});
 Route::get("/test", function (Request $request) {
     Chat::dispatch("lorem ipsum");
     // $options = array(
@@ -124,7 +124,4 @@ Route::get("/test", function (Request $request) {
 
     // event(new Chat("1", "2", "test"));
     return view('welcome');
-});
-
-Route::get("/getMessage", function () {
 });

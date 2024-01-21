@@ -42,7 +42,7 @@
                                                                     <p class="fw-bold mb-0" id="seller-name">
                                                                         {{ $item->shop->name }}</p>
                                                                     <p class="small text-muted">
-                                                                        {{ isset($item->contents->content) ? $item->contents->content : '' }}
+                                                                        {{ $item->contents->where('sender', '!=', 'customer')->first() ? $item->contents->where('sender', '!=', 'customer')->last()->content : '' }}
                                                                     </p>
                                                                 </div>
                                                             </div>

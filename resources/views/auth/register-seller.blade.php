@@ -14,7 +14,8 @@
                     <div class="row g-0">
                         <div class="col-md-12 col-lg-12 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
-                                <form method="POST" action="{{ route('seller.store') }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('seller.acc.process') }}"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     <div class="d-flex align-items-center mb-3 pb-1">
                                         <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
@@ -36,10 +37,11 @@
                                                     Image</label>
                                                 <input type="file" name="image" class="form-control d-none changeCheck"
                                                     id="image" />
-                                                @error('image')
-                                                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                                                @enderror
                                             </div>
+                                            @error('image')
+                                                <br>
+                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 

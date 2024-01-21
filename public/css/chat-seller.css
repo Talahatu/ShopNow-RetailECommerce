@@ -5,6 +5,10 @@ body {
     margin-top: 20px;
 }
 
+.container {
+    height: 100%;
+}
+
 .card {
     transition: 0.5s;
     border: 0;
@@ -13,6 +17,13 @@ body {
     position: relative;
     width: 100%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+}
+
+.row.clearfix,
+.col-lg-12,
+.card.chat-app {
+    height: 100%;
+    margin: 0px;
 }
 
 .chat-app .people-list {
@@ -25,6 +36,9 @@ body {
 }
 
 .chat-app .chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin-left: 280px;
     border-left: 1px solid black;
 }
@@ -87,6 +101,7 @@ body {
 }
 
 .chat .chat-history {
+    flex-grow: 1;
     padding: 20px;
     border-bottom: 2px solid var(--chat-border);
 }
@@ -172,6 +187,7 @@ body {
 
 .chat .chat-message {
     padding: 20px;
+    margin-top: auto;
 }
 
 .online,
@@ -205,6 +221,11 @@ body {
     content: " ";
     clear: both;
     height: 0;
+}
+
+.customer-images-pp {
+    border-bottom: 2px solid var(--chat-border);
+    border-right: 2px solid var(--chat-border);
 }
 
 @media only screen and (max-width: 767px) {

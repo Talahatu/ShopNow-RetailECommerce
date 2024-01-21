@@ -22,9 +22,12 @@ class Shop extends Model
     {
         return $this->hasMany(Order::class, "shop_id", "id");
     }
-
     public function chats()
     {
         return $this->hasMany(Chat::class, "shop_id", "id");
+    }
+    public function owner()
+    {
+        return $this->belongsTo(User::class, "user_id", "id");
     }
 }

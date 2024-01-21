@@ -145,4 +145,53 @@ class UserController extends Controller
         $user->save();
         return response()->json($user);
     }
+
+    public function openAccount()
+    {
+        $exists = Shop::where("user_id", Auth::user()->id)->get();
+        if (count($exists) > 0) {
+            return redirect()->route('seller.index');
+        }
+        return view('auth.register-seller');
+    }
+
+    public function processSellerAcc(Request $request)
+    {
+        $request->validate(
+            [
+                'image' => 'required|image|mimes:jpg,png,jpeg|max:3096',
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'phoneNumber' => 'required'
+            ],
+            [
+                "image.image" => "its not an image!",
+                "image.max" => "Image size exceed 3MB!"
+            ]
+        );
+        $latlong = explode(",", $request->get("latlng"));
+        $file = $request->file("image");
+        $ext = $file->getClientOriginalExtension();
+        $filename = "shop_" . time() . "." . $ext;
+        $path = public_path() . '/shopimages';
+        $file->move($path, $filename);
+
+        $newShop = "";
+        DB::transaction(function () use ($request, $latlong, $filename) {
+            $newShop = new Shop();
+            $newShop->user_id = Auth::user()->id;
+            $newShop->name = $request->get("name");
+            $newShop->phoneNumber = $request->get("phoneNumber");
+            $newShop->address = $request->get("address");
+            $newShop->lat = $latlong[0];
+            $newShop->long = $latlong[1];
+            $newShop->logoImage = $filename;
+            $newShop->save();
+
+            $user = User::find(Auth::user()->id);
+            $user->type = "seller";
+            $user->save();
+        });
+        return view('merchant.product', ["shop" => $newShop]);
+    }
 }

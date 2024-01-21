@@ -41,7 +41,6 @@ class ChatController extends Controller
     }
     public function sendMessage(Request $request)
     {
-
         $message = $request->get("content");
         $sellerID = $request->get("sellerID");
         $id = Auth::user()->id;

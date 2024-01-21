@@ -49,11 +49,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Notification::class, "user_id", "id");
     }
-
     public function chats()
     {
         return $this->hasMany(Chat::class, "user_id", "id");
     }
+    public function shop()
+    {
+        return $this->hasOne(Shop::class, "user_id", "id");
+    }
+
 
     //functions
     public static function deleteUser($id)

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
+use App\Models\Image;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,11 +32,11 @@ class ShopController extends Controller
      */
     public function create()
     {
-        $exists = Shop::where("user_id", Auth::user()->id)->get();
-        if (count($exists) > 0) {
-            return redirect()->route('seller.index');
-        }
-        return view('auth.register-seller');
+        // $exists = Shop::where("user_id", Auth::user()->id)->get();
+        // if (count($exists) > 0) {
+        //     return redirect()->route('seller.index');
+        // }
+        // return view('auth.register-seller');
     }
 
     /**
@@ -45,35 +47,42 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'phoneNumber' => 'required'
-        ]);
-        $latlong = explode(",", $request->get("latlng"));
-        $file = $request->file("image");
-        $ext = $file->getClientOriginalExtension();
-        $filename = "shop_" . time() . "." . $ext;
-        $path = public_path() . '/shopimages';
-        $file->move($path, $filename);
+        // $request->validate(
+        //     [
+        //         'image' => 'required|image|mimes:jpg,png,jpeg|max:3096',
+        //         'name' => 'required|string',
+        //         'address' => 'required|string',
+        //         'phoneNumber' => 'required'
+        //     ],
+        //     [
+        //         "image.image" => "its not an image!",
+        //         "image.max" => "Image size exceed 3MB!"
+        //     ]
+        // );
+        // $latlong = explode(",", $request->get("latlng"));
+        // $file = $request->file("image");
+        // $ext = $file->getClientOriginalExtension();
+        // $filename = "shop_" . time() . "." . $ext;
+        // $path = public_path() . '/shopimages';
+        // $file->move($path, $filename);
 
-        DB::transaction(function () use ($request, $latlong, $filename) {
-            $newShop = new Shop();
-            $newShop->user_id = Auth::user()->id;
-            $newShop->name = $request->get("name");
-            $newShop->phoneNumber = $request->get("phoneNumber");
-            $newShop->address = $request->get("address");
-            $newShop->lat = $latlong[0];
-            $newShop->long = $latlong[1];
-            $newShop->logoImage = $filename;
-            $newShop->save();
+        // $newShop = "";
+        // DB::transaction(function () use ($request, $latlong, $filename) {
+        //     $newShop = new Shop();
+        //     $newShop->user_id = Auth::user()->id;
+        //     $newShop->name = $request->get("name");
+        //     $newShop->phoneNumber = $request->get("phoneNumber");
+        //     $newShop->address = $request->get("address");
+        //     $newShop->lat = $latlong[0];
+        //     $newShop->long = $latlong[1];
+        //     $newShop->logoImage = $filename;
+        //     $newShop->save();
 
-            $user = User::find(Auth::user()->id);
-            $user->type = "seller";
-            $user->save();
-        });
-        return view('merchant.index', compact("newShop"));
+        //     $user = User::find(Auth::user()->id);
+        //     $user->type = "seller";
+        //     $user->save();
+        // });
+        // return view('merchant.index', ["shop" => $newShop]);
     }
 
     /**
@@ -123,7 +132,9 @@ class ShopController extends Controller
     public function showChat()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('merchant.chat', compact("shop"));
+        $allCustomerChats = Chat::with(["contents", "user"])
+            ->where("shop_id", $shop->id)->get();
+        return view('merchant.chat', compact("shop", "allCustomerChats"));
     }
     public function getSeller(Request $request)
     {
