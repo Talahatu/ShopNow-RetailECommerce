@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Pusher\Pusher;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +76,12 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/wishlist", [ProductController::class, "showWishlist"])->name("wishlist.show");
     Route::post("/wishlist/toggle", [ProductController::class, "toggleWishlist"])->name("wishlist.toggle");
 
-    Route::get("/chat/{id}", [HomeController::class, "showChat"])->name("chat.show");
+    Route::get("/chat/{id}", [ChatController::class, "showChat"])->name("chat.show");
+    Route::get("/allChat", [ChatController::class, "showAllChat"])->name("allChat.show");
     Route::post("/chat/loadChats", [ChatController::class, "loadChats"])->name("chat.load");
+    Route::post("/sendMessage", [ChatController::class, "sendMessage"])->name("chat.send");
+
+    Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });
 
 Route::middleware(["auth", "seller"])->group(function () {
@@ -98,7 +103,9 @@ Route::middleware(["auth", "seller"])->group(function () {
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);
 
-
+Route::get('/chat', function () {
+    return view('regular.chat');
+});
 Route::get("/test", function (Request $request) {
     Chat::dispatch("lorem ipsum");
     // $options = array(
@@ -117,30 +124,6 @@ Route::get("/test", function (Request $request) {
 
     // event(new Chat("1", "2", "test"));
     return view('welcome');
-});
-
-Route::post("/sendMessage", function (Request $request) {
-    $message = $request->get("content");
-    $sellerID = $request->get("sellerID");
-    $id = Auth::user()->id;
-
-    $options = array(
-        'cluster' => 'ap1',
-        'useTLS' => true
-    );
-    $pusher = new Pusher\Pusher(
-        'c58a82be41ea6c60c1d7',
-        '8264fc21e2b5035cc329',
-        '1716744',
-        $options
-    );
-
-    $data['message'] = $message;
-    $data["key"] = "regular";
-
-    // regular-seller
-    $pusher->trigger('private-my-channel-' . $id . '-' . $sellerID, 'client-load-chats', $data);
-    return response()->json($data);
 });
 
 Route::get("/getMessage", function () {

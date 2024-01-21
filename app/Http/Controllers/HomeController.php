@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Chat;
+use App\Models\ChatContent;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use Pusher\Pusher;
 
 use function Ramsey\Uuid\v1;
 
@@ -92,18 +94,5 @@ class HomeController extends Controller
     {
         $shop = Shop::with(["products.category", "products.images"])->where("id", $id)->first();
         return view('regular.shop', compact("shop"));
-    }
-
-    public function showChat($id)
-    {
-        $chat = Chat::firstOrCreate([
-            "user_id" => Auth::user()->id,
-            "shop_id" => $id
-        ]);
-        $chats = Chat::with(["contents", "shop"])
-            ->where("user_id", Auth::user()->id)
-            ->get();
-
-        return view("regular.chat", compact("chats"));
     }
 }

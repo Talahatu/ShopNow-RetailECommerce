@@ -11,7 +11,7 @@ class ChatContent extends Model
 
     protected $table = "chat_content";
 
-    protected $fillable = ["chat_id", "date", "content"];
+    protected $fillable = ["chat_id", "date", "content", "sender"];
 
     public function chat()
     {

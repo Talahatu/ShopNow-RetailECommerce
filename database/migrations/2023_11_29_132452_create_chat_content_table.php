@@ -20,6 +20,7 @@ class CreateChatContentTable extends Migration
             $table->text("content");
             $table->foreign("chat_id")->references("id")->on("chats");
             $table->timestamps();
+            $table->enum("sender", ["customer", 'seller']);
         });
     }
 

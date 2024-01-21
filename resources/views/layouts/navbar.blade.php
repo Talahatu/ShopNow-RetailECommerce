@@ -40,6 +40,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('wishlist.show') }}">Wishlist</a>
                                 </li>
+                                <li><a href="{{ route('allChat.show') }}" class="dropdown-item">Chats</a></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf

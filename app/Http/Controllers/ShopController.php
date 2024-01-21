@@ -84,7 +84,6 @@ class ShopController extends Controller
      */
     public function show($shop)
     {
-        //
     }
 
     /**
@@ -125,5 +124,9 @@ class ShopController extends Controller
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
         return view('merchant.chat', compact("shop"));
+    }
+    public function getSeller(Request $request)
+    {
+        return response()->json(["data" => Shop::find($request->get("id"))]);
     }
 }
