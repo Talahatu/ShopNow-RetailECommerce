@@ -73,4 +73,36 @@ class ChatController extends Controller
         $newChat->save();
         return response()->json(["data" => $data, "message" => $message]);
     }
+    public function sendMessageSeller(Request $request)
+    {
+        $message = $request->get("content");
+        $customerID = $request->get("customerID");
+        $shopID = $request->get("shopID");
+
+        $options = array(
+            'cluster' => 'ap1',
+            'useTLS' => true
+        );
+        $pusher = new \Pusher\Pusher(
+            'c58a82be41ea6c60c1d7',
+            '8264fc21e2b5035cc329',
+            '1716744',
+            $options
+        );
+
+        $data['message'] = $message;
+        $data["key"] = "seller";
+        $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
+        // regular-seller
+        $pusher->trigger('private-my-channel-' . $customerID . '-' . $shopID, 'client-load-chats', $data);
+        $chat = Chat::where("user_id", $customerID)->where("shop_id", $shopID)->first();
+        $newChat = new ChatContent();
+        $newChat->chat_id = $chat->id;
+        $newChat->date = $data["time"];
+        $newChat->content = $message;
+        $newChat->sender = "seller";
+        $newChat->save();
+        return response()->json(["data" => $data, "message" => $message]);
+    }
 }

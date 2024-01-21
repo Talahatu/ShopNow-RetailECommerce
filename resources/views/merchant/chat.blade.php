@@ -7,10 +7,11 @@
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card chat-app">
-                    <div id="plist" class="people-list card">
+                    <div id="plist" class="people-list card" style="height: 500px;overflow-y:scroll">
                         <ul class="list-unstyled chat-list mt-2 mb-0">
                             @foreach ($allCustomerChats as $item)
                                 <li class="clearfix customer-item">
+                                    <input type="hidden" name="dic" class="dic" value="{{ $item->user->id }}">
                                     <img src="{{ file_exists(public_path('profileimages/' . $item->user->profilePicture)) ? asset('profileimages/' . $item->user->profilePicture) : 'https://bootdey.com/img/Content/avatar/avatar2.png' }}"
                                         alt="avatar" width="45" height="45" loading="lazy"
                                         style="object-fit: cover;" class="customer-images-pp rounding-circle">
@@ -25,36 +26,26 @@
                         <div class="chat-header clearfix">
                             <div class="row">
                                 <div class="col-lg-6" id="chat-header">
-                                    {{-- 
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                                    <div class="chat-about">
-                                        <h6 class="m-b-0">Aiden Chavez</h6>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="chat-history">
+                        <div class="chat-history" id="chat-history" style="height: 400px;overflow-y:scroll">
                             <ul class="m-b-0" id="chat-history-ul">
-                                {{-- <li class="clearfix">
-                                    <div class="message-data text-right">
-                                        <span class="message-data-time text-light">10:10 AM, Today</span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                    </div>
-                                    <div class="message other-message float-right"> Hi Aiden, how are you? How is the
-                                        project coming along? </div>
-                                </li> --}}
                             </ul>
                         </div>
                         <div class="chat-message clearfix" hidden>
                             <div class="input-group mb-0 d-flex align-items-center justify-content-center">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text text-light"><i class="mdi mdi-send"></i></span>
-                                </div>
-                                <input type="text" class="form-control text-light" placeholder="Enter text here...">
+                                <input type="hidden" name="dio" id="dio" value="{{ $shop->id }}">
                                 <img src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : 'https://bootdey.com/img/Content/avatar/avatar2.png' }}"
                                     alt="avatar" width="45" height="45" loading="lazy" style="object-fit: cover;"
-                                    class="rounded-circle ms-2">
+                                    class="rounded-circle me-2" id="seller-images-pp">
+                                <input type="text" class="form-control text-light" id="chat-content-text"
+                                    placeholder="Enter text here...">
+                                <a class="input-group-append" id="submitChat" tabindex="0">
+                                    <span class="input-group-text text-light"><i class="mdi mdi-send"></i></span>
+                                </a>
+
                             </div>
                         </div>
 

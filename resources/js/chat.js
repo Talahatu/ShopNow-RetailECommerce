@@ -6,6 +6,7 @@ $(function () {
     const id = $("#diu").val();
     var channels = [];
     var sellerID = 0;
+    var win = $(this); //this = window
     var pusher = new Pusher("c58a82be41ea6c60c1d7", {
         cluster: "ap1",
         channelAuthorization: {
@@ -21,7 +22,6 @@ $(function () {
 
     $(window)
         .on("resize", function () {
-            var win = $(this); //this = window
             if (win.width() > 768) {
                 // To show the collapsible element
                 bsCollapse.show();
@@ -32,6 +32,7 @@ $(function () {
         .trigger("resize"); //trigger the resize event to run the function on page load
 
     $(".list-group-item-action").on("click", function () {
+        if (win.width() <= 768) bsCollapse.hide();
         $("#chat-content").html("");
         // regular-seller
         sellerID = parseInt($(this).find(".dis").val());
@@ -39,14 +40,12 @@ $(function () {
         const userPP = $("#user-images-pp").attr("src");
         const sellerPP = $(this).find(".seller-images-pp").attr("src");
 
-        // Not done yet
         if (!channels.includes(`private-my-channel-${id}-${sellerID}`)) {
             var channel = pusher.subscribe(
                 `private-my-channel-${id}-${sellerID}`
             );
             // Listen for incoming chat from self and/or seller
             channel.bind("client-load-chats", function (data) {
-                console.log("how many?");
                 const msg = data.message;
                 const key = data.key;
                 const time = formatDate(new Date(data.time));
@@ -142,6 +141,7 @@ $(function () {
                 sellerID: sellerID,
             },
             success: function (response) {
+                console.log(response);
                 $("#exampleFormControlInput2").val("");
             },
         });

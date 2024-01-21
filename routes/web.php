@@ -84,6 +84,7 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/openSellerAcc", [UserController::class, "openAccount"])->name('seller.hub');
     Route::post("/processAcc", [UserController::class, "processSellerAcc"])->name('seller.acc.process');
 
+    // not used yet
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });
 
@@ -102,26 +103,12 @@ Route::middleware(["auth", "seller"])->group(function () {
     Route::put("/live/product", [ProductController::class, "liveProduct"]);
 
     Route::get("/seller/chat/show", [ShopController::class, "showChat"])->name("seller.chat");
+    Route::post("/sendMessageSeller", [ChatController::class, "sendMessageSeller"])->name("chat.send.seller");
 });
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);
 
 Route::get("/test", function (Request $request) {
-    Chat::dispatch("lorem ipsum");
-    // $options = array(
-    //     'cluster' => 'ap1',
-    //     'useTLS' => true
-    // );
-    // $pusher = new Pusher\Pusher(
-    //     'c58a82be41ea6c60c1d7',
-    //     '8264fc21e2b5035cc329',
-    //     '1716744',
-    //     $options
-    // );
 
-    // $data['message'] = 'hello world';
-    // $pusher->trigger('my-channel', 'my-event', $data);
-
-    // event(new Chat("1", "2", "test"));
     return view('welcome');
 });
