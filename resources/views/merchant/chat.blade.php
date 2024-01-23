@@ -14,7 +14,7 @@
                     </a>
                     {{-- Left Side --}}
                     <div id="plist" class="people-list card collapse show">
-                        <div class="chatHeader d-none">
+                        <div class="chatHeader d-none d-md-block">
                             <h5>All Chats</h5>
                         </div>
                         <ul class="list-unstyled chat-list mt-2 mb-0" id="chatsList">
