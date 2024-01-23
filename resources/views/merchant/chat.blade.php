@@ -7,8 +7,17 @@
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card chat-app">
-                    <div id="plist" class="people-list card" style="height: 500px;overflow-y:scroll">
-                        <ul class="list-unstyled chat-list mt-2 mb-0">
+                    <!-- Toggle button -->
+                    <a id="toggleCollapse" class="btn btn-outline-info btn-lg btn-block d-block d-md-none"
+                        data-bs-toggle="collapse" href="#plist">All
+                        Chats <i class="mdi mdi-menu float-right"></i>
+                    </a>
+                    {{-- Left Side --}}
+                    <div id="plist" class="people-list card collapse show">
+                        <div class="chatHeader d-none">
+                            <h5>All Chats</h5>
+                        </div>
+                        <ul class="list-unstyled chat-list mt-2 mb-0" id="chatsList">
                             @foreach ($allCustomerChats as $item)
                                 <li class="clearfix customer-item">
                                     <input type="hidden" name="dic" class="dic" value="{{ $item->user->id }}">
@@ -21,7 +30,9 @@
                                 </li>
                             @endforeach
                         </ul>
+
                     </div>
+                    {{-- Right Side --}}
                     <div class="chat">
                         <div class="chat-header clearfix">
                             <div class="row">
@@ -48,7 +59,6 @@
 
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

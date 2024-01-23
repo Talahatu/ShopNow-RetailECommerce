@@ -7,6 +7,7 @@ $(function () {
     const ownerID = $("#dio").val();
     const shopPP = $("#seller-images-pp").attr("src");
     var customerID = 0;
+    const win = $(this);
 
     var pusher = new Pusher("c58a82be41ea6c60c1d7", {
         cluster: "ap1",
@@ -16,7 +17,35 @@ $(function () {
         },
     });
 
+    $(window)
+        .on("resize", function () {
+            if (win.width() <= 768) {
+                console.log("test");
+                if ($("#plist").hasClass("people-list")) {
+                    $("#plist").removeClass("people-list");
+                    $("#plist").removeClass("show");
+                    $("#plist").addClass("collapse");
+                }
+            } else {
+                if (!$("#plist").hasClass("people-list")) {
+                    $("#plist").addClass("people-list");
+                    if (
+                        !$("#plist").hasClass("show") ||
+                        $("#plist").hasClass("collapse")
+                    ) {
+                        $("#plist").removeClass("show");
+                        $("#plist").removeClass("collapse");
+                    }
+                }
+            }
+        })
+        .trigger("resize"); //trigger the resize event to run the function on page load
+
     $(".customer-item").on("click", function () {
+        if (win.width() <= 768) {
+            $("#plist").addClass("collapse");
+            $("#plist").removeClass("show");
+        }
         const customerPP = $(this).find("img").attr("src");
         const customerName = $(this).find(".name").text();
         $("#chat-header").html(`

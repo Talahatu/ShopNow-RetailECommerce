@@ -28,11 +28,16 @@ body {
 
 .chat-app .people-list {
     width: 280px;
+    height: 500px;
     position: absolute;
     left: 0;
     top: 0;
     padding: 20px;
     z-index: 7;
+}
+.chat-app #chatsList {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .chat-app .chat {
@@ -229,30 +234,30 @@ body {
 }
 
 @media only screen and (max-width: 767px) {
-    .chat-app .people-list {
-        height: 465px;
-        width: 100%;
-        overflow-x: auto;
-        background: #fff;
-        left: -400px;
-        display: none;
-    }
-
-    .chat-app .people-list.open {
-        left: 0;
+    .chat-app {
+        display: flex;
+        flex-direction: column;
     }
 
     .chat-app .chat {
+        height: 500px;
+        width: 100%;
+        overflow-x: auto;
         margin: 0;
     }
-
-    .chat-app .chat .chat-header {
-        border-radius: 0.55rem 0.55rem 0 0;
+    .chat-app #plist {
+        padding: 10px;
+        transition: all 500ms;
     }
-
-    .chat-app .chat-history {
-        height: 300px;
-        overflow-x: auto;
+    #chatsList {
+        display: flex;
+        flex-direction: column;
+    }
+    #chatsList li {
+        margin: 5px 0px;
+        padding: 5px;
+        border-left: 2px solid black;
+        border-bottom: 2px solid black;
     }
 }
 
