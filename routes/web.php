@@ -72,6 +72,7 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/checkout", [ProductController::class, "showCheckout"])->name("checkout.show");
     Route::post("/checkout/create", [OrderController::class, "checkoutCreate"])->name("checkout.create");
     Route::post("/getShipAddressModal", [ProductController::class, "getShipModal"])->name("checkout.ship.modal");
+    Route::post('/changeCartAddress', [ProductController::class, 'changeShipAddress'])->name("checkout.addr.chng");
 
     Route::get("/wishlist", [ProductController::class, "showWishlist"])->name("wishlist.show");
     Route::post("/wishlist/toggle", [ProductController::class, "toggleWishlist"])->name("wishlist.toggle");

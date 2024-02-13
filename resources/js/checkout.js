@@ -9,6 +9,26 @@ $(function () {
     }
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
+    let formatter = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
+
+    if (sessionStorage.getItem("address")) {
+        $("#address-ship").html(`
+        ${sessionStorage.getItem(
+            "address"
+        )} &nbsp;<button class="btn btn-outline-info btn-sm"
+        data-bs-toggle="modal" data-bs-target="#exampleModal"
+        attr-dia="${sessionStorage.getItem(
+            "addressI"
+        )}" data-bs-title="Change Shipping Address"
+        id="btnChangeShip">Change</button>
+        `);
+    }
+
     // Bootstrap 5 event not compatible with JQuery
     var btnShip = document.getElementById("btnChangeShip");
     btnShip.addEventListener("click", function (e) {
@@ -49,6 +69,28 @@ $(function () {
         data-bs-toggle="modal" data-bs-target="#exampleModal" attr-dia="${id}" 
         data-bs-title="Change Shipping Address" id="btnChangeShip">Change</button>
         `);
+        $.ajax({
+            type: "POST",
+            url: "/changeCartAddress",
+            data: {
+                _token: csrfToken,
+                addrID: id,
+            },
+            success: function (response) {
+                $("#subtotal-label").html(formatter.format(response.cartTotal));
+                $("#shippingfee-label").html(
+                    formatter.format(response.shippingFee)
+                );
+                $("#total-label").html(formatter.format(response.total));
+                $("#total-checkout").html(response.total);
+
+                sessionStorage.setItem("address", name);
+                sessionStorage.setItem("addressI", id);
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        });
         $(".btnCloseModal").click();
     });
     $("#btnCheckout").on("click", function () {
@@ -65,6 +107,10 @@ $(function () {
                 total: total,
             },
             success: function (response) {
+                if (response.data.length > 1) {
+                    alert(response.data[1]);
+                    return;
+                }
                 if (Push.Permission.has()) {
                     Push.create("New order created!", {
                         body:

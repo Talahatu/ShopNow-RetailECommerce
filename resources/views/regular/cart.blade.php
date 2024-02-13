@@ -5,7 +5,7 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
@@ -26,7 +26,7 @@
             <div class="content-wrap card p-4">
                 <div class="container">
                     <div class="row" style="--bs-gutter-x:6rem;">
-                        <div class="col-xl-8 py-6 border-end">
+                        <div class="col-xl-12 py-6">
                             <table class="table cart mb-5">
                                 <thead>
                                     <tr>
@@ -97,7 +97,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-xl-4 mt-4 mt-lg-0 py-6">
+                        {{-- <div class="col-xl-4 mt-4 mt-lg-0 py-6">
                             <div class="grid-inner">
                                 <div class="row col-mb-30">
                                     <div class="col-12">
@@ -151,6 +151,14 @@
                                     </div>
                                 </div>
                             </div>
+                        </div> --}}
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="{{ route('checkout.show') }}"
+                                class="btn btn-dark d-block text-center m-0 {{ $total > 0 ? '' : 'disable-link disabled' }}"
+                                id="btn-checkout">Proceed to
+                                Checkout</a>
                         </div>
                     </div>
                 </div>

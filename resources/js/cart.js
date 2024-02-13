@@ -44,7 +44,7 @@ $(function () {
             },
             success: function (response) {
                 if (!response) return;
-                calculateTotal();
+                // calculateTotal();
                 if (allSelected.length > 0) {
                     $(btnCheckout).removeClass("disabled disable-link");
                     $(btnCheckout).addClass("enable-link");
@@ -71,7 +71,7 @@ $(function () {
             success: function (response) {
                 if (response) {
                     $(parent).remove();
-                    calculateTotal();
+                    // calculateTotal();
                 }
             },
         });

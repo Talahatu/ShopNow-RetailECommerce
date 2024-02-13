@@ -294,6 +294,16 @@ class ProductController extends Controller
         ]);
     }
 
+    public function changeShipAddress(Request $request)
+    {
+        $addressID = $request->get("addrID");
+        Product::changeDistanceInCart($addressID);
+        $cartTotal = Product::cartTotal(Auth::user()->id);
+        $shippingFee = Product::shippingFee(Auth::user()->id);
+        $total = $cartTotal + $shippingFee;
+        return response()->json(compact("cartTotal", "shippingFee", "total"));
+    }
+
     public function showWishlist()
     {
         $products = Product::select(DB::raw("MIN(images.name) AS iname"), "products.name AS pname", "categories.name AS cname", "products.price", "products.stock", "products.rating", "products.id")

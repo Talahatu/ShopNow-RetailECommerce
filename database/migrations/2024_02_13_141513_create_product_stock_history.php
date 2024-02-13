@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductStockHistoryTable extends Migration
+class CreateProductStockHistory extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,11 @@ class CreateProductStockHistoryTable extends Migration
     {
         Schema::create('product_stock_history', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("product_id");
+            $table->integer("addition");
+            $table->integer("substraction");
+            $table->dateTime("date");
+            $table->foreign("product_id")->references("id")->on("products")->onDelete("CASCADE");
             $table->timestamps();
         });
     }

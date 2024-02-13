@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +70,14 @@ class Product extends Model
             $newProd->status = "live";
             $newProd->SKU = Product::getSKU($category->name, $brand->name, $request->get("name"));
             $newProd->save();
+
+            $prodHistory = new ProductStockHistory();
+            $prodHistory->product_id = $newProd->id;
+            $prodHistory->addition = $request->get("stock");
+            $prodHistory->substraction = 0;
+            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $prodHistory->save();
+
             if ($request->hasFile("image")) {
                 foreach ($request->file("image") as $key => $value) {
                     $file = $value;
@@ -90,6 +100,12 @@ class Product extends Model
     {
         DB::transaction(function () use ($request, $prodID, $price) {
             $prod = Product::find($prodID);
+
+            $prodHistory = new ProductStockHistory();
+            $temp = $prod->stock - $request->get("stock");
+            $prodHistory->addition = ($temp < 0 ? 0 : $temp);
+            $prodHistory->substraction = ($temp < 0 ? $temp : 0);
+
             $prod->category_id = $request->get("category");
             $prod->brand_id = $request->get("brand");
             $prod->name = $request->get("name");
@@ -98,6 +114,11 @@ class Product extends Model
             $prod->stock = $request->get("stock");
             $prod->price = $price;
             $prod->save();
+
+            $prodHistory->product_id = $prod->id;
+            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $prodHistory->save();
+
             if ($request->hasFile("image")) {
                 Product::deleteImages($prodID);
                 foreach ($request->file("image") as $key => $value) {
@@ -198,7 +219,7 @@ class Product extends Model
                 ->where([
                     ["addresses.current", true],
                     ["addresses.user_id", Auth::user()->id]
-                ])->first(["lat", "long"]);
+                ])->first(["lat", "long", "addresses.id"]);
             $distance = Product::getDistance($request->get("id"), $address->lat, $address->long);
 
             $existsCart = Cart::where([
@@ -253,5 +274,20 @@ class Product extends Model
                 ["cart.selected", 1]
             ])->first();
         return $result->shippingFee;
+    }
+
+    public static function changeDistanceInCart($addressID)
+    {
+        DB::transaction(function () use ($addressID) {
+            $selectedProducts = Cart::where([["user_id", Auth::user()->id], ["selected", 1]])->get(["id", "product_id"]);
+            $selectedAddress = Address::where("id", $addressID)->first(["lat", "long"]);
+            foreach ($selectedProducts as $value) {
+                $distance = Product::getDistance($value->product_id, $selectedAddress->lat, $selectedAddress->long);
+                $updatedProduct = Cart::find($value->id);
+                $updatedProduct->distance = $distance;
+                $updatedProduct->save();
+            }
+            return true;
+        });
     }
 }

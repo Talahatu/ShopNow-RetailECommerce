@@ -35,17 +35,17 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Shipping Address</h5>
                                     <div class="card-content d-flex flex-column justify-content-center">
-                                        <address class="m-0" id="address-ship">{{ $address->name }} &nbsp;<button
-                                                class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal" attr-dia="{{ $address->id }}"
-                                                data-bs-title="Change Shipping Address" id="btnChangeShip">Change</button>
+                                        <address class="m-0" id="address-ship">
+                                            {{ $address->name }} &nbsp;<button class="btn btn-outline-info btn-sm"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                attr-dia="{{ $address->id }}" data-bs-title="Change Shipping Address"
+                                                id="btnChangeShip">Change</button>
                                         </address>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="row col-mb-50 gutter-50">
                         <div class="w-100"></div>
                         {{-- Products List --}}
@@ -100,32 +100,32 @@
                             <div class="table-responsive">
                                 <table class="table cart">
                                     <tbody>
-                                        <tr class="cart_item">
+                                        <tr>
                                             <td class="border-top-0 cart-product-name">
                                                 <strong>Cart Subtotal</strong>
                                             </td>
 
                                             <td class="border-top-0 cart-product-name">
-                                                <span class="amount">Rp {{ number_format($cartTotal, 0, ',', '.') }}</span>
+                                                <span class="amount" id="subtotal-label">Rp
+                                                    {{ number_format($cartTotal, 0, ',', '.') }}</span>
                                             </td>
                                         </tr>
-                                        <tr class="cart_item">
+                                        <tr>
                                             <td class="cart-product-name">
                                                 <strong>Shipping</strong>
                                             </td>
-
                                             <td class="cart-product-name">
-                                                <span class="amount">Rp
+                                                <span class="amount" id="shippingfee-label">Rp
                                                     {{ number_format($shippingFee, 0, ',', '.') }}</span>
                                             </td>
                                         </tr>
-                                        <tr class="cart_item">
+                                        <tr>
                                             <td class="cart-product-name">
                                                 <strong>Total</strong>
                                             </td>
 
                                             <td class="cart-product-name">
-                                                <span class="amount color lead"><strong>Rp
+                                                <span class="amount color lead"><strong id="total-label">Rp
                                                         {{ number_format($total, 0, ',', '.') }}</strong></span>
                                                 <input type="hidden" name="total-checkout" id="total-checkout"
                                                     value="{{ $total }}">
@@ -135,7 +135,8 @@
                                 </table>
                             </div>
 
-                            <small class="text-danger">{{ Auth::user()->saldo < $total ? 'Saldo not enough...' : '' }}</small>
+                            <small
+                                class="text-danger">{{ Auth::user()->saldo < $total ? 'Saldo not enough...' : '' }}</small>
                             <div class="btn-group payment-method w-100">
                                 <input type="radio" class="btn-check btn-method" name="options" id="option1"
                                     autocomplete="off" value="ew"
