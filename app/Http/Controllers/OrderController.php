@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Shop;
@@ -50,5 +51,23 @@ class OrderController extends Controller
         $shop = Shop::where("user_id", Auth::user()->id)->first();
         $data = Order::getOrder($shop->id, "new");
         return response()->json(["data" => $data]);
+    }
+
+    public function acceptOrder(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        DB::transaction(function () use ($orderID) {
+            $order = Order::find($orderID);
+            $order->orderStatus = "accepted";
+            $order->save();
+
+            $newNotif = new Notification();
+            $newNotif->header = "Order Updates";
+            $newNotif->content = "Your order have been accepted by seller. Your order is currently being processed.";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = $order->user_id;
+            $newNotif->save();
+        });
+        return response()->json($orderID);
     }
 }

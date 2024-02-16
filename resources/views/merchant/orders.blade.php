@@ -18,7 +18,7 @@
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-process-tab" data-bs-toggle="pill"
                                 href="#pills-process" role="tab" aria-controls="pills-process" aria-selected="false"
-                                data-type="process">Processed</a>
+                                data-type="accepted">Processed</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-sent-tab" data-bs-toggle="pill" href="#pills-sent"
@@ -27,7 +27,7 @@
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-finish-tab" data-bs-toggle="pill" href="#pills-finish"
                                 role="tab" aria-controls="pills-finish" aria-selected="true"
-                                data-type="finish">Finished</a>
+                                data-type="done">Finished</a>
                         </li>
 
                         <li class="nav-item">
@@ -51,6 +51,27 @@
                             <tbody></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="orderDetails"></div>
+                    <div class="productList"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $, { param } from "jquery";
 import { now } from "lodash";
 import Push from "push.js";
 $(function () {
@@ -7,6 +7,12 @@ $(function () {
     if (!Push.Permission.has()) {
         Push.Permission.request(onGranted, onDenied);
     }
+    const onGranted = (params) => {
+        // console.log(params);
+    };
+    const onDenied = (params) => {
+        // console.log(params);
+    };
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     let formatter = new Intl.NumberFormat("id-ID", {
@@ -28,7 +34,6 @@ $(function () {
         id="btnChangeShip">Change</button>
         `);
     }
-
     // Bootstrap 5 event not compatible with JQuery
     var btnShip = document.getElementById("btnChangeShip");
     btnShip.addEventListener("click", function (e) {

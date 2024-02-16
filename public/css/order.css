@@ -30,3 +30,14 @@ li.paginate_button.page-item > a:focus {
 .table-hover tbody tr:hover td {
     color: #0090e7 !important;
 }
+
+#exampleModal .modal-content {
+    background-color: white;
+    border-radius: 20px;
+    color: RGB(45, 54, 53);
+}
+
+.modal-header,
+.modal-footer {
+    border: none;
+}
