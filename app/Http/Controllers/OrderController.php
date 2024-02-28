@@ -70,4 +70,38 @@ class OrderController extends Controller
         });
         return response()->json($orderID);
     }
+    public function rejectOrder(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        DB::transaction(function () use ($orderID) {
+            $order = Order::find($orderID);
+            $order->orderStatus = "cancel";
+            $order->save();
+
+            $newNotif = new Notification();
+            $newNotif->header = "Order Updates";
+            $newNotif->content = "Your order have been rejected by seller";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = $order->user_id;
+            $newNotif->save();
+        });
+        return response()->json($orderID);
+    }
+    public function detailOrder(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        $result = DB::transaction(function () use ($orderID) {
+            $order = Order::find($orderID);
+            $orderDetail = OrderDetail::join("products", "products.id", "order_details.product_id")
+                ->join("images", "images.product_id", "products.id")
+                ->where("order_details.order_id", $orderID)
+                ->get(["products.name AS pname", "images.name AS iname", "products.sku", "order_details.qty", "order_details.price", "order_details.subtotal", "order_details.distance"]);
+            return ["info" => $order, "products" => $orderDetail];
+        });
+        return response()->json($result);
+    }
+
+    public function pickCourier(Request $request)
+    {
+    }
 }

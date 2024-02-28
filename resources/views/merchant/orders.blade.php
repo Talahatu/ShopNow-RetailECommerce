@@ -56,7 +56,6 @@
         </div>
     </div>
 
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -65,14 +64,30 @@
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <hr style="margin-top: 0px">
                 <div class="modal-body">
-                    <div class="orderDetails"></div>
-                    <div class="productList"></div>
+                    <div class="table-responsive">
+                        <h3>Couriers current status</h3>
+                        <table class="table table-hover sortable-table">
+                            <thead>
+                                <tr>
+                                    <td>No.</td>
+                                    <td>Courier Name</td>
+                                    <td>Orders Handled</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form mt-4">
+                        <label for="courier">Pick a courier</label>
+                        <select class="form-control text-light" name="courier" id="selectCourier"></select>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <div class="modal-footer"></div>
             </div>
         </div>
     </div>

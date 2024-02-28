@@ -32,9 +32,7 @@ li.paginate_button.page-item > a:focus {
 }
 
 #exampleModal .modal-content {
-    background-color: white;
     border-radius: 20px;
-    color: RGB(45, 54, 53);
 }
 
 .modal-header,
