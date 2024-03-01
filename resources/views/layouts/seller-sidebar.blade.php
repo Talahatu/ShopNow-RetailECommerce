@@ -74,7 +74,7 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" id="navCourier">
             <a class="nav-link" data-bs-toggle="collapse" href="#delivery-page" aria-expanded="false"
                 aria-controls="delivery-page">
                 <span class="menu-icon">
@@ -85,7 +85,8 @@
             </a>
             <div class="collapse" id="delivery-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">My Delivery</a>
+                    <li class="nav-item" id="mycourier"> <a class="nav-link" href="{{ route('courier.index') }}">My
+                            Delivery</a>
                     </li>
                     <li class="nav-item"> <a class="nav-link" href="#">Add new
                             Courier</a></li>

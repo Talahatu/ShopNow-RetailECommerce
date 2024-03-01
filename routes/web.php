@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CourierController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -99,6 +100,7 @@ Route::middleware(["auth", "seller"])->group(function () {
     Route::post("/order/reject", [OrderController::class, "rejectOrder"])->name("order.reject");
     Route::post("/order/detail", [OrderController::class, "detailOrder"])->name("order.detail");
 
+    Route::get("/myCourier", [CourierController::class, "courierIndex"])->name("courier.index");
     Route::post("/pickCourier", [OrderController::class, "pickCourier"])->name("order.courier");
 
     Route::post("/fetch-categories", [CategoryController::class, "getCategories"]);
