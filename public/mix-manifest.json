@@ -19,6 +19,8 @@
     "/js/checkout.js": "/js/checkout.js",
     "/js/shop.js": "/js/shop.js",
     "/js/courier.js": "/js/courier.js",
+    "/js/courier-create.js": "/js/courier-create.js",
+    "/js/notif-listen.js": "/js/notif-listen.js",
     "/css/app.css": "/css/app.css",
     "/css/images/layers-2x.png": "/css/images/layers-2x.png",
     "/css/images/layers.png": "/css/images/layers.png",

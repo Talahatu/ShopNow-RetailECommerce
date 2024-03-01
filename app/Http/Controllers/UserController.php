@@ -194,4 +194,13 @@ class UserController extends Controller
         });
         return view('merchant.product', ["shop" => $newShop]);
     }
+
+
+    public function getAllRelatedShop(Request $request)
+    {
+        $orders = Order::where([
+            ["user_id", Auth::user()->id],
+        ])->get();
+        return response()->json(compact("orders"));
+    }
 }

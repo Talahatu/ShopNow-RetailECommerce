@@ -9,6 +9,8 @@ import "datatables.net-rowgroup-bs5";
 import "datatables.net-scroller-bs5";
 import "datatables.net-select-bs5";
 
+import Pusher from "pusher-js";
+
 $(function () {
     $("#navOrder").addClass("active");
     $("#navOrder > div").addClass("show");
@@ -140,34 +142,44 @@ $(function () {
 
         $.ajax({
             type: "POST",
-            url: "/order/accept",
+            url: "/getIdsFromOrder",
             data: {
                 _token: csrfToken,
                 orderID: orderID,
             },
-            success: function (response) {
-                if (response) {
-                    if ($(parent).hasClass("parent"))
-                        $(button)
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .remove();
-                    $(parent).remove();
-                } else {
-                    alert(
-                        "Problem occured when accepting orders, please contact customer support"
-                    );
-                }
-            },
-            error: function (err) {
-                console.log(err);
+            success: function (responseA) {
+                $.ajax({
+                    type: "POST",
+                    url: "/order/accept",
+                    data: {
+                        _token: csrfToken,
+                        orderID: orderID,
+                    },
+                    success: function (response) {
+                        if (response) {
+                            if ($(parent).hasClass("parent"))
+                                $(button)
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .parent()
+                                    .remove();
+                            $(parent).remove();
+                        } else {
+                            alert(
+                                "Problem occured when accepting orders, please contact customer support"
+                            );
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    },
+                });
             },
         });
     });

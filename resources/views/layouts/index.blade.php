@@ -63,6 +63,7 @@
         integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
     </script>
     <!-- Custom scripts -->
+    <script src="{{ asset('js/notif-listen.js') }}"></script>
     <script src="{{ asset('js/index.js') }}"></script>
     @yield('js')
 </body>

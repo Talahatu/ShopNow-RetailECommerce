@@ -15,4 +15,10 @@ class CourierController extends Controller
         $couriers = Courier::where("shop_id", $shop->id)->get();
         return view("merchant.couriers", compact("couriers", "shop"));
     }
+
+    public function create()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view("merchant.courier-create", compact("shop"));
+    }
 }

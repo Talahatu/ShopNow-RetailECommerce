@@ -10,21 +10,23 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <div class="tab-content tab-content-custom-pill" id="pills-tabContent">
-                        <table id="myTable" class="display table table-hover responsive nowrap"
-                            style="width: 100% !important">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Name</th>
-                                    <th>Operational Fee</th>
-                                    <th>Delivery Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="btn-group mb-4" role="group" aria-label="Basic mixed styles example">
+                        <a type="button" class="btn btn-success create-new-button" id="addNewCourier"
+                            href="{{ route('courier.create') }}"><i class="mdi mdi-plus"></i>Add new courier</a>
                     </div>
+                    <table id="myTable" class="display table table-hover responsive nowrap"
+                        style="width: 100% !important">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Name</th>
+                                <th>Operational Fee</th>
+                                <th>Delivery Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>

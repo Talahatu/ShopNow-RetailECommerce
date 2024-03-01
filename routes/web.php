@@ -86,6 +86,7 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/openSellerAcc", [UserController::class, "openAccount"])->name('seller.hub');
     Route::post("/processAcc", [UserController::class, "processSellerAcc"])->name('seller.acc.process');
 
+    Route::post("/getAllRelatedShop", [UserController::class, "getAllRelatedShop"])->name("get.all");
     // not used yet
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });
@@ -99,8 +100,11 @@ Route::middleware(["auth", "seller"])->group(function () {
     Route::post("/order/accept", [OrderController::class, "acceptOrder"])->name("order.accept");
     Route::post("/order/reject", [OrderController::class, "rejectOrder"])->name("order.reject");
     Route::post("/order/detail", [OrderController::class, "detailOrder"])->name("order.detail");
+    Route::post("/getIdsFromOrder", [OrderController::class, "getIDs"])->name("order.getID");
 
     Route::get("/myCourier", [CourierController::class, "courierIndex"])->name("courier.index");
+    Route::get("/createCourier", [CourierController::class, "create"])->name("courier.create");
+    Route::post("/storeCourier", [CourierController::class, "store"])->name("courier.store");
     Route::post("/pickCourier", [OrderController::class, "pickCourier"])->name("order.courier");
 
     Route::post("/fetch-categories", [CategoryController::class, "getCategories"]);

@@ -20,6 +20,8 @@ class CreateCourierTable extends Migration
             $table->string("username");
             $table->string("password");
             $table->foreign("shop_id")->references("id")->on("shops");
+            $table->integer("operationalFee");
+            $table->string("email");
             $table->timestamps();
         });
     }

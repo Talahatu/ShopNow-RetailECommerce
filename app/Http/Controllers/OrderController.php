@@ -61,6 +61,26 @@ class OrderController extends Controller
             $order->orderStatus = "accepted";
             $order->save();
 
+            $shopID = $order->shop_id;
+            $userID = $order->user_id;
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new \Pusher\Pusher(
+                'c58a82be41ea6c60c1d7',
+                '8264fc21e2b5035cc329',
+                '1716744',
+                $options
+            );
+
+            $data['message'] = "Your order $order->orderID has been accepted";
+            $data["key"] = "accept";
+            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
+            // regular-seller
+            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+
             $newNotif = new Notification();
             $newNotif->header = "Order Updates";
             $newNotif->content = "Your order have been accepted by seller. Your order is currently being processed.";
@@ -101,6 +121,11 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
+    public function getIDs(Request $request)
+    {
+        $order = Order::find($request->get("orderID"));
+        return response()->json(["userID" => $order->user_id, "shopID" => $order->shop_id]);
+    }
     public function pickCourier(Request $request)
     {
     }

@@ -88,7 +88,8 @@
                     <li class="nav-item" id="mycourier"> <a class="nav-link" href="{{ route('courier.index') }}">My
                             Delivery</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Add new
+                    <li class="nav-item" id="newCourier"> <a class="nav-link" href="{{ route('courier.create') }}">Add
+                            new
                             Courier</a></li>
                 </ul>
             </div>
