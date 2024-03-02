@@ -25,7 +25,17 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            @for ($i = 0; $i < count($couriers); $i++)
+                                <tr>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $couriers[$i]->name }}</td>
+                                    <td>{{ $couriers[$i]->operationalFee }}</td>
+                                    <td>{{ count($couriers[$i]->deliveries) <= 0 ? 'Available' : 'On Delivery' }}</td>
+                                    <td><button class="btn btn-outline-success">Saku</button></td>
+                                </tr>
+                            @endfor
+                        </tbody>
                     </table>
                 </div>
             </div>

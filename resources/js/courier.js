@@ -35,7 +35,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    const html = ``;
+                    const html = `<button class="btn btn-outline-success">Saku</button>`;
                     return html;
                 },
             },
@@ -74,4 +74,18 @@ $(function () {
         },
         columns: DTcolumns(),
     });
+    columnOpenFix();
 });
+
+const columnOpenFix = () => {
+    // datatable.net type column somehow not working, this is a makeshift solution
+    $("td")
+        .filter(function () {
+            return $(this).children("div").length === 0;
+        })
+        .on("click", function () {
+            const parent = $(this).parent();
+            const firstChild = $(parent).children().first();
+            if (!$(this).hasClass("dtr-control")) $(firstChild).click();
+        });
+};

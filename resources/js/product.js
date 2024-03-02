@@ -78,7 +78,30 @@ $(function () {
         ];
     };
     var table = $("#myTable").DataTable({
-        responsive: true,
+        responsive: {
+            details: {
+                renderer: function (api, rowIdx, columns) {
+                    var data = $.map(columns, function (col, i) {
+                        return col.hidden
+                            ? '<tr data-dt-row="' +
+                                  col.rowIndex +
+                                  '" data-dt-column="' +
+                                  col.columnIndex +
+                                  '">' +
+                                  (col.title == "Action"
+                                      ? ``
+                                      : `<td>${col.title}</td>`) +
+                                  (col.title == "Action"
+                                      ? `<td>${col.data}</td>`
+                                      : `<td>: ${col.data}</td>`) +
+                                  "</tr>"
+                            : "";
+                    }).join("");
+
+                    return data ? $("<table/>").append(data) : false;
+                },
+            },
+        },
         language: {
             emptyTable: "No product available",
         },
@@ -97,6 +120,8 @@ $(function () {
         success: function (response) {
             const data = response.data;
             table.rows.add(data).draw();
+            table.columns.adjust().draw();
+            columnOpenFix();
         },
     });
     $(document).on("click", ".btn-delete", function () {
@@ -172,7 +197,22 @@ $(function () {
                     columns: DTcolumns(type),
                 });
                 table.rows.add(data).draw();
+                table.columns.adjust().draw();
+                columnOpenFix();
             },
         });
     });
 });
+
+const columnOpenFix = () => {
+    // datatable.net type column somehow not working, this is a makeshift solution
+    $("td")
+        .filter(function () {
+            return $(this).children("div").length === 0;
+        })
+        .on("click", function () {
+            const parent = $(this).parent();
+            const firstChild = $(parent).children().first();
+            if (!$(this).hasClass("dtr-control")) $(firstChild).click();
+        });
+};

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Courier extends Model
+class Delivery extends Model
 {
     use HasFactory;
 
-    protected $table = "courier";
+    protected $table = "delivery";
 
-    public function deliveries()
+    public function courier()
     {
-        return $this->hasMany(Delivery::class, "courier_id", "id");
+        return $this->belongsTo(Courier::class, "courier_id", "id");
     }
 }
