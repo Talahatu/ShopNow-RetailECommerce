@@ -42,9 +42,14 @@
                                 </li>
                                 <li><a href="{{ route('allChat.show') }}" class="dropdown-item">Chats</a></li>
                                 <li>
+                                    <a class="dropdown-item text-info" href="{{ route('courier.show.login') }}">Login
+                                        as
+                                        courier</a>
+                                </li>
+                                <li>
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf
-                                        <a class="dropdown-item" id="logout">Logout</a>
+                                        <a class="dropdown-item text-danger" id="logout">Logout</a>
                                     </form>
                                 </li>
                             @else

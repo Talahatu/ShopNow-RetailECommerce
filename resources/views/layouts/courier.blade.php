@@ -90,64 +90,16 @@
 
         <!-- Page Title
   ============================================= -->
-        <section class="page-title bg-transparent">
-            <div class="container">
-                <div class="page-title-row">
-                    <div class="page-title-content">
-                        <h1>Events List</h1>
-                        <span>Showcase of Events in Full Width Layout</span>
-                    </div>
-                </div>
-            </div>
-        </section><!-- .page-title end -->
+
+        @yield('pageTitle')
+        <!-- .page-title end -->
 
         <!-- Content
   ============================================= -->
         <section id="content">
             <div class="content-wrap">
                 <div class="container">
-                    <div class="row g-4 mb-5">
-                        {{-- Contents --}}
-                        <article class="entry event col-12 mb-4">
-                            <div
-                                class="grid-inner bg-white row g-0 p-3 border-0 rounded-5 shadow-sm h-shadow all-ts h-translate-y-sm">
-                                <div class="col-md-4 mb-md-0">
-                                    <a href="#" class="entry-image mb-0 h-100">
-                                        <img src="https://source.unsplash.com/fIHozNWfcvs/800x450"
-                                            alt="Inventore voluptates velit totam ipsa tenetur"
-                                            class="rounded-2 h-100 object-cover">
-                                        <div class="bg-overlay">
-                                            <div class="bg-overlay-content justify-content-start align-items-start">
-                                                <div class="badge bg-light text-dark rounded-pill">Online Event</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-md-8 p-4">
-                                    <div class="entry-meta no-separator mb-1 mt-0">
-                                        <ul>
-                                            <li><a href="#" class="text-uppercase fw-medium">Fri, Jan 23 @
-                                                    5:30PM</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="entry-title nott">
-                                        <h3><a href="#">New York WordCamp 2022</a></h3>
-                                    </div>
-                                    <div class="entry-content my-3">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                            Ratione, voluptatem, dolorem animi nisi autem blanditiis. Fugiat facilis
-                                            eius amet corrupti autem?</p>
-                                    </div>
-                                    <div class="entry-meta no-separator">
-                                        <ul>
-                                            <li><a href="#" class="fw-normal"><i class="uil uil-map-marker"></i>
-                                                    New York, USA</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
+                    @yield('content')
                 </div>
             </div>
         </section><!-- #content end -->
