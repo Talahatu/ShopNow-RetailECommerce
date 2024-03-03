@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'courier' => [
+            'driver' => 'session',
+            'provider' => 'couriers'
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -70,6 +75,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
+        'couriers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Courier::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

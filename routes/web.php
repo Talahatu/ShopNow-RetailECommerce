@@ -37,15 +37,20 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return redirect("/home");
 });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
-Route::get("/categories", [CategoryController::class, "categoriesShow"])->name("show.categories");
-Route::get("/show-product/{id}", [ProductController::class, "showProduct"])->name("show.product");
-Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
-Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
-Route::post('/searchProduct', [ProductController::class, "searchProduct"])->name('searchProduct');
-Route::get("/shop/{id}", [HomeController::class, "showShop"])->name("shop.show");
-Route::middleware(["auth"])->group(function () {
+Route::middleware(["prevent.courier"])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
+    Route::get("/categories", [CategoryController::class, "categoriesShow"])->name("show.categories");
+    Route::get("/show-product/{id}", [ProductController::class, "showProduct"])->name("show.product");
+    Route::get('/reregister', [HomeController::class, 'reregister'])->name('reregister');
+    Route::post('/loadProduct', [ProductController::class, "loadProduct"])->name('loadProduct');
+    Route::post('/searchProduct', [ProductController::class, "searchProduct"])->name('searchProduct');
+    Route::get("/shop/{id}", [HomeController::class, "showShop"])->name("shop.show");
+
+    Route::get('/courier/login', [CourierController::class, "showLoginPage"])->name("courier.show.login");
+    Route::post('/courier/login/process', [CourierController::class, "loginAttempt"])->name("courier.login.attempt");
+});
+Route::middleware(["auth", "prevent.courier"])->group(function () {
     Route::get("/change-email-show", [HomeController::class, 'changeEmailShow'])->name('change.email.show');
     Route::post("/change-email", [HomeController::class, 'changeEmail'])->name('change.email');
     Route::get("/verify-email", [HomeController::class, "verifyLoggedEmail"])->name("verify.logged.email");
@@ -91,7 +96,7 @@ Route::middleware(["auth"])->group(function () {
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });
 
-Route::middleware(["auth", "seller"])->group(function () {
+Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::resource("seller", ShopController::class);
     Route::resource('product', ProductController::class);
     Route::get('/myorder', [OrderController::class, "ordersIndex"])->name("order.index");
@@ -116,6 +121,11 @@ Route::middleware(["auth", "seller"])->group(function () {
 
     Route::get("/seller/chat/show", [ShopController::class, "showChat"])->name("seller.chat");
     Route::post("/sendMessageSeller", [ChatController::class, "sendMessageSeller"])->name("chat.send.seller");
+});
+
+Route::middleware(['auth.courier'])->group(function () {
+    Route::get("/courier/home", [CourierController::class, "courierHome"])->name('courier.home');
+    Route::post("/courier/logout", [CourierController::class, "logout"])->name("courier.logout");
 });
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);

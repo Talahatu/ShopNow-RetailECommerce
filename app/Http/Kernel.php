@@ -2,7 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthenticateCourier;
 use App\Http\Middleware\CheckSeller;
+use App\Http\Middleware\PreventCourierAccess;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,6 +65,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'seller' => CheckSeller::class
+        'seller' => CheckSeller::class,
+        'auth.courier' => AuthenticateCourier::class,
+        'prevent.courier' => PreventCourierAccess::class,
     ];
 }

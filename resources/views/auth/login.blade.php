@@ -56,9 +56,11 @@
                                             {{ __('Forgot Your Password?') }}
                                         </a>
                                     @endif
-                                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a
+                                    <p class="mb-2 pb-lg-2" style="color: #393f81;">Don't have an account? <a
                                             href="{{ route('register') }}" style="color: #393f81;">Register
                                             here</a></p>
+                                    <p>Are you a courier? <a href="{{ route('courier.show.login') }}"
+                                            style="color: #393f81;">Login here!</a></p>
                                 </form>
 
                             </div>

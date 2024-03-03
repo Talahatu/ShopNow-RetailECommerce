@@ -42,6 +42,14 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm()
+    {
+        if (Auth::guard("courier")->check()) {
+            return redirect()->route("courier.show.login");
+        }
+        return view('auth.login');
+    }
+
     public function login(Request $request)
     {
         $this->validateLogin($request);
@@ -63,9 +71,6 @@ class LoginController extends Controller
             }
             return $this->sendLoginResponse($request);
         }
-
-
-
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
