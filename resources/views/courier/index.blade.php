@@ -32,7 +32,7 @@
                             </ul>
                         </div>
                         <div class="entry-title nott">
-                            <h3><a href="#">New Order #Order ID</a></h3>
+                            <h3><a href="#">#Order ID</a></h3>
                         </div>
                         <div class="entry-meta no-separator">
                             <ul>
