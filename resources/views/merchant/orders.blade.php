@@ -86,6 +86,7 @@
                         <label for="courier">Pick a courier</label>
                         <select class="form-control text-light" name="courier" id="selectCourier"></select>
                     </div> --}}
+
                 </div>
                 <div class="modal-footer"></div>
             </div>

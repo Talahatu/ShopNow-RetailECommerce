@@ -60,7 +60,7 @@ $(function () {
                             <li><button class="btn btn-block btn-icon-text btn-danger btn-reject dropdown-item" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Tolak</button></li>
                             </ul>
                         </div>
-                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pesanan</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
                         </div>`;
                     } else if (optionType == "accepted") {
                         return `
@@ -313,7 +313,7 @@ $(function () {
                             </div>
                         </div>
                         <hr>
-                        <h3>produk Dipesan: </h3>
+                        <h3>Produk Dipesan: </h3>
                         <div class="card table-responsive">
                             <table class="table table-hover sortable-table">
                                 <thead>
