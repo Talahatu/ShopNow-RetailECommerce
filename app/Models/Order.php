@@ -105,7 +105,10 @@ class Order extends Model
                         }
 
                         $product->stock = $product->stock - $item->qty;
+                        $product->status = ($product->stock == 0 ? "out of stock" : $product->status);
                         $product->save();
+
+
 
                         $prodHistory = new ProductStockHistory();
                         $prodHistory->product_id = $item->product_id;

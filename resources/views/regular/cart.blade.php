@@ -5,17 +5,17 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
                     <div class="page-title-content">
-                        <h1 class="text-light">Cart</h1>
+                        <h1 class="text-light">Keranjang</h1>
                     </div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" class="text-light">Home</a></li>
-                            <li class="breadcrumb-item active text-secondary" aria-current="page">Cart</li>
+                            <li class="breadcrumb-item active text-secondary" aria-current="page">Keranjang</li>
                         </ol>
                     </nav>
                 </div>
@@ -30,12 +30,12 @@
                             <table class="table cart mb-5">
                                 <thead>
                                     <tr>
-                                        <th class="cart-product-check">&nbsp;</th>
+                                        <th class="cart-product-check">Pilih</th>
                                         <th class="cart-product-remove">&nbsp;</th>
                                         <th class="cart-product-thumbnail">&nbsp;</th>
-                                        <th class="cart-product-name">Product</th>
-                                        <th class="cart-product-price">Unit Price</th>
-                                        <th class="cart-product-quantity">Quantity</th>
+                                        <th class="cart-product-name">Nama Barang</th>
+                                        <th class="cart-product-price">Harga/per barang</th>
+                                        <th class="cart-product-quantity">Jumlah</th>
                                         <th class="cart-product-subtotal">Total</th>
                                     </tr>
                                 </thead>
@@ -157,8 +157,7 @@
                         <div class="col-12">
                             <a href="{{ route('checkout.show') }}"
                                 class="btn btn-dark d-block text-center m-0 {{ $total > 0 ? '' : 'disable-link disabled' }}"
-                                id="btn-checkout">Proceed to
-                                Checkout</a>
+                                id="btn-checkout">Lanjut ke pembayaran</a>
                         </div>
                     </div>
                 </div>

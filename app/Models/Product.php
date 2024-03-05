@@ -47,6 +47,7 @@ class Product extends Model
 
     public static function getProducts($userID, $type)
     {
+        $type = ($type == "empty" ? "out of stock" : $type);
         return Product::join("shops", "shops.id", "products.shop_id")
             ->where([
                 ["shops.user_id", $userID],
@@ -113,6 +114,7 @@ class Product extends Model
             $prod->weight = $request->get("weight");
             $prod->stock = $request->get("stock");
             $prod->price = $price;
+            $prod->status = ($prod->stock <= 0 ? "out of stock" : $prod->status);
             $prod->save();
 
             $prodHistory->product_id = $prod->id;

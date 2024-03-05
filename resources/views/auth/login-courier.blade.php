@@ -19,8 +19,7 @@
                                         <span class="h1 fw-bold mb-0">ShopNow</span>
                                     </div>
 
-                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your courier's
-                                        account
+                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Masukan akun kurir anda
                                     </h5>
 
                                     <div class="form-outline mb-4">
@@ -28,7 +27,7 @@
                                             class="form-control form-control-lg @error('username') is-invalid @enderror"
                                             name="username" value="{{ old('username') }}" required autofocus
                                             autocomplete="username" />
-                                        <label class="form-label" for="username">Username</label>
+                                        <label class="form-label" for="username">Nama Alias</label>
                                         @error('username')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -40,7 +39,7 @@
                                         <input id="password" type="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
                                             name="password" required autocomplete="current-password" />
-                                        <label class="form-label" for="password">Password</label>
+                                        <label class="form-label" for="password">Kata Sandi</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -49,12 +48,10 @@
                                     </div>
 
                                     <div class="pt-1 mb-4">
-                                        <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                                        <button class="btn btn-dark btn-lg btn-block" type="submit">Masuk</button>
                                     </div>
-                                    <p class="mb-2 pb-lg-2" style="color: #393f81;">Doesn't have an account yet? Apply to a
-                                        seller!</p>
-                                    <p>Back to shopping? <a href="{{ route('home') }}" style="color: #393f81;">Start
-                                            Shopping Now!</a></p>
+                                    <p>Ingin kembali belanja? <a href="{{ route('home') }}" style="color: #393f81;">Mulai
+                                            belanja disini!</a></p>
                                 </form>
 
                             </div>

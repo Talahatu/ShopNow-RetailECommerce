@@ -87,7 +87,7 @@ $(document).ready(function () {
                                         <p class="text-muted mb-0"><span class="fw-bold">${
                                             products[index].stock
                                         }</span>
-                                            In Stock</p>
+                                            Tersedia</p>
                                         <div class="ms-auto text-warning">
                                             ${starFull}
                                             ${starHalf}

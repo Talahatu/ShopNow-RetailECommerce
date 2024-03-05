@@ -5,7 +5,7 @@
 @section('content-wrapper')
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">My Orders</h3>
+            <h3 class="page-title">Daftar Pesanan</h3>
         </div>
         <div class="row">
             <div class="card">
@@ -13,27 +13,27 @@
                     <ul class="nav nav-pills nav-pills-success nav-pills-custom" id="pills-tab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link order-type active" id="pills-new-tab" data-bs-toggle="pill" href="#pills-new"
-                                role="tab" aria-controls="pills-new" aria-selected="false" data-type="new">New</a>
+                                role="tab" aria-controls="pills-new" aria-selected="false" data-type="new">Baru</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-process-tab" data-bs-toggle="pill"
                                 href="#pills-process" role="tab" aria-controls="pills-process" aria-selected="false"
-                                data-type="accepted">Processed</a>
+                                data-type="accepted">Diterima</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-sent-tab" data-bs-toggle="pill" href="#pills-sent"
-                                role="tab" aria-controls="pills-sent" aria-selected="true" data-type="sent">Sent</a>
+                                role="tab" aria-controls="pills-sent" aria-selected="true" data-type="sent">Dikirim</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-finish-tab" data-bs-toggle="pill" href="#pills-finish"
                                 role="tab" aria-controls="pills-finish" aria-selected="true"
-                                data-type="done">Finished</a>
+                                data-type="done">Selesai</a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link order-type" id="pills-cancel-tab" data-bs-toggle="pill" href="#pills-cancel"
                                 role="tab" aria-controls="pills-cancel" aria-selected="true"
-                                data-type="cancel">Cancelled</a>
+                                data-type="cancel">Ditolak</a>
                         </li>
                     </ul>
                     <div class="tab-content tab-content-custom-pill" id="pills-tabContent">
@@ -41,11 +41,11 @@
                             style="width: 100% !important">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Destination</th>
-                                    <th>Distance</th>
-                                    <th>Payment Type</th>
-                                    <th>Action</th>
+                                    <th>Nomor Pesanan</th>
+                                    <th>Alamat Tujuan</th>
+                                    <th>Jarak Tempuh</th>
+                                    <th>Tipe Pembayaran</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -66,7 +66,7 @@
                 </div>
                 <hr style="margin-top: 0px">
                 <div class="modal-body">
-                    <div class="table-responsive">
+                    {{-- <div class="table-responsive">
                         <h3>Couriers current status</h3>
                         <table class="table table-hover sortable-table">
                             <thead>
@@ -85,7 +85,7 @@
                     <div class="form mt-4">
                         <label for="courier">Pick a courier</label>
                         <select class="form-control text-light" name="courier" id="selectCourier"></select>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer"></div>
             </div>

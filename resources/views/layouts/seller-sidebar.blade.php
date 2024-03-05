@@ -9,8 +9,7 @@
                 <div class="profile-pic">
                     <div class="count-indicator">
                         <img class="img-xs rounded-circle "
-                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : asset('corona/images/faces/face15.jpg') }}"
-                            alt="">
+                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : asset('corona/images/faces/face15.jpg') }}">
                         <span class="count bg-success"></span>
                     </div>
                     <div class="profile-name">
@@ -28,14 +27,14 @@
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                            <p class="preview-subject ellipsis mb-1 text-small">Pengaturan</p>
                         </div>
                     </a>
                 </div>
             </div>
         </li>
         <li class="nav-item nav-category">
-            <span class="nav-link">Navigation</span>
+            <span class="nav-link">Navigasi</span>
         </li>
         <li class="nav-item menu-items" id="navProduct">
             <a class="nav-link" data-bs-toggle="collapse" href="#product-page" aria-expanded="false"
@@ -43,17 +42,16 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-shopping"></i>
                 </span>
-                <span class="menu-title">Products</span>
+                <span class="menu-title">Produk</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="product-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item" id="myproduct"> <a class="nav-link" href="{{ route('product.index') }}">My
-                            Products</a>
+                    <li class="nav-item" id="myproduct"> <a class="nav-link" href="{{ route('product.index') }}">Daftar
+                            Produk</a>
                     </li>
-                    <li class="nav-item" id="newproduct"> <a class="nav-link" href="{{ route('product.create') }}">Add
-                            new
-                            Product</a></li>
+                    <li class="nav-item" id="newproduct"> <a class="nav-link" href="{{ route('product.create') }}">Buat
+                            Produk Baru</a></li>
                 </ul>
             </div>
         </li>
@@ -63,13 +61,13 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-note-text"></i>
                 </span>
-                <span class="menu-title">Orders</span>
+                <span class="menu-title">Pesanan</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="order-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item" id="myorder"> <a class="nav-link" href="{{ route('order.index') }}">My
-                            Orders</a>
+                    <li class="nav-item" id="myorder"> <a class="nav-link" href="{{ route('order.index') }}">Daftar
+                            Pesanan</a>
                     </li>
                 </ul>
             </div>
@@ -80,17 +78,16 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-motorbike"></i>
                 </span>
-                <span class="menu-title">Delivery</span>
+                <span class="menu-title">Kurir</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="delivery-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item" id="mycourier"> <a class="nav-link" href="{{ route('courier.index') }}">My
-                            Delivery</a>
+                    <li class="nav-item" id="mycourier"> <a class="nav-link" href="{{ route('courier.index') }}">Daftar
+                            Kurir</a>
                     </li>
-                    <li class="nav-item" id="newCourier"> <a class="nav-link" href="{{ route('courier.create') }}">Add
-                            new
-                            Courier</a></li>
+                    <li class="nav-item" id="newCourier"> <a class="nav-link"
+                            href="{{ route('courier.create') }}">Tambahkan Kurir Baru</a></li>
                 </ul>
             </div>
         </li>
@@ -100,12 +97,12 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-chart-bar"></i>
                 </span>
-                <span class="menu-title">Financials</span>
+                <span class="menu-title">Keuangan</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="financial-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">My Financials</a>
+                    <li class="nav-item"> <a class="nav-link" href="#">Laporan Keuangan</a>
                     </li>
                 </ul>
             </div>
@@ -116,14 +113,14 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-settings"></i>
                 </span>
-                <span class="menu-title">Settings</span>
+                <span class="menu-title">Pengaturan</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="setting-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">Shop Setting</a>
+                    <li class="nav-item"> <a class="nav-link" href="#">Pengaturan Toko</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Seller Account Setting</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Pengaturan Akun</a></li>
                 </ul>
             </div>
         </li>

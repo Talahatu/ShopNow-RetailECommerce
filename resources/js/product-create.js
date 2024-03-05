@@ -10,7 +10,7 @@ $(function () {
     $("#navProduct > div").addClass("show");
     $("#newproduct > a").addClass("active");
     $("#selectCategory").select2({
-        placeholder: "Select a category",
+        placeholder: "Pilih kategori",
         ajax: {
             type: "POST",
             url: "/fetch-categories",
@@ -30,7 +30,7 @@ $(function () {
         },
     });
     $("#selectBrand").select2({
-        placeholder: "Select a brand (pick a category first)",
+        placeholder: "Pilih Merek (Pilih kategori terlebih dahulu)",
         disabled: true,
         ajax: {
             type: "POST",

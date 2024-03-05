@@ -27,7 +27,7 @@
                             </li>
                         @endfor
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('show.categories') }}">Other Categories</a>
+                            <a class="nav-link" href="{{ route('show.categories') }}">Kategori Lainnya</a>
                         </li>
                     </ul>
                     <!-- Left links -->
@@ -45,11 +45,11 @@
                     <div class="card-banner h-auto p-5 bg-gradient rounded-5" style="height: 350px;">
                         <div>
                             <h2 class="text-white">
-                                Great products with <br />
-                                best deals
+                                Produk Terbaik <br />
+                                Dengan Layanan Terbaik
                             </h2>
-                            <p class="text-white">Provide the nearest products just for your needs whenever and wherever.
-                                Together lets shop happily with ShopNow!</p>
+                            <p class="text-white">Menyediakan berbagai barang terdekat yang kamu butuhkan. Mari belanja
+                                bersama menggunakan ShopNow!</p>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
         <div class="container my-5">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
-                    <h3>Closest To You! </h3>
+                    <h3>Disekitar Anda! </h3>
                 </a>
             </header>
             <div class="row" id="products-row"></div>
@@ -75,7 +75,7 @@
         <section class="mt-5 mb-4">
             <div class="container text-light">
                 <header class="">
-                    <h3 class="section-title">Recently viewed</h3>
+                    <h3 class="section-title">Sebelumnya Dilihat</h3>
                 </header>
                 <div class="row gy-3">
                     @for ($i = 0; $i < min(count($recent), 4); $i++)
@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <p class="text-muted mb-0"><span class="fw-bold">{{ $recent[$i]->stock }}</span>
-                                                In Stock</p>
+                                                Tersedias</p>
                                             <div class="ms-auto text-warning">
                                                 @for ($j = 0; $j < floor($recent[$i]->rating); $j++)
                                                     <i class="fa fa-star"></i>

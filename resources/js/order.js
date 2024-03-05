@@ -25,12 +25,26 @@ $(function () {
         maximumFractionDigits: 0,
     });
 
+    const opsiLanguage = {
+        emptyTable: "Tidak ada pesanan",
+        lengthMenu: "Menampilkan _MENU_ Pesanan",
+        info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ Pesanan",
+        search: "Cari",
+        paginate: {
+            previous: "Sebelumnya",
+            next: "Selanjutnya",
+        },
+    };
+
     var DTcolumns = (optionType = "new") => {
         return [
             { data: "orderID" },
             { data: "destination_address" },
             {
-                data: "distance",
+                data: null,
+                render: function (data, type, row) {
+                    return data.distance + " KM";
+                },
             },
             { data: "payment_method" },
             {
@@ -40,23 +54,23 @@ $(function () {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle p-2 btnGroupAction" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle p-2 btnGroupAction" data-bs-toggle="dropdown" aria-expanded="false">Aksi</button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
-                            <li><button class="btn btn-block btn-icon-text btn-info btn-accept dropdown-item mb-2" data-dia="${data.id}">Accept</button></li>
-                            <li><button class="btn btn-block btn-icon-text btn-danger btn-reject dropdown-item" data-dia="${data.id}">Reject</button></li>
+                            <li><button class="btn btn-block btn-icon-text btn-info btn-accept dropdown-item mb-2" data-dia="${data.id}">Terima</button></li>
+                            <li><button class="btn btn-block btn-icon-text btn-danger btn-reject dropdown-item" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Tolak</button></li>
                             </ul>
                         </div>
-                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Detail</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pesanan</button>
                         </div>`;
                     } else if (optionType == "accepted") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                            <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Send Product</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim Pesanan</button>
                         </div>`;
                     } else if (optionType == "sent") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                            On Delivery
+                            Dalam Perjalanan
                         </div>`;
                     } else if (optionType == "done") {
                         return `
@@ -66,7 +80,7 @@ $(function () {
                     } else {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                        <button class="btn btn-block btn-lg btn-outline-success btn-chat p-2" data-dia="${data.id}">Chat</button>
+                        <button class="btn btn-block btn-lg btn-outline-success btn-chat p-2" data-dia="${data.id}">Kirim Pesan</button>
                         </div>`;
                     }
                 },
@@ -85,10 +99,10 @@ $(function () {
                                   '" data-dt-column="' +
                                   col.columnIndex +
                                   '">' +
-                                  (col.title == "Action"
+                                  (col.title == "Aksi"
                                       ? ``
                                       : `<td>${col.title}</td>`) +
-                                  (col.title == "Action"
+                                  (col.title == "Aksi"
                                       ? `<td>${col.data}</td>`
                                       : `<td>: ${col.data}</td>`) +
                                   "</tr>"
@@ -99,9 +113,7 @@ $(function () {
                 },
             },
         },
-        language: {
-            emptyTable: "No orders available",
-        },
+        language: opsiLanguage,
         rowId: function (row) {
             return "row_" + row.id;
         },
@@ -162,7 +174,7 @@ $(function () {
                             $(parent).remove();
                         } else {
                             alert(
-                                "Problem occured when accepting orders, please contact customer support"
+                                "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
                             );
                         }
                     },
@@ -179,37 +191,54 @@ $(function () {
         const button = $(this);
         const parent = $("#row_" + orderID);
 
-        $.ajax({
-            type: "POST",
-            url: "/order/reject",
-            data: {
-                _token: csrfToken,
-                orderID: orderID,
-            },
-            success: function (response) {
-                if (response) {
-                    if ($(parent).hasClass("parent"))
-                        $(button)
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .parent()
-                            .remove();
-                    $(parent).remove();
-                } else {
-                    alert(
-                        "Problem occured when rejecting orders, please contact customer support"
-                    );
-                }
-            },
-            error: function (err) {
-                console.log(err);
-            },
+        $("#exampleModalLabel").html("Masukan alasan penolakan");
+        $("#exampleModal").find(".modal-footer").html(`
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModal">Tutup</button>
+        <button type="button" class="btn btn-primary" id="simpanAlasan">Simpan</button>
+    `);
+        $("#exampleModal").find(".modal-body").html(`
+        <label for="reason">Alasan: </label>
+        <input type="text" name="reason" id="reason" placeholder="Penolakan Karena..."
+            class="form-control text-white">
+        `);
+
+        $(document).on("click", "#simpanAlasan", function () {
+            const alasan = $("#reason").val();
+            $.ajax({
+                type: "POST",
+                url: "/order/reject",
+                data: {
+                    _token: csrfToken,
+                    orderID: orderID,
+                    reason: alasan,
+                },
+                success: function (response) {
+                    if (response) {
+                        if ($(parent).hasClass("parent"))
+                            $(button)
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .parent()
+                                .remove();
+                        $(parent).remove();
+                        const modal = document.getElementById("exampleModal");
+                        bootstrap.Modal.getInstance(modal).hide();
+                    } else {
+                        alert(
+                            "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
+                        );
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+            });
         });
     });
 
@@ -218,9 +247,9 @@ $(function () {
         const IDOrder = $("#row_" + orderID)
             .find("td.dtr-control")
             .text();
-        $("#exampleModalLabel").html(`${IDOrder}'s Details`);
+        $("#exampleModalLabel").html(`Rincian Pesanan Nomor ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
         $.ajax({
             type: "POST",
@@ -249,7 +278,7 @@ $(function () {
                 <div class="orderDetails">
                     <div class="forms-sample">
                         <div class="form-group row">
-                            <label for="orderDate" class="col-sm-3 col-form-label">Order Date</label>
+                            <label for="orderDate" class="col-sm-3 col-form-label">Tanggal Pesanan</label>
                             <div class="col-sm-9">
                                 <label for="orderDate" class="col-form-label">:&nbsp;${
                                     ordersInfo.order_date
@@ -257,7 +286,7 @@ $(function () {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="orderStatus" class="col-sm-3 col-form-label">Order Status</label>
+                            <label for="orderStatus" class="col-sm-3 col-form-label">Status Pesanan</label>
                             <div class="col-sm-9">
                                 <label for="orderStatus" class="col-form-label">:&nbsp;${
                                     ordersInfo.orderStatus
@@ -265,18 +294,18 @@ $(function () {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="destination" class="col-sm-3 col-form-label">Destination Address</label>
+                            <label for="destination" class="col-sm-3 col-form-label">Alamat Tujuan</label>
                             <div class="col-sm-9">
                                 <label for="destination" class="col-form-label">:&nbsp;${
                                     ordersInfo.destination_address
                                 }&nbsp;
-                                    <span class="text-muted">&lpar;Estimated ${Math.round(
+                                    <span class="text-muted">&lpar;Jarak Perkiraan ${Math.round(
                                         products[0].distance
                                     )} KM&rpar;</span></label>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="paymentMethod" class="col-sm-3 col-form-label">Payment Method</label>
+                            <label for="paymentMethod" class="col-sm-3 col-form-label">Metode Pembayaran</label>
                             <div class="col-sm-9">
                                 <label for="paymentMethod" class="col-form-label">:&nbsp;${
                                     ordersInfo.payment_method
@@ -284,16 +313,16 @@ $(function () {
                             </div>
                         </div>
                         <hr>
-                        <h3>Product Ordered</h3>
+                        <h3>produk Dipesan: </h3>
                         <div class="card table-responsive">
                             <table class="table table-hover sortable-table">
                                 <thead>
                                     <tr>
-                                        <th>Product Image</th>
-                                        <th>Name</th>
+                                        <th>Gambar</th>
+                                        <th>Nama</th>
                                         <th>SKU</th>
-                                        <th>Quantity</th>
-                                        <th>Price/pcs</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga/pcs</th>
                                         <th>Subtotal</th>
                                     </tr>
                                 </thead>
@@ -307,7 +336,7 @@ $(function () {
                         <h4 class="subtotal">Subtotal: ${formatter.format(
                             ordersInfo.subtotal
                         )}</h4>
-                        <h4 class="shippingFee">Shipping Fee: ${formatter.format(
+                        <h4 class="shippingFee">Ongkos Kirim: ${formatter.format(
                             ordersInfo.shippingFee
                         )}</h4>
                         <h2 class="totalAll">Total: ${formatter.format(
@@ -348,10 +377,10 @@ $(function () {
                                               '" data-dt-column="' +
                                               col.columnIndex +
                                               '">' +
-                                              (col.title == "Action"
+                                              (col.title == "Aksi"
                                                   ? ``
                                                   : `<td>${col.title}</td>`) +
-                                              (col.title == "Action"
+                                              (col.title == "Aksi"
                                                   ? `<td>${col.data}</td>`
                                                   : `<td>: ${col.data}</td>`) +
                                               "</tr>"
@@ -364,9 +393,7 @@ $(function () {
                             },
                         },
                     },
-                    language: {
-                        emptyTable: "No orders available",
-                    },
+                    language: opsiLanguage,
                     rowId: function (row) {
                         return "row_" + row.id;
                     },
@@ -384,11 +411,32 @@ $(function () {
         console.log("test 1");
         console.log($("#exampleModalLabel"));
 
-        $("#exampleModalLabel").html(`Pick a courier to deliver the products`);
+        $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
             `);
+        $("#exampleModal").find(".modal-body").html(`
+        <div class="table-responsive">
+                        <h3>Status Kurir Saat ini</h3>
+                        <table class="table table-hover sortable-table">
+                            <thead>
+                                <tr>
+                                    <td>No.</td>
+                                    <td>Nama Kurir</td>
+                                    <td>Pesanan pada kurir</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form mt-4">
+                        <label for="courier">Pilih kurir</label>
+                        <select class="form-control text-light" name="courier" id="selectCourier"></select>
+                    </div>`);
         $.ajax({
             type: "POST",
             url: "/pickCourier",

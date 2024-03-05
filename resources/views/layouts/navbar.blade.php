@@ -17,12 +17,12 @@
                             <a href="{{ route('cart.show') }}"
                                 class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_self">
                                 <i class="fas fa-shopping-cart m-1 me-md-2"></i>
-                                <p class="d-none d-md-block mb-0">My cart</p>
+                                <p class="d-none d-md-block mb-0">Keranjang</p>
                             </a>
                             <a href="{{ route('seller.hub') }}"
                                 class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
                                 <i class="fas fa-shopping-bag m-1 me-md-2"></i>
-                                <p class="d-none d-md-block mb-0">Seller Hub</p>
+                                <p class="d-none d-md-block mb-0">Portal Seller</p>
                             </a>
                         @endif
                         <a class="dropdown-toggle py-1 px-3 nav-link d-flex align-items-center hidden-arrow"
@@ -35,26 +35,25 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                             @if (Auth::check())
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('profile') }}">My profile</a>
+                                    <a class="dropdown-item" href="{{ route('profile') }}">Profil Anda</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('wishlist.show') }}">Wishlist</a>
                                 </li>
                                 <li><a href="{{ route('allChat.show') }}" class="dropdown-item">Chats</a></li>
                                 <li>
-                                    <a class="dropdown-item text-info" href="{{ route('courier.show.login') }}">Login
-                                        as
-                                        courier</a>
+                                    <a class="dropdown-item text-info" href="{{ route('courier.show.login') }}">Masuk
+                                        sebagai kurir</a>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf
-                                        <a class="dropdown-item text-danger" id="logout">Logout</a>
+                                        <a class="dropdown-item text-danger" id="logout">Keluar</a>
                                     </form>
                                 </li>
                             @else
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('login') }}">Login</a>
+                                    <a class="dropdown-item" href="{{ route('login') }}">Masuk ke akun</a>
                                 </li>
                             @endif
                         </ul>
@@ -66,7 +65,8 @@
                     <div class="input-group float-center">
                         <div class="form-outline">
                             <input type="search" id="searchInput" name="searchInput" value="{{ old('searchInput') }}"
-                                class="form-control" placeholder="Search product's name, category, or brand" />
+                                class="form-control"
+                                placeholder="Cari berdasarkan nama, merek, atau kategori barang..." />
                         </div>
                         <a href="/search/" id="btnSearch" class="btn btn-dark shadow-0">
                             <i class="fas fa-search"></i>
@@ -99,8 +99,8 @@
                 <use xlink:href="#exclamation-triangle-fill" />
             </svg>
             <div>
-                Verify your email to access transactional features! <a href="{{ route('verify.logged.email') }}"
-                    class="alert-link">click here to verify</a>.
+                Verifikasi email anda untuk dapat melakukan transaksi! <a href="{{ route('verify.logged.email') }}"
+                    class="alert-link">Klik disini untuk verifikasi email</a>.
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
                 id="alertClose"></button>

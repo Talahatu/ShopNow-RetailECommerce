@@ -21,7 +21,7 @@
                                         <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                                         <span class="h1 fw-bold mb-0">ShopNow</span>
                                     </div>
-                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"> Open a seller account!
+                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"> Buka akun seller!
                                     </h5>
 
 
@@ -33,8 +33,7 @@
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <div class="btn btn-dark btn-rounded">
-                                                <label class="form-label text-white m-1" for="image">Choose
-                                                    Image</label>
+                                                <label class="form-label text-white m-1" for="image">Pilih gambar</label>
                                                 <input type="file" name="image" class="form-control d-none changeCheck"
                                                     id="image" />
                                             </div>
@@ -50,7 +49,7 @@
                                             class="form-control form-control-lg @error('name') is-invalid @enderror changeCheck"
                                             name="name" value="{{ old('name') }}" required autofocus
                                             autocomplete="name" />
-                                        <label class="form-label" for="name">{{ __('Shop Name') }}</label>
+                                        <label class="form-label" for="name">{{ __('Nama Toko') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -62,7 +61,7 @@
                                             class="form-control form-control-lg @error('phoneNumber') is-invalid @enderror changeCheck"
                                             name="phoneNumber" value="{{ old('phoneNumber') }}" autofocus
                                             autocomplete="phoneNumber">
-                                        <label class="form-label" for="desc">{{ __('phoneNumber') }}</label>
+                                        <label class="form-label" for="desc">{{ __('Nomor Telepon') }}</label>
                                         @error('phoneNumber')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -75,7 +74,7 @@
                                             name="address" value="{{ old('address') }}" required autofocus
                                             autocomplete="address" />
                                         <input type="hidden" name="latlng" id="ll">
-                                        <label class="form-label" for="address">{{ __('Shop Address') }}</label>
+                                        <label class="form-label" for="address">{{ __('Alamat Toko') }}</label>
                                     </div>
                                     @error('address')
                                         <span class="invalid-feedback" role="alert">
@@ -87,7 +86,7 @@
                                     <div class="pt-1 mb-4">
                                         <button class="btn btn-dark btn-lg btn-block" disabled type="submit"
                                             id="btnsbmt">{{ __('Open Account') }}</button>
-                                        <a href="/" class="btn btn-outline-dark btn-lg btn-block">Back</a>
+                                        <a href="/" class="btn btn-outline-dark btn-lg btn-block">Kembali</a>
                                     </div>
                                 </form>
                             </div>

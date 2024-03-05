@@ -11,7 +11,7 @@ $(function () {
     $("#navProduct > div").addClass("show");
     $("#newproduct > a").addClass("active");
     $("#selectCategory").select2({
-        placeholder: "Select a category",
+        placeholder: "Pilih Kategori",
         ajax: {
             type: "POST",
             url: "/fetch-categories",
@@ -32,7 +32,7 @@ $(function () {
         },
     });
     $("#selectBrand").select2({
-        placeholder: "Select a brand (pick a category first)",
+        placeholder: "Pilih Merek (Pilih Kategori Terlebih Dahulu)",
         ajax: {
             type: "POST",
             url: "/fetch-brands",

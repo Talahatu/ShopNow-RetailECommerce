@@ -85,7 +85,7 @@ $(function () {
                 const products = response.products;
                 if (products.length == 0) {
                     $("#products-row")
-                        .html(`<h1 class="text-light">No Product matched the keywords...</h1>
+                        .html(`<h1 class="text-light">Tidak ada barang yang sesuai dengan pencarian...</h1>
                     `);
                     return;
                 }
@@ -151,7 +151,7 @@ $(function () {
                                         <p class="text-muted mb-0"><span class="fw-bold">${
                                             products[index].stock
                                         }</span>
-                                            In Stock</p>
+                                            Tersedia</p>
                                         <div class="ms-auto text-warning">
                                             ${starFull}
                                             ${starHalf}

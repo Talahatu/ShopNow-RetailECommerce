@@ -121,7 +121,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                     aria-labelledby="profileDropdown">
-                    <h6 class="p-3 mb-0">Profile</h6>
+                    <h6 class="p-3 mb-0">Profil Toko</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject mb-1">Settings</p>
+                            <p class="preview-subject mb-1">Pengaturan</p>
                         </div>
                     </a>
                     <a class="dropdown-item preview-item" href="/">
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject mb-1">Quit Seller Hub</p>
+                            <p class="preview-subject mb-1">Keluar dari toko</p>
                         </div>
                     </a>
                     <div class="dropdown-divider"></div>
@@ -153,7 +153,7 @@
                                 </div>
                             </div>
                             <div class="preview-item-content">
-                                <p class="preview-subject mb-1">Log out</p>
+                                <p class="preview-subject mb-1">Keluar</p>
                             </div>
                         </button>
                     </form>

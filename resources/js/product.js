@@ -50,17 +50,6 @@ $(function () {
                         </div>
                             <button class="btn btn-block btn-lg btn-outline-success btn-live p-2" data-dia="${data.id}"><i class="mdi mdi-folder-lock-open btn-icon-prepend"></i>Live</button>
                         </div>`;
-                    } else if (optionType == "problem") {
-                        return `
-                        <div class="d-flex flex-column btn-group-vertical">
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
-                                <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
-                                <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
-                                <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
-                                </ul>
-                            </div>
-                        </div>`;
                     } else {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">

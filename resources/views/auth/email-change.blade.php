@@ -9,7 +9,7 @@
                         <div class="card-body p-4 p-lg-5 text-black">
                             @if (session('status'))
                                 <div class="alert alert-success" role="alert">
-                                    {{ session('status') }} <a href="/">Back to Login!</a>
+                                    {{ session('status') }} <a href="/">Kembali ke halaman masuk akun!</a>
                                 </div>
                             @endif
                             <form method="POST" action="{{ route('change.email') }}">
@@ -23,7 +23,7 @@
                                     <input type="email" id="email"
                                         class="form-control form-control-lg @error('email') is-invalid @enderror"
                                         name="email" value="{{ old('email') }}" required autofocus />
-                                    <label class="form-label" for="email">Email Address</label>
+                                    <label class="form-label" for="email">Alamat Email</label>
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -33,7 +33,7 @@
 
                                 <div class="pt-1 mb-4">
                                     <button type="submit" class="btn btn-dark btn-lg btn-block">
-                                        {{ __('Send Email Change Link') }}
+                                        {{ __('Kirim link perubahan email ulang!') }}
                                     </button>
                                 </div>
                             </form>

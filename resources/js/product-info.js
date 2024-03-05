@@ -53,10 +53,10 @@ $(function () {
             success: function (response) {
                 const data = response.data;
                 $("#toastHeader").html(
-                    `<i class="bi-gift-fill"></i> Added to cart!`
+                    `<i class="bi-gift-fill"></i> Telah masuk ke keranjang!`
                 );
                 $("#toastBody").html(`
-                Product: ${data.name} is successfully added to your cart! <a href="/cart">Check it out here!</a> 
+                ${data.name} telah berhasil masuk ke keranjang anda! <a href="/cart">Lihat disini!</a> 
                 `);
                 toast.show();
             },
@@ -82,20 +82,20 @@ $(function () {
                     $("#wishlistStatus").removeClass("fa-regular");
                     $("#wishlistStatus").addClass("fa-solid");
                     $("#toastHeader").html(
-                        `<i class="bi-gift-fill"></i> Added to wishlist!`
+                        `<i class="bi-gift-fill"></i> Telah masuk ke wishlist!`
                     );
                     $("#toastBody").html(`
-                    Product: ${response.name} is successfully added to your wishlist! <a href="/wishlist">Check it out here!</a> 
+                    ${response.name} telah berhasil masuk ke wishlist anda! <a href="/wishlist">Lihat disini!</a> 
                     `);
                     toast.show();
                 } else {
                     $("#wishlistStatus").removeClass("fa-solid");
                     $("#wishlistStatus").addClass("fa-regular");
                     $("#toastHeader").html(
-                        `<i class="bi-gift-fill"></i> Removed from wishlist!`
+                        `<i class="bi-gift-fill"></i> Dihapus dari wishlist!`
                     );
                     $("#toastBody").html(`
-                    Product: ${response.name} is removed from your wishlist! `);
+                    ${response.name} telah dihapus dari wishlist anda! `);
                     toast.show();
                 }
             },

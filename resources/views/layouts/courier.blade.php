@@ -27,7 +27,7 @@
 
     <!-- Document Title
  ============================================= -->
-    <title>Events List - Full Width | Canvas</title>
+    <title>Halaman Kurir</title>
 
 </head>
 

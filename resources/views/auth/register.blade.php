@@ -20,12 +20,12 @@
                                         <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                                         <span class="h1 fw-bold mb-0">ShopNow</span>
                                     </div>
-                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"> Create a new account!
+                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"> Buat Akun Baru!
                                     </h5>
 
                                     @if (session('verifyfailed'))
                                         <div class="alert alert-success" role="alert">
-                                            {{ __('Please re-register again!') }}
+                                            {{ __('Mohon buat akun ulang!') }}
                                         </div>
                                     @endif
                                     <div class="form-outline mb-4">
@@ -33,7 +33,7 @@
                                             class="form-control form-control-lg @error('name') is-invalid @enderror"
                                             name="name" value="{{ old('name') }}" required autofocus
                                             autocomplete="name" />
-                                        <label class="form-label" for="email">{{ __('Name') }}</label>
+                                        <label class="form-label" for="email">{{ __('Nama Anda') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -46,7 +46,7 @@
                                             class="form-control form-control-lg @error('username') is-invalid @enderror"
                                             name="username" value="{{ old('username') }}" required autofocus
                                             autocomplete="username" />
-                                        <label class="form-label" for="username">{{ __('Username') }}</label>
+                                        <label class="form-label" for="username">{{ __('Nama Alias') }}</label>
                                         @error('username')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -59,7 +59,7 @@
                                             name="address" value="{{ old('address') }}" required autofocus
                                             autocomplete="address" />
                                         <input type="hidden" name="latlng" id="ll">
-                                        <label class="form-label" for="address">{{ __('Home Address') }}</label>
+                                        <label class="form-label" for="address">{{ __('Alamat Rumah') }}</label>
                                         @error('address')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -73,7 +73,7 @@
                                             class="form-control form-control-lg @error('email') is-invalid @enderror"
                                             name="email" value="{{ old('email') }}" required autofocus
                                             autocomplete="email" />
-                                        <label class="form-label" for="email">Email Address</label>
+                                        <label class="form-label" for="email">Alamat Email</label>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -85,7 +85,7 @@
                                         <input type="password" id="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
                                             name="password" required autofocus autocomplete="new-password" />
-                                        <label class="form-label" for="password">{{ __('Password') }}</label>
+                                        <label class="form-label" for="password">{{ __('Kata Sandi') }}</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -97,7 +97,7 @@
                                         <input type="password" id="password-confirm" class="form-control form-control-lg"
                                             name="password_confirmation" required autocomplete="new-password" />
                                         <label class="form-label"
-                                            for="password-confirm">{{ __('Confirm Password') }}</label>
+                                            for="password-confirm">{{ __('Konfirmasi Kata Sandi') }}</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -107,10 +107,10 @@
 
                                     <div class="pt-1 mb-4">
                                         <button class="btn btn-dark btn-lg btn-block"
-                                            type="submit">{{ __('Register') }}</button>
+                                            type="submit">{{ __('Buat Akun') }}</button>
                                     </div>
                                 </form>
-                                <h6><a href="{{ route('login') }}">Already have an account? Login now!</a></h6>
+                                <h6><a href="{{ route('login') }}">Sudah punya akun? Masuk sekarang!</a></h6>
                             </div>
                         </div>
                     </div>

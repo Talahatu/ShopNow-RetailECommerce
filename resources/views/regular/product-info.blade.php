@@ -79,12 +79,12 @@
                                         <button class="carousel-control-prev carousel-button" type="button"
                                             data-mdb-target="#carouselMDExample" data-mdb-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
+                                            <span class="visually-hidden">Sebelum</span>
                                         </button>
                                         <button class="carousel-control-next carousel-button" type="button"
                                             data-mdb-target="#carouselMDExample" data-mdb-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
+                                            <span class="visually-hidden">Selanjutnya</span>
                                         </button>
                                         <!-- Controls -->
 
@@ -131,7 +131,7 @@
                                     <hr class="mt-1 mb-3">
 
                                     <!-- Product Single - Quantity & Cart Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ============================================= -->
                                     <div class="cart mb-0  d-block d-lg-flex justify-content-between align-items-center">
                                         <div class="input-group m-lg-0 mb-3 input-quantity-width">
                                             <button class="btn  btn-dark" type="button" id="button-minus"
@@ -152,29 +152,27 @@
                                             <div class="btn-group m-0" role="group">
 
                                                 <button type="button" class="buy-now btn btn-outline-dark"
-                                                    attr-dia="{{ $data->id }}">Buy
-                                                    Now</button>
+                                                    attr-dia="{{ $data->id }}">Beli Sekarang</button>
                                                 <button type="button" class="add-to-cart btn btn-dark"
-                                                    attr-dia="{{ $data->id }}">Add to
-                                                    cart</button>
+                                                    attr-dia="{{ $data->id }}">Tambahkan ke Keranjang</button>
                                             </div>
                                         @else
-                                            Login to purchase this product!
+                                            Masuk ke akun untuk melanjutkan pembelian!
                                         @endif
                                     </div><!-- Product Single - Quantity & Cart Button End -->
 
                                     <hr class="mb-1 mt-3">
 
                                     <div class="spesification my-3">
-                                        <h2>Spesification: </h2>
+                                        <h2>Rincian Barang: </h2>
                                         <table class="table table-striped table-bordered">
                                             <tbody>
                                                 <tr>
-                                                    <td>Weight</td>
+                                                    <td>Berat</td>
                                                     <td>{{ $data->weight }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Stock</td>
+                                                    <td>Jumlah Tersedia</td>
                                                     <td>{{ $data->stock }}</td>
                                                 </tr>
                                             </tbody>
@@ -196,7 +194,7 @@
                                                     <a href="{{ route('chat.show', $data->shop->id) }}"
                                                         class="btn btn-outline-dark btn-chat">Chat</a>
                                                     <a href="{{ route('shop.show', $data->shop->id) }}"
-                                                        class="btn btn-dark btn-visit">Visit</a>
+                                                        class="btn btn-dark btn-visit">Kunjungi</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +206,7 @@
                                         <div class="card-body">
                                             <span itemprop="productID" class="sku_wrapper text-secondary">SKU: <span
                                                     class="sku text-dark">{{ $data->SKU }}</span></span>&nbsp;
-                                            <span class="posted_in text-secondary">Category: <a href="#"
+                                            <span class="posted_in text-secondary">Kategori: <a href="#"
                                                     rel="tag"
                                                     class="text-dark">{{ $data->category->name }}</a>.</span>&nbsp;
                                             <span class="tagged_as text-secondary">Tags: <a href="#" rel="tag"
@@ -225,7 +223,7 @@
                                                     data-bs-toggle="pill" data-bs-target="#tabs-1" type="button"
                                                     role="tab" aria-controls="canvas-tabs-1" aria-selected="true">
                                                     <i class="me-1 bi-justify"></i>
-                                                    <span class="d-inline-block">Description</span>
+                                                    <span class="d-inline-block">Deskripsi Barang</span>
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation">
@@ -233,7 +231,7 @@
                                                     data-bs-target="#tabs-3" type="button" role="tab"
                                                     aria-controls="canvas-tabs-3" aria-selected="false">
                                                     <i class="me-1 bi-star-fill"></i>
-                                                    <span class="d-inline-block">Reviews (2)</span>
+                                                    <span class="d-inline-block">Ulasan (2)</span>
                                                 </button>
                                             </li>
                                         </ul>
@@ -619,7 +617,7 @@
 
         <header class="my-4 text-white">
             <a href="#" class="text-white">
-                <h3>Related Product</h3>
+                <h3>Barang Serupa</h3>
             </a>
         </header>
 

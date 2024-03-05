@@ -21,11 +21,6 @@
                                 role="tab" aria-controls="pills-empty" aria-selected="false" data-type="empty">Empty</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link product-type" id="pills-problem-tab" data-bs-toggle="pill"
-                                href="#pills-problem" role="tab" aria-controls="pills-problem" aria-selected="true"
-                                data-type="problem">Problem</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link product-type" id="pills-archive-tab" data-bs-toggle="pill"
                                 href="#pills-archive" role="tab" aria-controls="pills-archive" aria-selected="true"
                                 data-type="archive">Archive</a>
