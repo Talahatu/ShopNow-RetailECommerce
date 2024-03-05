@@ -1,7 +1,7 @@
 @extends('regular.profile')
 @section('contentProfile')
     <main class="card p-3 shadow-2-strong">
-        <h1>{{ Auth::user()->name }}'s Profile</h1>
+        <h1>Profil Anda</h1>
         <!-- Tabs navs -->
         <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
             <li class="nav-item" role="presentation">
@@ -10,11 +10,11 @@
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-2" data-mdb-toggle="tab" href="#ex3-tabs-2" role="tab"
-                    aria-controls="ex3-tabs-2" aria-selected="false">Address</a>
+                    aria-controls="ex3-tabs-2" aria-selected="false">Alamat Rumah</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-3" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Top Up</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false">Tambah Saldo</a>
             </li>
         </ul>
         <!-- Tabs navs -->

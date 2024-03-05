@@ -23,3 +23,7 @@ label.btn input[type="radio"].with-gap:checked + label:after {
 .form-check-input[type="radio"]:not(:checked) + .form-check-label {
     color: #000000;
 }
+
+.isChecked {
+    background-color: maroon;
+}

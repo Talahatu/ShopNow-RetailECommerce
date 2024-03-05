@@ -4,7 +4,7 @@
         <div class="container my-5">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
-                    <h3>Your Wishlists </h3>
+                    <h3>Wishlists Anda</h3>
                 </a>
             </header>
             <div class="row" id="products-row">
@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <p class="text-muted mb-0"><span class="fw-bold">{{ $products[$i]->stock }}</span>
-                                            In Stock</p>
+                                            Tersedia</p>
                                         <div class="ms-auto text-warning">
                                             @for ($j = 0; $j < floor($products[$i]->rating); $j++)
                                                 <i class="fa fa-star"></i>

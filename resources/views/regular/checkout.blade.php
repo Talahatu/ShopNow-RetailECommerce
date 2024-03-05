@@ -10,14 +10,14 @@
                 <div class="page-title-row">
 
                     <div class="page-title-content text-light">
-                        <h1>Checkout</h1>
+                        <h1>Pembayaran</h1>
                     </div>
 
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" class="text-light">Home</a></li>
-                            <li class="breadcrumb-item"><a href="/cart" class="text-light">Cart</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                            <li class="breadcrumb-item"><a href="/cart" class="text-light">Keranjang</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Pembayaran</li>
                         </ol>
                     </nav>
 
@@ -33,13 +33,13 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Shipping Address</h5>
+                                    <h5 class="card-title">Alamat Tujuan</h5>
                                     <div class="card-content d-flex flex-column justify-content-center">
                                         <address class="m-0" id="address-ship">
                                             {{ $address->name }} &nbsp;<button class="btn btn-outline-info btn-sm"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                                attr-dia="{{ $address->id }}" data-bs-title="Change Shipping Address"
-                                                id="btnChangeShip">Change</button>
+                                                attr-dia="{{ $address->id }}" data-bs-title="Ubah Alamat Tujuan"
+                                                id="btnChangeShip">Ubah</button>
                                         </address>
                                     </div>
                                 </div>
@@ -49,16 +49,16 @@
                     <div class="row col-mb-50 gutter-50">
                         <div class="w-100"></div>
                         {{-- Products List --}}
-                        <div class="col-lg-8">
-                            <h4>Your Orders</h4>
+                        <div class="col-lg-7">
+                            <h4>Pesanan Anda</h4>
                             <div class="table-responsive">
                                 <table class="table cart">
                                     <thead>
                                         <tr>
                                             <th class="cart-product-thumbnail">&nbsp;</th>
-                                            <th class="cart-product-name">Product</th>
-                                            <th class="cart-product-price">Price</th>
-                                            <th class="cart-product-quantity">Quantity</th>
+                                            <th class="cart-product-name">Nama Barang</th>
+                                            <th class="cart-product-price">Harga</th>
+                                            <th class="cart-product-quantity">Jumlah Barang</th>
                                             <th class="cart-product-subtotal">Total</th>
                                         </tr>
                                     </thead>
@@ -95,14 +95,14 @@
                         </div>
 
                         {{-- Total & Payment --}}
-                        <div class="col-lg-4">
-                            <h4>Cart Totals</h4>
+                        <div class="col-lg-5">
+                            <h4>Total Pesanan</h4>
                             <div class="table-responsive">
                                 <table class="table cart">
                                     <tbody>
                                         <tr>
                                             <td class="border-top-0 cart-product-name">
-                                                <strong>Cart Subtotal</strong>
+                                                <strong>Subtotal Barang Keseluruhan</strong>
                                             </td>
 
                                             <td class="border-top-0 cart-product-name">
@@ -112,7 +112,7 @@
                                         </tr>
                                         <tr>
                                             <td class="cart-product-name">
-                                                <strong>Shipping</strong>
+                                                <strong>Ongkos Kirim</strong>
                                             </td>
                                             <td class="cart-product-name">
                                                 <span class="amount" id="shippingfee-label">Rp
@@ -121,7 +121,7 @@
                                         </tr>
                                         <tr>
                                             <td class="cart-product-name">
-                                                <strong>Total</strong>
+                                                <strong>Total Pembayaran</strong>
                                             </td>
 
                                             <td class="cart-product-name">
@@ -141,16 +141,19 @@
                                 <input type="radio" class="btn-check btn-method" name="options" id="option1"
                                     autocomplete="off" value="ew"
                                     {{ Auth::user()->saldo < $total ? 'disabled' : 'checked' }} />
-                                <label class="btn btn-secondary" for="option1" data-mdb-ripple-init>Saldo ShopNow</label>
+                                <label class="btn {{ Auth::user()->saldo < $total ? 'btn-secondary' : 'btn-primary' }}"
+                                    for="option1" data-mdb-ripple-init>Saldo ShopNow</label>
 
                                 <input type="radio" class="btn-check btn-method" name="options" id="option2"
                                     autocomplete="off" value="cod"
                                     {{ Auth::user()->saldo < $total ? 'checked' : '' }} />
-                                <label class="btn btn-secondary" for="option2" data-mdb-ripple-init>Cash On
-                                    Delivery</label>
+                                <label class="btn {{ Auth::user()->saldo < $total ? 'btn-primary' : 'btn-secondary' }}"
+                                    for="option2" data-mdb-ripple-init>COD
+                                    (Pembayaran di
+                                    tempat)</label>
                             </div>
                             <div class="d-flex justify-content-end my-4">
-                                <button class="btn btn-dark btn-lg btn-block" id="btnCheckout">Checkout</button>
+                                <button class="btn btn-dark btn-lg btn-block" id="btnCheckout">Bayar</button>
                             </div>
                         </div>
                     </div>
@@ -172,8 +175,8 @@
 
                 </div>
                 <div class="modal-footer" id="modalFooter">
-                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Save changes</button>
+                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Simpan</button>
                 </div>
             </div>
         </div>

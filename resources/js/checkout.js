@@ -98,10 +98,28 @@ $(function () {
         });
         $(".btnCloseModal").click();
     });
+
+    $(".btn-method").on("click", function () {
+        if ($(this).is(":checked")) {
+            $(this).next().removeClass("btn-secondary");
+            $(this).next().addClass("btn-primary");
+
+            if ($(this).attr("id") == "option2") {
+                $(this).prev().removeClass("btn-primary");
+                $(this).prev().addClass("btn-secondary");
+            } else {
+                console.log("AHA");
+                $(this).next().next().next().removeClass("btn-primary");
+                $(this).next().next().next().addClass("btn-secondary");
+            }
+        }
+    });
     $("#btnCheckout").on("click", function () {
         const addressID = $("#btnChangeShip").attr("attr-dia");
         const method = $(".btn-method:checked").val();
         const total = $("#total-checkout").val();
+        console.log(method);
+        return;
         $.ajax({
             type: "POST",
             url: "/checkout/create",

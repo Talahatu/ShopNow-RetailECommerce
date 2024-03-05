@@ -2,7 +2,7 @@
 
 @section('contentProfile')
     <main class="card p-3 shadow-2-strong">
-        <h1>{{ Auth::user()->name }}'s Notifications</h1>
+        <h1>Notifikasi Anda</h1>
         <div class="list-group p-2">
             {{-- Start Here --}}
             @foreach ($notifs as $item)

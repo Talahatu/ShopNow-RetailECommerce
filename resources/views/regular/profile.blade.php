@@ -9,16 +9,16 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link nav-link-profile active" id="v-tabs-profile-tab" data-mdb-toggle="tab"
                             href="#v-tabs-profile" role="tab" aria-controls="v-tabs-profile"
-                            aria-selected="true">Profile</a>
+                            aria-selected="true">Profil</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link nav-link-profile tabs-order" id="v-tabs-order-tab" data-mdb-toggle="tab"
                             href="#v-tabs-order" role="tab" aria-controls="v-tabs-order"
-                            aria-selected="false">Orders</a>
+                            aria-selected="false">Pesanan</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link nav-link-profile" id="v-tabs-notif-tab" href="{{ route('profile.notif') }}"
-                            aria-selected="false">Notifications</a>
+                            aria-selected="false">Notifikasi</a>
                     </li>
                 </ul>
             </div>
@@ -29,11 +29,11 @@
                 <div class="nav flex-column nav-tabs text-center" id="v-tabs-tab" role="tablist"
                     aria-orientation="vertical">
                     <a class="nav-link nav-link-profile active" id="v-tabs-profile-tab-lg"
-                        href="{{ route('profile.bio') }}">Profile</a>
+                        href="{{ route('profile.bio') }}">Profil</a>
                     <a class="nav-link nav-link-profile tabs-order" id="v-tabs-order-tab-lg"
-                        href="{{ route('profile.order') }}">Orders</a>
+                        href="{{ route('profile.order') }}">Pesanan</a>
                     <a class="nav-link nav-link-profile" id="v-tabs-notif-tab-lg"
-                        href="{{ route('profile.notif') }}">Notifications</a>
+                        href="{{ route('profile.notif') }}">Notifikasi</a>
                 </div>
                 <!-- Tab navs -->
             </div>
@@ -64,8 +64,8 @@
 
                 </div>
                 <div class="modal-footer" id="modalFooter">
-                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Save changes</button>
+                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Simpan</button>
                 </div>
             </div>
         </div>

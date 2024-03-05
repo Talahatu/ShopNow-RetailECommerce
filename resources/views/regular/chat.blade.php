@@ -14,7 +14,7 @@
                                 <button class="navbar-toggler d-block d-lg-none" type="button" data-mdb-toggle="collapse"
                                     data-mdb-target="#navbarLeftAlignExample" aria-controls="navbarLeftAlignExample"
                                     aria-expanded="true" aria-label="Toggle navigation"><i class="fas fa-bars"></i>
-                                    <span class="ms-4">All Chats</span>
+                                    <span class="ms-4">Semua Kontak</span>
                                 </button>
                                 <div class="collapse navbar-collapse show" id="navbarLeftAlignExample">
                                     <div class="p-3">
@@ -66,7 +66,7 @@
                                         style="object-fit:cover;" width="30" height="30" class="rounded-circle"
                                         id="user-images-pp">
                                     <input type="text" class="form-control form-control-lg" id="exampleFormControlInput2"
-                                        placeholder="Type message">
+                                        placeholder="Ketik pesan...">
                                     <a class="ms-3" href="#!" id="submitChat"><i class="fas fa-paper-plane"></i></a>
                                     <input type="hidden" name="diu" id="diu" value="{{ Auth::user()->id }}">
                                 </div>

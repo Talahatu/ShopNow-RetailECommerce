@@ -9,8 +9,7 @@
         </div>
         <div class="d-flex justify-content-center">
             <div class="btn btn-dark btn-rounded">
-                <label class="form-label text-white m-1" for="image">Choose
-                    Image</label>
+                <label class="form-label text-white m-1" for="image">Pilih Gambar</label>
                 <input type="file" name="image" class="form-control d-none" id="image" />
                 @error('image')
                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
@@ -22,7 +21,7 @@
     <div class="form-outline mb-4">
         <input type="text" id="name" class="form-control form-control-lg @error('name') is-invalid @enderror"
             name="name" value="{{ Auth::user()->name }}" required autofocus autocomplete="name" />
-        <label class="form-label" for="name">{{ __('Name') }}</label>
+        <label class="form-label" for="name">{{ __('Nama') }}</label>
         @error('name')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -33,7 +32,7 @@
         <input type="text" id="username"
             class="form-control form-control-lg @error('username') is-invalid @enderror" name="username"
             value="{{ Auth::user()->username }}" required autofocus autocomplete="username" />
-        <label class="form-label" for="username">{{ __('Username') }}</label>
+        <label class="form-label" for="username">{{ __('Nama Alias') }}</label>
         @error('username')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -57,7 +56,7 @@
         <input type="text" id="phoneNumber"
             class="form-control form-control-lg @error('phoneNumber') is-invalid @enderror" name="phoneNumber"
             value="{{ Auth::user()->phoneNumber }}" />
-        <label class="form-label" for="phoneNumber">{{ __('Phone Number') }}</label>
+        <label class="form-label" for="phoneNumber">{{ __('Nomor Telepon') }}</label>
         @error('phoneNumber')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -68,20 +67,20 @@
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="gender" id="man" value="man"
             {{ Auth::user()->gender == 'man' ? 'Checked' : '' }}>
-        <label class="form-check-label" for="man">Man</label>
+        <label class="form-check-label" for="man">Laki-Laki</label>
     </div>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="gender" id="woman" value="woman"
             {{ Auth::user()->gender == 'woman' ? 'Checked' : '' }}>
-        <label class="form-check-label" for="woman">Woman</label>
+        <label class="form-check-label" for="woman">Perempuan</label>
     </div>
     <div class="form-check form-check-inline mb-4">
         <input class="form-check-input" type="radio" name="gender" id="other" value="other"
             {{ Auth::user()->gender == 'other' ? 'Checked' : '' }}>
-        <label class="form-check-label" for="other">Other</label>
+        <label class="form-check-label" for="other">Lainnya</label>
     </div>
 
     <div class="pt-1 mb-4">
-        <button class="btn btn-dark btn-lg btn-block" type="submit">Update</button>
+        <button class="btn btn-dark btn-lg btn-block" type="submit">Ubah</button>
     </div>
 </form>

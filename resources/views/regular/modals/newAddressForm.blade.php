@@ -2,7 +2,7 @@
     <input type="text" id="address" class="form-control form-control-lg @error('address') is-invalid @enderror"
         name="address" required autofocus autocomplete="address" />
     <input type="hidden" name="latlng" id="ll">
-    <label class="form-label" for="address">{{ __('Address') }}</label>
+    <label class="form-label" for="address">{{ __('Alamat') }}</label>
     @error('address')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

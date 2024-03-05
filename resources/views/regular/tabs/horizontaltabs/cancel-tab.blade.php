@@ -8,7 +8,7 @@
                     <h1 class="ms-4">{{ $item->shop->name }} <i class="fa-solid fa-chevron-right"></i></h1>
                 </a>
                 <div class="product-items card-body">
-                    <h3>Order Date: {{ $item->order_date }}</h3>
+                    <h3>Tanggal Pesanan: {{ $item->order_date }}</h3>
                     @foreach ($item->details as $detail)
                         <hr class="mb-1 mt-3">
                         <a href="{{ route('show.product', $detail->product_id) }}"
@@ -33,7 +33,7 @@
         @endforeach
     @else
         <div class="text text-center text-muted">
-            <p>There is no orders</p>
+            <p>Tidak ada pesanan</p>
         </div>
     @endif
 </div>

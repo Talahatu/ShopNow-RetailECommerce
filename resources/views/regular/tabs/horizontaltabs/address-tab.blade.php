@@ -1,14 +1,14 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-dark btn-lg mb-4 mt-4" id="btnAdd" data-bs-toggle="modal"
-    data-bs-target="#exampleModal" data-bs-title="Add new address">
-    Add new address
+    data-bs-target="#exampleModal" data-bs-title="Tambahkan Alamat Baru">
+    Tambahkan Alamat Baru
 </button>
 
 <div class="list-group" id="list-address">
     @isset($shop)
         <a href="#" class="list-group-item list-group-item-warning" aria-current="true" addr-type="shop">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1 address-name">{{ $shop->address }} <span class="badge bg-warning">{{ __('Shop') }}</span>
+                <h5 class="mb-1 address-name">{{ $shop->address }} <span class="badge bg-warning">{{ __('Toko') }}</span>
                 </h5>
             </div>
             <div class="btn-group" role="group" aria-label="Basic example">
@@ -24,13 +24,13 @@
             aria-current="true" attr-int={{ $item->id }}>
             <div class="d-flex w-100 justify-content-between address-content">
                 <h5 class="mb-1 address-name">{{ $item->name }} <span
-                        class="badge bg-success">{{ __('Home') }}</span>
+                        class="badge bg-success">{{ __('Rumah') }}</span>
                 </h5>
                 @if ($item->current == 1)
-                    <small>Current</small>
+                    <small>Saat Ini</small>
                 @else
-                    <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current
-                        address</button>
+                    <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Jadikan Alamat Saat
+                        Ini</button>
                 @endif
             </div>
             <div class="btn-group" role="group" aria-label="Basic example">

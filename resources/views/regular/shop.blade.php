@@ -7,7 +7,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/" class=" text-light">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#" class=" text-light text-muted">Shop</a>
+                        <li class="breadcrumb-item"><a href="#" class=" text-light text-muted">Toko</a>
                         </li>
                     </ol>
                 </nav>
@@ -42,7 +42,7 @@
         <div class="my-4 col-md-9 col-sm-12 ps-md-4">
             <header class="mb-4 text-white">
                 <a href="#" class="text-white">
-                    <h3>{{ $shop->name }}'s Product </h3>
+                    <h3>Barang pada {{ $shop->name }} </h3>
                 </a>
             </header>
             <div class="row" id="products-row">
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <p class="text-muted mb-0"><span class="fw-bold">{{ $item->stock }}</span>
-                                            In Stock</p>
+                                            Tersedia</p>
                                         <div class="ms-auto text-warning">
                                             @for ($j = 0; $j < floor($item->rating); $j++)
                                                 <i class="fa fa-star"></i>

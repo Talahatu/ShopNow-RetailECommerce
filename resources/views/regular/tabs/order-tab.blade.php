@@ -2,28 +2,28 @@
 
 @section('contentProfile')
     <main class="card p-3 shadow-2-strong">
-        <h1>{{ Auth::user()->name }}'s Orders</h1>
+        <h1>Pesanan Anda</h1>
         <!-- Tabs navs -->
         <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="ex3-tab-1" data-mdb-toggle="tab" href="#ex3-tabs-1" role="tab"
-                    aria-controls="ex3-tabs-1" aria-selected="true">Pending</a>
+                    aria-controls="ex3-tabs-1" aria-selected="true">Menunggu Seller</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-2" data-mdb-toggle="tab" href="#ex3-tabs-2" role="tab"
-                    aria-controls="ex3-tabs-2" aria-selected="false">Processed</a>
+                    aria-controls="ex3-tabs-2" aria-selected="false">Sedang Diproses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-3" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Sent</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false">Sedang Dikirim</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-4" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Finished</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false">Selesai</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-5" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Cancel</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false">Ditolak</a>
             </li>
         </ul>
         <!-- Tabs navs -->
