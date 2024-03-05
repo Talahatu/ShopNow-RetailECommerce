@@ -21,4 +21,9 @@ class Courier extends Authenticatable
     {
         return $this->hasMany(Delivery::class, "courier_id", "id");
     }
+
+    public function filteredDeliveries($type)
+    {
+        return $this->deliveries()->where("status", $type)->get();
+    }
 }

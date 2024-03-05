@@ -8,7 +8,10 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-rowgroup-bs5";
 import "datatables.net-scroller-bs5";
 import "datatables.net-select-bs5";
-
+import moment from "moment/moment";
+import "moment/locale/id";
+import Pikaday from "pikaday";
+import "pikaday/css/pikaday.css";
 import Pusher from "pusher-js";
 
 $(function () {
@@ -65,7 +68,7 @@ $(function () {
                     } else if (optionType == "accepted") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                            <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim Pesanan</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim</button>
                         </div>`;
                     } else if (optionType == "sent") {
                         return `
@@ -407,17 +410,38 @@ $(function () {
     });
     $(document).on("click", ".btn-send", function () {
         const orderID = $(this).attr("data-dia");
-
-        console.log("test 1");
-        console.log($("#exampleModalLabel"));
-
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="saveDelivery" disabled>Simpan</button>
             `);
-        $("#exampleModal").find(".modal-body").html(`
-        <div class="table-responsive">
+        $.ajax({
+            type: "POST",
+            url: "/getAllCourier",
+            data: {
+                _token: csrfToken,
+            },
+            success: function (response) {
+                console.log(response);
+                const couriers = response.couriers;
+                let bodyRows = ``;
+                for (let i = 0; i < couriers.length; i++) {
+                    // Not Done
+                    bodyRows += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${couriers[i].name}</td>
+                        <td>${1}</td>
+                        <td>${
+                            couriers[i].deliveries.length == 0
+                                ? "Tersedia"
+                                : "Sedang dalam perjalanan"
+                        }</td>
+                    </tr>
+                    `;
+                }
+                $("#exampleModal").find(".modal-body").html(`
+                    <div class="table-responsive">
                         <h3>Status Kurir Saat ini</h3>
                         <table class="table table-hover sortable-table">
                             <thead>
@@ -429,14 +453,39 @@ $(function () {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr></tr>
+                                ${bodyRows}
                             </tbody>
                         </table>
                     </div>
                     <div class="form mt-4">
                         <label for="courier">Pilih kurir</label>
                         <select class="form-control text-light" name="courier" id="selectCourier"></select>
+                    </div>
+                    <div class="form mt-4">
+                        <label for="courier">Pilih Tanggal</label>
+                        <div id="datepicker-popup" class="input-group date">
+                          <input type="text" class="form-control form-control-sm datepicker">
+                          <span class="input-group-addon input-group-append border-left">
+                            <span class="mdi mdi-calendar input-group-text"></span>
+                          </span>
+                        </div>
                     </div>`);
+                var picker = new Pikaday({
+                    field: $(".datepicker")[0],
+                    i18n: {
+                        previousMonth: "Bulan Sebelumnya",
+                        nextMonth: "Bulan Selanjutnya",
+                        months: moment.localeData().months(),
+                        weekdays: moment.localeData().weekdays(),
+                        weekdaysShort: moment.localeData().weekdaysShort(),
+                    },
+                    format: "dddd, D MMMM YYYY",
+                });
+            },
+            error: function (param) {
+                console.log(param);
+            },
+        });
         $.ajax({
             type: "POST",
             url: "/pickCourier",

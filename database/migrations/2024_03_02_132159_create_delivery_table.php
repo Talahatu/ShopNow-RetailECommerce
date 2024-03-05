@@ -20,7 +20,7 @@ class CreateDeliveryTable extends Migration
             $table->date("start_date");
             $table->double("weight");
             $table->string("resi");
-            $table->enum("status", ["done", "progress"]);
+            $table->enum("status", ["done", "progress", "new"]);
             $table->timestamps();
         });
     }

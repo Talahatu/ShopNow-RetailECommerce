@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewEmailMail;
 use App\Models\Courier;
+use App\Models\Delivery;
 use App\Models\Shop;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -21,7 +22,7 @@ class CourierController extends Controller
     public function courierIndex()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        $couriers = Courier::with("deliveries")
+        $couriers = Courier::with(["deliveries"])
             ->where("shop_id", $shop->id)->get();
         return view("merchant.couriers", compact("couriers", "shop"));
     }
@@ -158,7 +159,18 @@ class CourierController extends Controller
 
     public function courierHome()
     {
+        $newDeliveries = Delivery::with(["order"])
+            ->where("courier_id", Auth::guard("courier")->user()->id)
+            ->where("status", "new")
+            ->get();
+        return view('courier.index', compact("newDeliveries"));
+    }
 
-        return view('courier.index');
+    public function getAllByShop()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        $couriers = Courier::with("deliveries")
+            ->where("shop_id", $shop->id)->get();
+        return response()->json(compact("shop", "couriers"));
     }
 }

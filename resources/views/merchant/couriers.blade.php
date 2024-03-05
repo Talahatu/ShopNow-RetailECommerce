@@ -31,7 +31,7 @@
                                     <td>{{ $i + 1 }}</td>
                                     <td>{{ $couriers[$i]->name }}</td>
                                     <td>{{ $couriers[$i]->operationalFee }}</td>
-                                    <td>{{ count($couriers[$i]->deliveries) <= 0 ? 'Tersedia' : 'Sedang Dalam Perjalanan' }}
+                                    <td>{{ count($couriers[$i]->filteredDeliveries('progress')) <= 0 ? 'Tersedia' : 'Sedang Dalam Perjalanan' }}
                                     </td>
                                     <td><button class="btn btn-outline-success">Saku</button></td>
                                 </tr>
