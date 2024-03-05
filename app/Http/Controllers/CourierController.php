@@ -158,6 +158,7 @@ class CourierController extends Controller
 
     public function courierHome()
     {
+
         return view('courier.index');
     }
 }

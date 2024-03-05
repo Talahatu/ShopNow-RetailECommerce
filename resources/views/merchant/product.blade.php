@@ -5,7 +5,7 @@
 @section('content-wrapper')
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">My Products</h3>
+            <h3 class="page-title">Daftar Produk</h3>
         </div>
         <div class="row">
             <div class="card">
@@ -14,32 +14,32 @@
                         <li class="nav-item">
                             <a class="nav-link product-type active" id="pills-live-tab" data-bs-toggle="pill"
                                 href="#pills-live" role="tab" aria-controls="pills-live" aria-selected="false"
-                                data-type="live">Live</a>
+                                data-type="live">Dijual</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link product-type" id="pills-empty-tab" data-bs-toggle="pill" href="#pills-empty"
-                                role="tab" aria-controls="pills-empty" aria-selected="false" data-type="empty">Empty</a>
+                                role="tab" aria-controls="pills-empty" aria-selected="false" data-type="empty">Habis</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link product-type" id="pills-archive-tab" data-bs-toggle="pill"
                                 href="#pills-archive" role="tab" aria-controls="pills-archive" aria-selected="true"
-                                data-type="archive">Archive</a>
+                                data-type="archive">Arsip</a>
                         </li>
                     </ul>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                         <a type="button" class="btn btn-success create-new-button" id="addNewProduct"
-                            href="{{ route('product.create') }}"><i class="mdi mdi-plus"></i>Add new product</a>
+                            href="{{ route('product.create') }}"><i class="mdi mdi-plus"></i>Tambahkan Produk Baru</a>
                     </div>
                     <div class="tab-content tab-content-custom-pill" id="pills-tabContent">
                         <table id="myTable" class="display table table-hover responsive nowrap"
                             style="width: 100% !important">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Nama Barang</th>
                                     <th>SKU</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>Action</th>
+                                    <th>Harga</th>
+                                    <th>Jumlah Tersedia</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

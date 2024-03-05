@@ -17,6 +17,17 @@ $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     const baseUrl = window.location.protocol + "//" + window.location.host;
 
+    const opsiLanguage = {
+        emptyTable: "Tidak ada Kurir",
+        lengthMenu: "Menampilkan _MENU_ Kurir",
+        info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ Kurir",
+        search: "Cari",
+        paginate: {
+            previous: "Sebelumnya",
+            next: "Selanjutnya",
+        },
+    };
+
     let formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
@@ -66,9 +77,7 @@ $(function () {
                 },
             },
         },
-        language: {
-            emptyTable: "No Courier available",
-        },
+        language: opsiLanguage,
         rowId: function (row) {
             return "row_" + row.id;
         },

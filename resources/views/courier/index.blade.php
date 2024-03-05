@@ -4,8 +4,8 @@
         <div class="container">
             <div class="page-title-row">
                 <div class="page-title-content">
-                    <h1 class="text-white">Order List</h1>
-                    <span class="text-white">Showcase of order assigned by seller</span>
+                    <h1 class="text-white">Daftar Pengiriman</h1>
+                    <span class="text-white">Daftar pesanan yang harus dikirimkan.</span>
                 </div>
             </div>
         </div>
@@ -13,14 +13,17 @@
 @endsection
 @section('content')
     <div class="ongoing-order">
-        <h1>On-Going Order</h1>
+        <h1>Pesanan Saat Ini</h1>
         <div class="row g-4 mb-5 mt-0 text-center section p-4 rounded">
-            <span>No Orders Taken</span>
+            <span>Belum ada pesanan diambil</span>
         </div>
     </div>
     <div class="new-order">
-        <h1>New Orders</h1>
+        <h1>Pesanan Baru</h1>
         <div class="row g-4 mb-5 mt-0 section p-4 rounded">
+            @foreach ( as )
+                
+            @endforeach
             <article class="entry event col-12 mb-4">
                 <div class="grid-inner bg-white row g-0 p-3 border-0 rounded-5 shadow-sm h-shadow all-ts h-translate-y-sm">
                     <div class="col-md-8 p-4">

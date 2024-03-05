@@ -5,13 +5,13 @@
 @section('content-wrapper')
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">Add New Product</h3>
+            <h3 class="page-title">Tambahkan Produk Baru</h3>
         </div>
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Please Fill The Form!</h4>
-                    <p class="card-description"> Product's Information </p>
+                    <h4 class="card-title">Mohon isi form berikut!</h4>
+                    <p class="card-description">Informasi Produk</p>
                     <form class="forms-sample" action="{{ route('product.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -34,20 +34,19 @@
                                     <button class="carousel-control-prev" type="button"
                                         data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
+                                        <span class="visually-hidden">Sebelum</span>
                                     </button>
                                     <button class="carousel-control-next" type="button"
                                         data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
+                                        <span class="visually-hidden">Selanjutnya</span>
                                     </button>
                                 </div>
                             </div>
                             {{-- Button Choose Image --}}
                             <div class="d-flex justify-content-center">
                                 <div class="btn btn-dark btn-rounded">
-                                    <label class="form-label text-white m-1" for="image">Choose
-                                        Image</label>
+                                    <label class="form-label text-white m-1" for="image">Pilih Gambar</label>
                                     <input type="file" name="image[]" class="form-control d-none" id="image"
                                         multiple />
                                     @error('image')
@@ -57,25 +56,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputName">Name</label>
+                            <label for="inputName">Nama Produk</label>
                             <input type="text" class="form-control text-light @error('name') is-invalid @enderror"
-                                value="{{ old('name') }}" id="inputName" name="name" placeholder="Name">
+                                value="{{ old('name') }}" id="inputName" name="name" placeholder="Nama Produk">
                             @error('name')
                                 <label id="name-error" class="error mt-2 text-danger" for="name">
                                     {{ $message }}</label>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputDesc">Description</label>
+                            <label for="inputDesc">Deskripsi</label>
                             <textarea class="form-control text-light @error('desc') is-invalid @enderror" id="inputDesc" value="{{ old('desc') }}"
-                                name="desc" placeholder="Description" rows="4"></textarea>
+                                name="desc" placeholder="Deskripsi" rows="4"></textarea>
                             @error('desc')
                                 <label id="desc-error" class="error mt-2 text-danger" for="desc">
                                     {{ $message }}</label>
                             @enderror
                         </div>
                         <div class="form-group mb-4">
-                            <label for="">Choose a category</label>
+                            <label for="">Pilih Kategori</label>
                             <select class="form-control text-light @error('category') is-invalid @enderror" name="category"
                                 id="selectCategory"></select>
                             @error('category')
@@ -84,7 +83,7 @@
                             @enderror
                         </div>
                         <div class="form-group mb-4">
-                            <label for="">Choose a brand</label>
+                            <label for="">Pilih Merek</label>
                             <select class="form-control text-light  @error('brand') is-invalid @enderror" name="brand"
                                 id="selectBrand"></select>
                             @error('brand')
@@ -93,10 +92,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputWeight">Weight</label>
+                            <label for="inputWeight">Berat</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('weight') is-invalid @enderror"
-                                    value="{{ old('weight') }}" id="inputWeight" name="weight" placeholder="Weight"
+                                    value="{{ old('weight') }}" id="inputWeight" name="weight" placeholder="Berat"
                                     min="1">
                                 <div class="input-group-append">
                                     <span class="input-group-text text-light">gr</span>
@@ -108,11 +107,11 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputStock">Stock</label>
+                            <label for="inputStock">Jumlah Tersedia</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('stock') is-invalid @enderror"
-                                    value="{{ old('stock') }}" id="inputStock" name="stock" placeholder="Stock"
-                                    min="1">
+                                    value="{{ old('stock') }}" id="inputStock" name="stock"
+                                    placeholder="Jumlah Tersedia" min="1">
                             </div>
                             @error('stock')
                                 <label id="stock-error" class="error mt-2 text-danger" for="stock">
@@ -120,7 +119,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputPrice">Price</label>
+                            <label for="inputPrice">Harga</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Rp.</span>
@@ -134,8 +133,8 @@
                                     {{ $message }}</label>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary me-2">Submit</button>
-                        <a class="btn btn-dark" href="{{ route('product.index') }}">Cancel</a>
+                        <button type="submit" class="btn btn-primary me-2">Buat</button>
+                        <a class="btn btn-dark" href="{{ route('product.index') }}">Batalkan</a>
                     </form>
                 </div>
             </div>

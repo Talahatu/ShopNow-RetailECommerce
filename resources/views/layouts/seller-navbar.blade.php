@@ -59,11 +59,11 @@
                 </div> --}}
             </li>
             <li class="nav-item dropdown border-left">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                {{-- <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                     data-bs-toggle="dropdown">
                     <i class="mdi mdi-bell"></i>
                     <span class="count bg-danger"></span>
-                </a>
+                </a> --}}
                 {{-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                     aria-labelledby="notificationDropdown">
                     <h6 class="p-3 mb-0">Notifications</h6>

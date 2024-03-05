@@ -9,13 +9,12 @@
                 <div class="card chat-app">
                     <!-- Toggle button -->
                     <a id="toggleCollapse" class="btn btn-outline-info btn-lg btn-block d-block d-md-none"
-                        data-bs-toggle="collapse" href="#plist">All
-                        Chats <i class="mdi mdi-menu float-right"></i>
+                        data-bs-toggle="collapse" href="#plist">Kontak Pelanggan <i class="mdi mdi-menu float-right"></i>
                     </a>
                     {{-- Left Side --}}
                     <div id="plist" class="people-list card collapse show">
                         <div class="chatHeader d-none d-md-block">
-                            <h5>All Chats</h5>
+                            <h5>Kontak Pelanggan</h5>
                         </div>
                         <ul class="list-unstyled chat-list mt-2 mb-0" id="chatsList">
                             @foreach ($allCustomerChats as $item)
@@ -52,7 +51,7 @@
                                     alt="avatar" width="45" height="45" loading="lazy" style="object-fit: cover;"
                                     class="rounded-circle me-2" id="seller-images-pp">
                                 <input type="text" class="form-control text-light" id="chat-content-text"
-                                    placeholder="Enter text here...">
+                                    placeholder="Ketikan pesan...">
                                 <a class="input-group-append" id="submitChat" tabindex="0">
                                     <span class="input-group-text text-light"><i class="mdi mdi-send"></i></span>
                                 </a>

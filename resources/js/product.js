@@ -14,6 +14,17 @@ $(function () {
     $("#myproduct > a").addClass("active");
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
+    const opsiLanguage = {
+        emptyTable: "Tidak ada produk",
+        lengthMenu: "Menampilkan _MENU_ Produk",
+        info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ Produk",
+        search: "Cari",
+        paginate: {
+            previous: "Sebelumnya",
+            next: "Selanjutnya",
+        },
+    };
+
     var DTcolumns = (optionType = "live") => {
         return [
             { data: "name" },
@@ -30,34 +41,34 @@ $(function () {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
                         <div class="btn-group" role="group">
-                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Aksi</button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
-                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
-                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Ubah</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Hapus</a></li>
                             </ul>
                         </div>
-                            <button class="btn btn-block btn-lg btn-outline-info btn-archive p-2" data-dia="${data.id}"><i class="mdi mdi-archive btn-icon-prepend"></i>Archive</button>
+                            <button class="btn btn-block btn-lg btn-outline-info btn-archive p-2" data-dia="${data.id}"><i class="mdi mdi-archive btn-icon-prepend"></i>Arsip</button>
                         </div>`;
                     } else if (optionType == "archive") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
                         <div class="btn-group" role="group">
-                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                            <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Aksi</button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
-                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
-                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Ubah</a></li>
+                            <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Hapus</a></li>
                             </ul>
                         </div>
-                            <button class="btn btn-block btn-lg btn-outline-success btn-live p-2" data-dia="${data.id}"><i class="mdi mdi-folder-lock-open btn-icon-prepend"></i>Live</button>
+                            <button class="btn btn-block btn-lg btn-outline-success btn-live p-2" data-dia="${data.id}"><i class="mdi mdi-folder-lock-open btn-icon-prepend"></i>Kembali Dijual</button>
                         </div>`;
                     } else {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
                             <div class="btn-group" role="group">
-                                <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                                <button id="btnGroupAction" type="button" class="btn btn-outline-primary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false">Aksi</button>
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupAction">
-                                <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Update</a></li>
-                                <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Delete</a></li>
+                                <li><a class="btn btn-block btn-icon-text btn-info btn-update dropdown-item mb-2" href="/product/${data.id}/edit" data-dia="${data.id}">Ubah</a></li>
+                                <li><a class="btn btn-block btn-icon-text btn-danger btn-delete dropdown-item" data-dia="${data.id}">Hapus</a></li>
                                 </ul>
                             </div>
                         </div>`;
@@ -91,9 +102,7 @@ $(function () {
                 },
             },
         },
-        language: {
-            emptyTable: "No product available",
-        },
+        language: opsiLanguage,
         rowId: function (row) {
             return "row_" + row.id;
         },
@@ -114,9 +123,7 @@ $(function () {
         },
     });
     $(document).on("click", ".btn-delete", function () {
-        let result = confirm(
-            "Are you sure you want to delete this product from your shops?"
-        );
+        let result = confirm("Apakah anda yakin ingin menghapus produk ini?");
         if (!result) return;
         const id = $(this).attr("data-dia");
         $.ajax({
@@ -177,9 +184,7 @@ $(function () {
                 table.destroy();
                 table = $("#myTable").DataTable({
                     responsive: true,
-                    language: {
-                        emptyTable: "No product available",
-                    },
+                    language: opsiLanguage,
                     rowId: function (row) {
                         return "row_" + row.id;
                     },
