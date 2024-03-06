@@ -111,6 +111,7 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::get("/createCourier", [CourierController::class, "create"])->name("courier.create");
     Route::post("/storeCourier", [CourierController::class, "store"])->name("courier.store");
     Route::post("/getAllCourier", [CourierController::class, "getAllByShop"])->name("courier.all");
+    Route::post("/fetch-courier", [CourierController::class, "fetchCourier"])->name("courier.fetch");
     Route::post("/pickCourier", [OrderController::class, "pickCourier"])->name("order.courier");
 
     Route::post("/fetch-categories", [CategoryController::class, "getCategories"]);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\Delivery;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -149,7 +150,7 @@ class OrderController extends Controller
     {
         $orderID = $request->get("orderID");
         $result = DB::transaction(function () use ($orderID) {
-            $order = Order::find($orderID);
+            $order = Order::with("user")->where("id", $orderID)->first();
             $orderDetail = OrderDetail::join("products", "products.id", "order_details.product_id")
                 ->join("images", "images.product_id", "products.id")
                 ->where("order_details.order_id", $orderID)
@@ -166,5 +167,61 @@ class OrderController extends Controller
     }
     public function pickCourier(Request $request)
     {
+        $result = DB::transaction(function () use ($request) {
+            $courierID = $request->get("courierID");
+            $orderID = $request->get("orderID");
+            $startDate = $request->get("deliveryDate");
+
+            $order = Order::with(["shop", "user", "shop.couriers" => function ($query) use ($courierID) {
+                $query->where("id", $courierID)->first();
+            }])->where("id", $orderID)->first();
+
+            $newDelivery = new Delivery();
+            $newDelivery->order_id = $orderID;
+            $newDelivery->courier_id = $courierID;
+            $newDelivery->start_date = $startDate;
+            $newDelivery->status = "new";
+            $newDelivery->resi = $this->generateResiNumber($order->shop->name, $order->user->name, $order->shop->couriers[0]->name);
+            $newDelivery->save();
+
+            $order->orderStatus = "sent";
+            $order->save();
+
+            $newNotif = new Notification();
+            $newNotif->header = "Pesanan anda telah dikirim ke kurir";
+            $newNotif->content = "Pesanan anda diberikan ke kurir, menunggu kurir mengambil barang dari seller";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = $order->user_id;
+            $newNotif->save();
+
+            $shopID = $order->shop_id;
+            $userID = $order->user_id;
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new \Pusher\Pusher(
+                'c58a82be41ea6c60c1d7',
+                '8264fc21e2b5035cc329',
+                '1716744',
+                $options
+            );
+
+            $data['message'] = "Pesanan anda dengan nomor $order->orderID diberikan ke kurir, menunggu kurir mengambil barang dari seller";
+            $data["key"] = "sentToCourier";
+            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
+            // regular-seller
+            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+
+            return $order->id;
+        });
+        return response()->json($result);
+    }
+
+    private function generateResiNumber($toko, $user, $courier)
+    {
+        // Inisial Nama Toko + Inisial Nama Pelanggan + Inisial Nama Kurir + Tanggal Pengiriman (Ymds)
+        return strtoupper($toko[0]) . strtoupper($user[0]) . strtoupper($courier[0]) . now()->format("Ymds");
     }
 }

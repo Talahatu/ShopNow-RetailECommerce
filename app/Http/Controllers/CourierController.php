@@ -173,4 +173,14 @@ class CourierController extends Controller
             ->where("shop_id", $shop->id)->get();
         return response()->json(compact("shop", "couriers"));
     }
+
+    public function fetchCourier(Request $request)
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        $data = Courier::where([
+            ["shop_id", $shop->id],
+            ["name", "LIKE", "%" . $request->get("searchTerm") . "%"],
+        ])->get(["name", "id"]);
+        return response()->json(["data" => $data, "term" => $request->get("searchTerm")]);
+    }
 }

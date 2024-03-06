@@ -21,6 +21,10 @@ class Courier extends Authenticatable
     {
         return $this->hasMany(Delivery::class, "courier_id", "id");
     }
+    public function shopOwner()
+    {
+        return $this->belongsTo(Shop::class, "shop_id", "id");
+    }
 
     public function filteredDeliveries($type)
     {

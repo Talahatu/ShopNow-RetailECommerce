@@ -12,7 +12,10 @@ import moment from "moment/moment";
 import "moment/locale/id";
 import Pikaday from "pikaday";
 import "pikaday/css/pikaday.css";
-import Pusher from "pusher-js";
+// import Pusher from "pusher-js";
+import "select2";
+import "select2/dist/css/select2.min.css";
+import "select2-bootstrap-theme/dist/select2-bootstrap.min.css";
 
 $(function () {
     $("#navOrder").addClass("active");
@@ -68,6 +71,7 @@ $(function () {
                     } else if (optionType == "accepted") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
+                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
                             <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim</button>
                         </div>`;
                     } else if (optionType == "sent") {
@@ -265,6 +269,7 @@ $(function () {
                 const ordersInfo = response.info;
                 const products = response.products;
                 let tableRow = "";
+                console.log(ordersInfo);
                 for (const item of products) {
                     tableRow += `
                     <tr>
@@ -289,10 +294,10 @@ $(function () {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="orderStatus" class="col-sm-3 col-form-label">Status Pesanan</label>
+                            <label for="Nama Pelanggan" class="col-sm-3 col-form-label">Nama Pelanggan</label>
                             <div class="col-sm-9">
-                                <label for="orderStatus" class="col-form-label">:&nbsp;${
-                                    ordersInfo.orderStatus
+                                <label for="destination" class="col-form-label">:&nbsp;${
+                                    ordersInfo.user.name
                                 }</label>
                             </div>
                         </div>
@@ -357,7 +362,7 @@ $(function () {
 
     $(document).on("click", ".order-type", function () {
         const type = $(this).attr("data-type");
-        console.log(type);
+        // console.log(type);
         $.ajax({
             type: "POST",
             url: "/fetch/order/repopulate",
@@ -409,12 +414,17 @@ $(function () {
         });
     });
     $(document).on("click", ".btn-send", function () {
+        // Show Modal
         const orderID = $(this).attr("data-dia");
+        let courierID = "";
+        let date = "";
+        const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" id="saveDelivery" disabled>Simpan</button>
             `);
+        // Query couriers for table and select2
         $.ajax({
             type: "POST",
             url: "/getAllCourier",
@@ -422,7 +432,7 @@ $(function () {
                 _token: csrfToken,
             },
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 const couriers = response.couriers;
                 let bodyRows = ``;
                 for (let i = 0; i < couriers.length; i++) {
@@ -431,7 +441,7 @@ $(function () {
                     <tr>
                         <td>${i + 1}</td>
                         <td>${couriers[i].name}</td>
-                        <td>${1}</td>
+                        <td>${0}</td>
                         <td>${
                             couriers[i].deliveries.length == 0
                                 ? "Tersedia"
@@ -462,7 +472,7 @@ $(function () {
                         <select class="form-control text-light" name="courier" id="selectCourier"></select>
                     </div>
                     <div class="form mt-4">
-                        <label for="courier">Pilih Tanggal</label>
+                        <label for="courier">Pilih Tanggal Kirim</label>
                         <div id="datepicker-popup" class="input-group date">
                           <input type="text" class="form-control form-control-sm datepicker">
                           <span class="input-group-addon input-group-append border-left">
@@ -480,20 +490,83 @@ $(function () {
                         weekdaysShort: moment.localeData().weekdaysShort(),
                     },
                     format: "dddd, D MMMM YYYY",
+                    defaultDate: new Date(),
+                    minDate: new Date(),
+                    onSelect: function (value) {
+                        date = this.toString("YYYY-MM-DD");
+                        checkModalRequirement(date, courierID);
+                    },
                 });
+                picker.setDate(new Date());
+
+                $("#selectCourier")
+                    .select2({
+                        placeholder: "Pilih Kurir",
+                        allowClear: true,
+                        dropdownParent: $("#exampleModal"),
+                        theme: "bootstrap",
+                        ajax: {
+                            type: "POST",
+                            url: "/fetch-courier",
+                            data: function (param) {
+                                return {
+                                    _token: csrfToken,
+                                    searchTerm: param.term,
+                                };
+                            },
+                            processResults: function (response) {
+                                return {
+                                    results: $.map(
+                                        response.data,
+                                        function (item) {
+                                            return {
+                                                text: item.name,
+                                                id: item.id,
+                                            };
+                                        }
+                                    ),
+                                };
+                            },
+                        },
+                    })
+                    .on("select2:select", function (e) {
+                        courierID = $(e.currentTarget).val();
+                        checkModalRequirement(date, courierID);
+                    })
+                    .on("select2:unselect", function (e) {
+                        courierID = "";
+                        checkModalRequirement(date, courierID);
+                    });
             },
             error: function (param) {
                 console.log(param);
             },
         });
-        $.ajax({
-            type: "POST",
-            url: "/pickCourier",
-            data: {
-                _token: csrfToken,
-                orderID: orderID,
-            },
-            success: function (response) {},
+
+        // Submit Data
+        $("#saveDelivery").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "/pickCourier",
+                data: {
+                    _token: csrfToken,
+                    orderID: orderID,
+                    deliveryDate: date,
+                    courierID: courierID,
+                },
+                success: function (response) {
+                    if (response) {
+                        const modal = document.getElementById("exampleModal");
+                        bootstrap.Modal.getInstance(modal).hide();
+                        $(parent).remove();
+                    } else {
+                        console.log("Error Submit");
+                    }
+                },
+                error: function (param) {
+                    console.log(param);
+                },
+            });
         });
     });
 });
@@ -509,4 +582,12 @@ const columnOpenFix = () => {
             const firstChild = $(parent).children().first();
             if (!$(this).hasClass("dtr-control")) $(firstChild).click();
         });
+};
+
+const checkModalRequirement = (date, courier) => {
+    if (date != "" && courier != "") {
+        $("#saveDelivery").attr("disabled", false);
+        return;
+    }
+    $("#saveDelivery").attr("disabled", true);
 };

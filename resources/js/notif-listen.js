@@ -38,19 +38,30 @@ $(function () {
                 );
 
                 channel.bind("client-notif", function (data) {
+                    console.log("TEST");
+                    console.log(data);
                     if (data.key == "accept") {
-                        if (Push.Permission.has()) {
-                            Push.create("Order Accepted!", {
-                                body: data.message + " " + data.time,
-                                icon: baseUrl + "/images/logoshpnw2_ver4.png",
-                                link: "/profile/notif",
-                                timeout: 4000,
-                                onClick: function () {
-                                    window.focus();
-                                    this.close();
-                                },
-                            });
-                        }
+                        Push.create("Pesanan Diterima", {
+                            body: data.message + " " + data.time,
+                            icon: baseUrl + "/images/logoshpnw2_ver4.png",
+                            link: "/profile/notif",
+                            timeout: 4000,
+                            onClick: function () {
+                                window.focus();
+                                this.close();
+                            },
+                        });
+                    } else if (data.key == "sentToCourier") {
+                        Push.create("Pesanan Diberikan Ke Kurir", {
+                            body: data.message + " " + data.time,
+                            icon: baseUrl + "/images/logoshpnw2_ver4.png",
+                            link: "/profile/notif",
+                            timeout: 4000,
+                            onClick: function () {
+                                window.focus();
+                                this.close();
+                            },
+                        });
                     }
                 });
             }

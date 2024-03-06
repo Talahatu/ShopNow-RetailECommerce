@@ -18,7 +18,6 @@ class CreateDeliveryTable extends Migration
             $table->unsignedBigInteger("order_id");
             $table->unsignedBigInteger("courier_id");
             $table->date("start_date");
-            $table->double("weight");
             $table->string("resi");
             $table->enum("status", ["done", "progress", "new"]);
             $table->timestamps();

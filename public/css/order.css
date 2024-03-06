@@ -1,3 +1,8 @@
+:root {
+    --dark-background: #2a3038;
+    --text-color: #6b7293;
+}
+
 div.dataTables_length select,
 li.paginate_button.page-item > a {
     color: white !important;
@@ -38,4 +43,24 @@ li.paginate_button.page-item > a:focus {
 .modal-header,
 .modal-footer {
     border: none;
+}
+
+.select2 {
+    width: 100% !important;
+}
+
+.select2-results__option[aria-selected="true"],
+.select2-selection__rendered {
+    color: white !important;
+}
+
+.select2-dropdown,
+.select2-selection,
+.select2-results {
+    background-color: var(--dark-background) !important;
+    color: white !important;
+}
+.select2-selection__placeholder,
+.select2-default {
+    color: var(--text-color) !important;
 }
