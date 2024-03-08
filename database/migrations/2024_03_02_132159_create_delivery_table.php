@@ -17,10 +17,12 @@ class CreateDeliveryTable extends Migration
             $table->id();
             $table->unsignedBigInteger("order_id");
             $table->unsignedBigInteger("courier_id");
-            $table->date("start_date");
+            $table->dateTime("start_date");
             $table->string("resi");
             $table->enum("status", ["done", "progress", "new"]);
             $table->timestamps();
+            $table->dateTime("pickup_date")->nullable();
+            $table->dateTime("arrive_date")->nullable();
         });
     }
 

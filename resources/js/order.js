@@ -77,7 +77,7 @@ $(function () {
                     } else if (optionType == "sent") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                            Dalam Perjalanan
+                            Perjalanan
                         </div>`;
                     } else if (optionType == "done") {
                         return `
