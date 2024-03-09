@@ -188,7 +188,13 @@ class CourierController extends Controller
     public function getDetail(Request $request)
     {
         $orderID = $request->get("orderID");
-        $order = Order::with(["deliveries", "details"])->where("id", $orderID)->first();
+        $order = Order::with(["deliveries", "details", "shop"])->where("id", $orderID)->first();
         return response()->json($order);
+    }
+
+    public function pickupItems(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        $deliveryID = $request->get("deliveryID");
     }
 }

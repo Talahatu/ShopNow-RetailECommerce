@@ -136,8 +136,8 @@ class Order extends Model
                 }
 
                 $newNotif = new Notification();
-                $newNotif->header = "New order created!";
-                $newNotif->content = "Your order has been succesfully created. Waiting for seller acceptance and packaging";
+                $newNotif->header = "Pesanan baru berhasil dibuat!";
+                $newNotif->content = "Pesanan anda telah berhasil dibuat. Menunggu aksi dari seller!";
                 $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
                 $newNotif->user_id = Auth::user()->id;
                 $newNotif->save();

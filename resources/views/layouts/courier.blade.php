@@ -29,7 +29,7 @@
     <!-- Document Title
  ============================================= -->
     <title>Halaman Kurir</title>
-
+    @yield('css')
 </head>
 
 <body class="stretched">
