@@ -21,12 +21,20 @@
     <!-- endinject -->
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('corona/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/seller.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('corona/images/favicon.png') }}" />
     @yield('css')
 </head>
 
 <body>
+    <div class="bg-dark opacity-75 loader-container d-none justify-content-center align-items-center" id="loader">
+        <div class="dot-opacity-loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
     <div class="container-scroller">
         <!-- partial:partials/_sidebar.html -->
         @include('layouts.seller-sidebar')

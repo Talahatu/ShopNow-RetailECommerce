@@ -545,6 +545,8 @@ $(function () {
 
         // Submit Data
         $("#saveDelivery").on("click", function () {
+            $("#loader").addClass("d-flex");
+            $("#loader").removeClass("d-none");
             $.ajax({
                 type: "POST",
                 url: "/pickCourier",
@@ -558,6 +560,8 @@ $(function () {
                     if (response) {
                         const modal = document.getElementById("exampleModal");
                         bootstrap.Modal.getInstance(modal).hide();
+                        $("#loader").addClass("d-none");
+                        $("#loader").removeClass("d-flex");
                         $(parent).remove();
                     } else {
                         console.log("Error Submit");

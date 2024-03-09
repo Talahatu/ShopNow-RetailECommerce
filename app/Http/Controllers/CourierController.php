@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\NewEmailMail;
 use App\Models\Courier;
 use App\Models\Delivery;
+use App\Models\Order;
 use App\Models\Shop;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -182,5 +183,12 @@ class CourierController extends Controller
             ["name", "LIKE", "%" . $request->get("searchTerm") . "%"],
         ])->get(["name", "id"]);
         return response()->json(["data" => $data, "term" => $request->get("searchTerm")]);
+    }
+
+    public function getDetail(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        $order = Order::with(["deliveries", "details"])->where("id", $orderID)->first();
+        return response()->json($order);
     }
 }

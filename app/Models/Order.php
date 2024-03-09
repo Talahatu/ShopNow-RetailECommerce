@@ -30,6 +30,10 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, "user_id", "id");
     }
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class, "order_id", "id");
+    }
 
     public static function createOrder($addressID, $payment, $total)
     {

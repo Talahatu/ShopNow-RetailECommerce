@@ -118,8 +118,6 @@ $(function () {
         const addressID = $("#btnChangeShip").attr("attr-dia");
         const method = $(".btn-method:checked").val();
         const total = $("#total-checkout").val();
-        console.log(method);
-        return;
         $.ajax({
             type: "POST",
             url: "/checkout/create",

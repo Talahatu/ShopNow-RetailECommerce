@@ -1,0 +1,6 @@
+.loader-container {
+    width: 100% !important;
+    height: 100vh !important;
+    position: fixed;
+    z-index: 99999;
+}

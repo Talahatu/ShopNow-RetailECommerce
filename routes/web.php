@@ -128,6 +128,7 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
 Route::middleware(['auth.courier'])->group(function () {
     Route::get("/courier/home", [CourierController::class, "courierHome"])->name('courier.home');
     Route::post("/courier/logout", [CourierController::class, "logout"])->name("courier.logout");
+    Route::post("/getDeliveryDetail", [CourierController::class, "getDetail"])->name("courier.detail");
 });
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);

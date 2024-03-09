@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="SemiColonWeb">
     <meta name="description"
         content="Get Canvas to build powerful websites easily with the Highly Customizable &amp; Best Selling Bootstrap Template, today.">
@@ -140,7 +141,7 @@
  ============================================= -->
     <script src="{{ asset('Canvas7/js/plugins.min.js') }}"></script>
     <script src="{{ asset('Canvas7/js/functions.bundle.js') }}"></script>
-
+    @yield('js')
 </body>
 
 </html>
