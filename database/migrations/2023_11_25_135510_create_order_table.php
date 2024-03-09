@@ -33,6 +33,7 @@ class CreateOrderTable extends Migration
             $table->integer("subtotal");
             $table->integer("shippingFee");
             $table->string("orderID");
+            $table->double("distance");
         });
     }
 

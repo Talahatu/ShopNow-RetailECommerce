@@ -153,8 +153,9 @@ class OrderController extends Controller
             $order = Order::with("user")->where("id", $orderID)->first();
             $orderDetail = OrderDetail::join("products", "products.id", "order_details.product_id")
                 ->join("images", "images.product_id", "products.id")
+                ->join("orders", "orders.id", "order_details.order_id")
                 ->where("order_details.order_id", $orderID)
-                ->get(["products.name AS pname", "images.name AS iname", "products.sku", "order_details.qty", "order_details.price", "order_details.subtotal", "order_details.distance"]);
+                ->get(["products.name AS pname", "images.name AS iname", "products.sku", "order_details.qty", "order_details.price", "order_details.subtotal", "orders.distance"]);
             return ["info" => $order, "products" => $orderDetail];
         });
         return response()->json($result);

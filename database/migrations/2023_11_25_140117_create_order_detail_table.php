@@ -20,7 +20,6 @@ class CreateOrderDetailTable extends Migration
             $table->integer("qty");
             $table->integer("price");
             $table->integer("subtotal");
-            $table->double("distance");
             $table->foreign("order_id")->references("id")->on("orders");
             $table->foreign("product_id")->references("id")->on("products");
             $table->timestamps();

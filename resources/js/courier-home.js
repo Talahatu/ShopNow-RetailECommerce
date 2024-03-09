@@ -14,7 +14,7 @@ $(function () {
     });
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    var map = L.map("map").setView([-7.28838, 112.77239], 13);
+    var map = L.map("map").setView([-7.28838, 112.77239], 15);
 
     const markerStart = L.marker([-7.28838, 112.77239], {
         draggable: false,
