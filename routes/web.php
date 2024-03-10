@@ -130,6 +130,8 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/courier/logout", [CourierController::class, "logout"])->name("courier.logout");
     Route::post("/getDeliveryDetail", [CourierController::class, "getDetail"])->name("courier.detail");
     Route::post("/pickupItems", [CourierController::class, "pickupItems"])->name("courier.pickup");
+    Route::post("/delivery/finish", [CourierController::class, "deliveryFinish"])->name("courier.finish");
+    Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
 });
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);

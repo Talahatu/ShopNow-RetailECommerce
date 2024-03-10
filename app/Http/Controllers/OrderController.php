@@ -220,6 +220,13 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
+    public function getPaymentType(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        $order = Order::find($orderID);
+        return response()->json(["type" => $order->payment_method]);
+    }
+
     private function generateResiNumber($toko, $user, $courier)
     {
         // Inisial Nama Toko + Inisial Nama Pelanggan + Inisial Nama Kurir + Tanggal Pengiriman (Ymds)

@@ -30,6 +30,7 @@
         "datatables.net-scroller-bs5": "^2.3.0",
         "datatables.net-select-bs5": "^1.7.0",
         "jquery": "^3.7.1",
+        "jquery-mask-plugin": "^1.14.16",
         "laravel-echo": "^1.15.3",
         "leaflet": "^1.9.4",
         "leaflet-routing-machine": "^3.2.12",

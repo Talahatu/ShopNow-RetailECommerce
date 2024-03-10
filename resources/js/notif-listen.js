@@ -38,31 +38,31 @@ $(function () {
                 );
 
                 channel.bind("client-notif", function (data) {
-                    console.log("TEST");
-                    console.log(data);
-                    if (data.key == "accept") {
-                        Push.create("Pesanan Diterima", {
-                            body: data.message + " " + data.time,
-                            icon: baseUrl + "/images/logoshpnw2_ver4.png",
-                            link: "/profile/notif",
-                            timeout: 4000,
-                            onClick: function () {
-                                window.focus();
-                                this.close();
-                            },
-                        });
-                    } else if (data.key == "sentToCourier") {
-                        Push.create("Pesanan Diberikan Ke Kurir", {
-                            body: data.message + " " + data.time,
-                            icon: baseUrl + "/images/logoshpnw2_ver4.png",
-                            link: "/profile/notif",
-                            timeout: 4000,
-                            onClick: function () {
-                                window.focus();
-                                this.close();
-                            },
-                        });
+                    let title = ``;
+                    switch (data.key) {
+                        case "accept":
+                            title = "Pesanan Diterima";
+                            break;
+                        case "sentToCourier":
+                            title = "Pesanan Diberikan Ke Kurir";
+                            break;
+                        case "courierPickUp":
+                            title = "Pesanan Sedang Dalam Perjalanan";
+                            break;
+                        default:
+                            console.log("There is a problem!!");
+                            return;
                     }
+                    Push.create(title, {
+                        body: data.message + " " + data.time,
+                        icon: baseUrl + "/images/logoshpnw2_ver4.png",
+                        link: "/profile/notif",
+                        timeout: 4000,
+                        onClick: function () {
+                            window.focus();
+                            this.close();
+                        },
+                    });
                 });
             }
         },

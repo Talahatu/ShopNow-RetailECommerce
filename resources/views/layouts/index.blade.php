@@ -46,7 +46,7 @@
                         ShopNow
                     </a>
                     <p class="mt-1 text-white">
-                        © 2023 Copyright: MDBootstrap.com & Canvas
+                        © 2023 Copyright: MDBootstrap.com & Canvas 7 & Corona
                     </p>
                 </div>
                 <!-- Grid column -->

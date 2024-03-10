@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\NewEmailMail;
 use App\Models\Courier;
 use App\Models\Delivery;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Shop;
 use Carbon\Carbon;
@@ -164,7 +165,11 @@ class CourierController extends Controller
             ->where("courier_id", Auth::guard("courier")->user()->id)
             ->where("status", "new")
             ->get();
-        return view('courier.index', compact("newDeliveries"));
+        $currentDeliveries = Delivery::with(["order"])
+            ->where("courier_id", Auth::guard("courier")->user()->id)
+            ->where("status", "progress")
+            ->get();
+        return view('courier.index', compact("newDeliveries", "currentDeliveries"));
     }
 
     public function getAllByShop()
@@ -188,7 +193,7 @@ class CourierController extends Controller
     public function getDetail(Request $request)
     {
         $orderID = $request->get("orderID");
-        $order = Order::with(["deliveries", "details", "shop"])->where("id", $orderID)->first();
+        $order = Order::with(["deliveries", "details", "shop", "user"])->where("id", $orderID)->first();
         return response()->json($order);
     }
 
@@ -196,5 +201,59 @@ class CourierController extends Controller
     {
         $orderID = $request->get("orderID");
         $deliveryID = $request->get("deliveryID");
+
+        $result = DB::transaction(function () use ($orderID, $deliveryID) {
+            $takenDelivery = Delivery::find($deliveryID);
+            $takenDelivery->status = "progress";
+            $takenDelivery->pickup_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $takenDelivery->save();
+
+            $currentOrder = Order::find($orderID);
+
+            $newNotif = new Notification();
+            $newNotif->header = "Pemberitahuan Pesanan";
+            $newNotif->content = "Pesanan anda telah diterima oleh kurir dan saat ini sedang dalam perjalanan.";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = $currentOrder->user_id;
+            $newNotif->save();
+
+            $shopID = $currentOrder->shop_id;
+            $userID = $currentOrder->user_id;
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new \Pusher\Pusher(
+                'c58a82be41ea6c60c1d7',
+                '8264fc21e2b5035cc329',
+                '1716744',
+                $options
+            );
+
+            $data['message'] = "Pesanan anda dengan nomor $currentOrder->orderID telah diterima oleh kurir dan saat ini sedang dalam perjalanan";
+            $data["key"] = "courierPickUp";
+            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
+            // regular-seller
+            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+
+            return ["startDate" => $takenDelivery->start_date, "orderID" => $currentOrder->orderID, "id" => $orderID, "deliveryID" => $deliveryID, "address" => $currentOrder->destination_address];
+        });
+        return response()->json($result);
+    }
+
+    public function deliveryFinish(Request $request)
+    {
+        $orderID = $request->get("orderID");
+        $deliveryID = $request->get("deliveryID");
+
+        $result = DB::transaction(function () use ($orderID, $deliveryID) {
+            $delivery = Delivery::find($deliveryID);
+            // $delivery
+
+            return true;
+        });
+
+        return response()->json($result);
     }
 }

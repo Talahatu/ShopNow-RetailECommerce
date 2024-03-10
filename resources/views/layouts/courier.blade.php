@@ -33,6 +33,13 @@
 </head>
 
 <body class="stretched">
+    <div class="loader d-none" id="loader">
+        <div class="css3-spinner" style="--cnvs-loader-color:var(--cnvs-themecolor);">
+            <div class="css3-spinner-bounce1"></div>
+            <div class="css3-spinner-bounce2"></div>
+            <div class="css3-spinner-bounce3"></div>
+        </div>
+    </div>
     <!-- Document Wrapper ============================================= -->
     <div id="wrapper">
         <!-- Header ============================================= -->
@@ -76,11 +83,11 @@
                                         <div>Home</div>
                                     </a>
                                 </li>
-                                <li class="menu-item">
+                                {{-- <li class="menu-item">
                                     <a class="menu-link" href="">
                                         <div>Features</div>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </nav><!-- #primary-menu end -->
                     </div>
@@ -121,7 +128,7 @@
                                             ShopNow
                                         </a>
                                         <p class="mt-1 text-white">
-                                            © 2023 Copyright: MDBootstrap.com & Canvas
+                                            © 2023 Copyright: MDBootstrap.com & Canvas 7 & Corona
                                         </p>
                                     </div>
                                 </div>
