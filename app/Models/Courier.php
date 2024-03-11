@@ -30,4 +30,9 @@ class Courier extends Authenticatable
     {
         return $this->deliveries()->where("status", $type)->get();
     }
+
+    public function sakuHistories()
+    {
+        return $this->hasMany(CourierFeeHistory::class, "courier_id", "id");
+    }
 }

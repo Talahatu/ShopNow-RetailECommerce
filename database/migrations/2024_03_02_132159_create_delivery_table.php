@@ -23,6 +23,7 @@ class CreateDeliveryTable extends Migration
             $table->timestamps();
             $table->dateTime("pickup_date")->nullable();
             $table->dateTime("arrive_date")->nullable();
+            $table->string("proofImage")->nullable();
         });
     }
 

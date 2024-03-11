@@ -138,7 +138,7 @@ $(function () {
         const [orderID, deliveryID] = $(this).attr("data-di").split("-");
         $("#exampleModal").find(".modal-footer").html(`
             <button type="button" class="button button-border button-rounded button-teal button-fill" data-bs-dismiss="modal" id="closeModal"><span>Tutup</span></button>
-            <button type="button" class="button button-border button-rounded button-green button-fill me-2" id="finishDelivery" data-di="${orderID}-${deliveryID}"><span>Selesaikan</span></button>
+            <button type="button" class="button button-border button-rounded button-green button-fill me-2" id="finishDelivery" data-di="${orderID}-${deliveryID}" disabled><span>Selesaikan</span></button>
             
         `);
         $("#exampleModalLabel").html("Selesaikan Pengiriman");
@@ -155,7 +155,7 @@ $(function () {
                 const latitudeDestination = order.destination_latitude;
                 const longitudeDestination = order.destination_longitude;
 
-                generateModal(order);
+                generateModal(order, "finish");
                 generateMap(latitudeDestination, longitudeDestination);
 
                 if (order.payment_method == "cod") {
@@ -164,19 +164,29 @@ $(function () {
                         reverse: true,
                     });
                     $(document).on("input", "#operationalFeeUsed", function () {
-                        $("#finishDelivery").attr(
-                            "disabled",
-                            $(this).val() == ""
-                        );
+                        const image = $("#proofImage")[0];
+                        checkFilled(image, $(this).val());
                     });
                 }
+
+                $(document).on("change", "#proofImage", function () {
+                    if (order.payment_method == "cod") {
+                        checkFilled(this, $("#operationalFeeUsed").val());
+                    } else {
+                        $("#finishDelivery").attr(
+                            "disabled",
+                            !this.files.length > 0
+                        );
+                    }
+                });
             },
         });
     });
 
     $(document).on("click", "#finishDelivery", function () {
         const [orderID, deliveryID] = $(this).attr("data-di").split("-");
-
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
         $.ajax({
             type: "POST",
             url: "/getOrderPaymentType",
@@ -189,6 +199,7 @@ $(function () {
                 const type = response.type;
                 let result = true;
                 let saku = 0;
+                let image = $("#proofImage")[0];
                 if (type == "cod") {
                     saku = $("#operationalFeeUsed").cleanVal();
                     result = confirm(
@@ -197,25 +208,55 @@ $(function () {
                             "?"
                     );
                 }
+
+                let formData = new FormData();
+                formData.append("_token", csrfToken);
+                formData.append("file", image.files[0]);
+                formData.append("orderID", orderID);
+                formData.append("deliveryID", deliveryID);
+                formData.append("moneyUsed", saku);
+                formData.append("type", type);
+
                 if (result)
                     return $.ajax({
                         type: "POST",
                         url: "/delivery/finish",
-                        data: {
-                            _token: csrfToken,
-                            orderID: orderID,
-                            deliveryID: deliveryID,
-                            moneyUsed: saku,
-                        },
+                        data: formData,
+                        processData: false,
+                        contentType: false,
                     });
             })
             .then(function (response) {
-                console.log(response);
+                if (response) {
+                    const button = $(
+                        ".btnDeliveryDone[data-di='" +
+                            orderID +
+                            "-" +
+                            deliveryID +
+                            "']"
+                    )[0];
+                    const article = $(button)
+                        .parent()
+                        .parent()
+                        .parent()
+                        .parent()[0];
+
+                    $(article).remove();
+
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
+                    $("#loader").removeClass("d-flex");
+                    $("#loader").addClass("d-none");
+                }
+            })
+            .catch(function (param) {
+                console.log(param);
             });
     });
 
     const generateModal = (order, data) => {
         let codAddition = ``;
+        let finishAdd = "";
         let html = `
             <div class="row">
                 <div class="form-group col-6">
@@ -266,10 +307,25 @@ $(function () {
                 </div>
             </div>
             <hr>
-            <div id="map" style="height: 360px" class="m-4"></div>`;
+            <div id="map" style="height: 360px" class="m-4"></div>
+            `;
 
-        if (order.payment_method == "cod") {
-            codAddition = `
+        if (data == "finish") {
+            finishAdd = `
+                <div class="divider divider-rounded divider-center"><i class="bi-camera-fill"></i></div>
+                <div class="style-msg infomsg">
+					<div class="sb-msg"><i class="bi-exclamation-diamond-fill"></i><strong>Perhatian!</strong> Gambar yang dipilih hanya dalam bentuk jpg, jpeg, dan png</div>
+				</div>
+                <div class="form-group row">
+                    <label for="proof" class="col-sm-5 col-form-label"><b>Bukti Selesai:&nbsp;</b></label>
+                    <div class="col-sm-7">
+                        <input type="file" accept="image/png, image/jpg, image/jpeg" capture="camera" id="proofImage">
+                    </div>
+                </div>
+            `;
+            html += finishAdd;
+            if (order.payment_method == "cod") {
+                codAddition = `
                 <div class="divider divider-rounded divider-center"><i class="bi-pencil"></i></div>
                 <div class="style-msg alertmsg">
 					<div class="sb-msg"><i class="bi-exclamation-diamond-fill"></i><strong>Perhatian!</strong> Isi bagian "Uang saku digunakan" untuk menyelesaikan pengiriman</div>
@@ -289,7 +345,8 @@ $(function () {
                             <input id="operationalFeeUsed" name="operationalFeeUsed" type="text" class="form-control" placeholder="Masukan nominal uang saku">
                     </div>
                 </div>`;
-            html += codAddition;
+                html += codAddition;
+            }
         }
         $("#exampleModal").find(".modal-body").html(html);
     };
@@ -341,4 +398,37 @@ $(function () {
         // }).addTo(map);
         //===================================== Map Section End =====================================
     };
+
+    const checkFilled = (image, fee) => {
+        $("#finishDelivery").attr(
+            "disabled",
+            fee == "" || image.files.length <= 0
+        );
+    };
+    // Not Used maybe
+    // function startCamera(front) {
+    //     console.log(front);
+    //     const video = document.getElementById("webcam");
+    //     const constraints = {
+    //         video: {
+    //             facingMode: front ? "user" : "environment",
+    //             width: 320,
+    //             height: 320,
+    //         },
+    //     };
+    //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    //         console.log("AHA");
+    //         navigator.mediaDevices
+    //             .getUserMedia(constraints)
+    //             .then(function (stream) {
+    //                 console.log(stream);
+    //                 video.srcObject = stream;
+    //             })
+    //             .catch(function (err) {
+    //                 console.error("Error accessing camera: ", err);
+    //             });
+    //     } else {
+    //         console.error("getUserMedia not supported on your browser!");
+    //     }
+    // }
 });

@@ -246,11 +246,18 @@ class CourierController extends Controller
     {
         $orderID = $request->get("orderID");
         $deliveryID = $request->get("deliveryID");
+        $type = $request->get("type");
+        $moneyUsed = $request->get("moneyUsed");
+        $image = $request->file("file");
 
-        $result = DB::transaction(function () use ($orderID, $deliveryID) {
+        $result = DB::transaction(function () use ($orderID, $deliveryID, $type, $moneyUsed, $image) {
             $delivery = Delivery::find($deliveryID);
-            // $delivery
-
+            $order = Order::find($orderID);
+            if ($type == "cod") {
+                Delivery::processCOD($delivery, $order, $image, $moneyUsed);
+            } else {
+                Delivery::processSaldo($delivery, $order, $image);
+            }
             return true;
         });
 
