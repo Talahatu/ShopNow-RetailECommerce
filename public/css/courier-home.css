@@ -5,6 +5,8 @@
 .loader {
     position: fixed;
     width: 100%;
-    height: auto;
+    height: 100%;
     z-index: 99999;
+    background-color: whitesmoke;
+    opacity: 0.7;
 }

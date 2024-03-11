@@ -53,7 +53,7 @@ $(function () {
     });
 
     $(document).on("click", "#saveDelivery", function () {
-        const [orderID, deliveryID] = $(this).attr("data-di").split("-");
+        const [order_ID, delivery_ID] = $(this).attr("data-di").split("-");
         $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         $.ajax({
@@ -61,11 +61,11 @@ $(function () {
             url: "/pickupItems",
             data: {
                 _token: csrfToken,
-                orderID: orderID,
-                deliveryID: deliveryID,
+                orderID: order_ID,
+                deliveryID: delivery_ID,
             },
             success: function (response) {
-                if (response.length > 0) {
+                if (response) {
                     const id = response.id;
                     const startDate = response.startDate;
                     const orderID = response.orderID;
@@ -109,6 +109,22 @@ $(function () {
                     `;
 
                     $("#now").prepend(html);
+
+                    const button = $(
+                        ".btnTakeDelivery[data-di='" +
+                            order_ID +
+                            "-" +
+                            delivery_ID +
+                            "']"
+                    )[0];
+                    const article = $(button)
+                        .parent()
+                        .parent()
+                        .parent()
+                        .parent()[0];
+
+                    $(article).remove();
+
                     const modal = document.getElementById("exampleModal");
                     bootstrap.Modal.getInstance(modal).hide();
                     $("#loader").removeClass("d-flex");

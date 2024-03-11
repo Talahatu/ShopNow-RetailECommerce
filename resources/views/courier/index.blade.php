@@ -114,7 +114,7 @@
             </div>
         </div>
     </div>
-    <div class="modal modal-sm fade" id="exampleModalSmall" tabindex="-1" aria-labelledby="exampleModalLabel"
+    {{-- <div class="modal modal-sm fade" id="exampleModalSmall" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -127,7 +127,7 @@
                 <div class="modal-footer footer-small"></div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @section('js')
     <script src="{{ asset('js/courier-home.js') }}"></script>
