@@ -9,10 +9,12 @@
             <div class="page-title-row">
                 <div class="page-title-content">
                     <span class="text-light">Uang Saku</span>
-                    <h1 class="text-white">Rp
+                    <h1 class="text-white" id="feeAvailable" data-val="{{ Auth::guard('courier')->user()->operationalFee }}">Rp
                         {{ number_format(Auth::guard('courier')->user()->operationalFee, 0, ',', '.') }}
                     </h1>
-                    <button class="button button-border button-rounded button-dirtygreen mt-2">Tarik Uang</button>
+                    <button class="button button-border button-rounded button-dirtygreen mt-2" id="withdrawFee"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">Tarik
+                        Uang</button>
                 </div>
             </div>
         </div>
@@ -114,20 +116,6 @@
             </div>
         </div>
     </div>
-    {{-- <div class="modal modal-sm fade" id="exampleModalSmall" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabelSmall">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <hr style="margin-top: 0px">
-                <div class="modal-body body-small">Yes Small</div>
-                <div class="modal-footer footer-small"></div>
-            </div>
-        </div>
-    </div> --}}
 @endsection
 @section('js')
     <script src="{{ asset('js/courier-home.js') }}"></script>

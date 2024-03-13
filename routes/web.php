@@ -132,6 +132,11 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/pickupItems", [CourierController::class, "pickupItems"])->name("courier.pickup");
     Route::post("/delivery/finish", [CourierController::class, "deliveryFinish"])->name("courier.finish");
     Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
+
+    Route::get("/courier/history", [CourierController::class, "courierHistory"])->name("courier.history");
+    Route::get("/courier/fee/history", [CourierController::class, "courierFeeHistory"])->name("courier.fee.history");
+
+    Route::post("/courier/fee/withdraw", [CourierController::class, "courierWithdraw"])->name("courier.fee.withdraw");
 });
 
 Route::post('/pusher/auth', [PusherController::class, "auth"]);

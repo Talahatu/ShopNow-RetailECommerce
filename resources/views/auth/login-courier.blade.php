@@ -52,6 +52,9 @@
                                     </div>
                                     <p>Ingin kembali belanja? <a href="{{ route('home') }}" style="color: #393f81;">Mulai
                                             belanja disini!</a></p>
+
+                                    <p>Bukan kurir? <a href="{{ route('login') }}" style="color: #393f81;">Masuk disini!</a>
+                                    </p>
                                 </form>
 
                             </div>

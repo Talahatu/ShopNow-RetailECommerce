@@ -24,6 +24,7 @@ class CreateDeliveryTable extends Migration
             $table->dateTime("pickup_date")->nullable();
             $table->dateTime("arrive_date")->nullable();
             $table->string("proofImage")->nullable();
+            $table->double("feeUsed")->nullable();
         });
     }
 

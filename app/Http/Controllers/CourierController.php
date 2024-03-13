@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewEmailMail;
 use App\Models\Courier;
+use App\Models\CourierFeeHistory;
 use App\Models\Delivery;
 use App\Models\Notification;
 use App\Models\Order;
@@ -16,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+
+use function Ramsey\Uuid\v1;
 
 class CourierController extends Controller
 {
@@ -172,6 +175,21 @@ class CourierController extends Controller
         return view('courier.index', compact("newDeliveries", "currentDeliveries"));
     }
 
+    public function courierHistory()
+    {
+        $finishDeliveries = Delivery::with(["order"])
+            ->where("courier_id", Auth::guard("courier")->user()->id)
+            ->where("status", "done")
+            ->get();
+        return view("courier.history", compact("finishDeliveries"));
+    }
+
+    public function courierFeeHistory()
+    {
+        $histories = CourierFeeHistory::where("courier_id", Auth::guard("courier")->user()->id)->get();
+        return view("courier.feeHistory", compact("histories"));
+    }
+
     public function getAllByShop()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
@@ -261,6 +279,28 @@ class CourierController extends Controller
             return true;
         });
 
+        return response()->json($result);
+    }
+
+    public function courierWithdraw(Request $request)
+    {
+        $amount = $request->get("amount");
+
+        $result = DB::transaction(function () use ($amount) {
+            $courier = Courier::find(Auth::guard("courier")->user()->id);
+            $courier->operationalFee = $courier->operationalFee - $amount;
+            $courier->save();
+
+            $newHistory = new CourierFeeHistory();
+            $newHistory->courier_id = $courier->id;
+            $newHistory->nominal = $amount;
+            $newHistory->description = "Kurir $courier->name berhasil melakukan penarikan uang saku sebesar Rp " . number_format($amount, 0, '.', ',');
+            $newHistory->type = "withdraw";
+            $newHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newHistory->save();
+
+            return $courier->operationalFee;
+        });
         return response()->json($result);
     }
 }

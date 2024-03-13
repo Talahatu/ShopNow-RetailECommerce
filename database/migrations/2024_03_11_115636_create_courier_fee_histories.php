@@ -18,9 +18,10 @@ class CreateCourierFeeHistories extends Migration
             $table->unsignedBigInteger("courier_id");
             $table->integer("nominal")->nullable();
             $table->text("description");
-            $table->enum("type", ["add", "withdraw"]);
+            $table->enum("type", ["add", "withdraw", "used"]);
             $table->timestamps();
             $table->foreign("courier_id")->references("id")->on("courier");
+            $table->dateTime("tanggal");
         });
     }
 

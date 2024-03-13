@@ -75,10 +75,24 @@ $(function () {
                             <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim</button>
                         </div>`;
                     } else if (optionType == "sent") {
-                        return `
-                        <div class="d-flex flex-column btn-group-vertical">
-                            Perjalanan
-                        </div>`;
+                        if (data.deliveries[0].status == "done") {
+                            if (data.type == "cod") {
+                                return `
+                                <div class="d-flex flex-column btn-group-vertical">
+                                Menunggu kurir setor tunai
+                                </div>`;
+                            }
+
+                            return `
+                            <div class="d-flex flex-column btn-group-vertical">
+                                Menunggu persetujuan pembeli
+                            </div>`;
+                        } else {
+                            return `
+                            <div class="d-flex flex-column btn-group-vertical">
+                            Kurir sedang dalam Perjalanan
+                            </div>`;
+                        }
                     } else if (optionType == "done") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
@@ -100,6 +114,7 @@ $(function () {
             details: {
                 renderer: function (api, rowIdx, columns) {
                     var data = $.map(columns, function (col, i) {
+                        console.log(col.title);
                         return col.hidden
                             ? '<tr data-dt-row="' +
                                   col.rowIndex +
@@ -362,7 +377,6 @@ $(function () {
 
     $(document).on("click", ".order-type", function () {
         const type = $(this).attr("data-type");
-        // console.log(type);
         $.ajax({
             type: "POST",
             url: "/fetch/order/repopulate",

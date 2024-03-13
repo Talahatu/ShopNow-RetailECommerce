@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\CreateSnapToken;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Shop;
@@ -47,21 +48,21 @@ class UserController extends Controller
             ])
             ->orderBy("shop_id")
             ->get();
-        $sents = Order::with("shop", "details.product.images")
+        $sents = Order::with(["shop", "details.product.images", "deliveries"])
             ->where([
                 ["user_id", Auth::user()->id],
                 ["orderStatus", "sent"]
             ])
             ->orderBy("shop_id")
             ->get();
-        $finished = Order::with("shop", "details.product.images")
+        $finished = Order::with(["shop", "details.product.images", "deliveries"])
             ->where([
                 ["user_id", Auth::user()->id],
                 ["orderStatus", "done"]
             ])
             ->orderBy("shop_id")
             ->get();
-        $cancelled = Order::with("shop", "details.product.images")
+        $cancelled = Order::with(["shop", "details.product.images", "deliveries"])
             ->where([
                 ["user_id", Auth::user()->id],
                 ["orderStatus", "cancel"]
@@ -142,6 +143,7 @@ class UserController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $user->saldo = $user->saldo + $request->get("value");
+        // $snapToken = CreateSnapToken::GenerateSnapTokenTopUp($request->get("value"));
         $user->save();
         return response()->json($user);
     }

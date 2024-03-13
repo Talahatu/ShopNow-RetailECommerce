@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @yield('css')
     @laravelPWA
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">

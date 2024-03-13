@@ -154,10 +154,18 @@ class Order extends Model
 
     public static function getOrder($shopID, $type)
     {
-        return Order::join("order_details AS od", "od.order_id", "orders.id")
+        return Order::with(["details", "deliveries"])
             ->where([
                 ["orders.shop_id", $shopID],
                 ["orders.orderStatus", $type]
-            ])->get(["orders.id", "orders.destination_address", DB::raw("ROUND(orders.distance,0) AS distance"), "orders.payment_method", "orders.orderID"]);
+            ])->get(
+                [
+                    "orders.id",
+                    "orders.destination_address",
+                    DB::raw("ROUND(orders.distance,0) AS distance"),
+                    "orders.payment_method",
+                    "orders.orderID",
+                ]
+            );
     }
 }

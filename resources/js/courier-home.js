@@ -254,42 +254,105 @@ $(function () {
             });
     });
 
+    $("#withdrawFee").on("click", function () {
+        const max = $("#feeAvailable").attr("data-val");
+        $("#exampleModal").find(".modal-footer").html(`
+            <button type="button" class="button button-border button-rounded button-teal button-fill" data-bs-dismiss="modal" id="closeModal"><span>Tutup</span></button>
+            <button type="button" class="button button-border button-rounded button-green button-fill me-2" id="withdrawFeeProcess" disabled><span>Tarik</span></button>
+            
+        `);
+        $("#exampleModalLabel").html("Penarikan Uang Saku");
+
+        $("#exampleModal").find(".modal-body").html(`
+            <div class="col-12">
+                    <label for="operationalFeeWithdraw">Jumlah Uang:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">Rp</span>
+                            <input id="operationalFeeWithdraw" name="operationalFeeWithdraw" type="text" class="form-control" placeholder="Masukan nominal uang saku">
+                    </div>
+                </div>
+        `);
+        $("#operationalFeeWithdraw").mask("#.##0", {
+            reverse: true,
+        });
+
+        $(document).on("input", "#operationalFeeWithdraw", function () {
+            $("#withdrawFeeProcess").attr(
+                "disabled",
+                $(this).cleanVal() <= 5000
+            );
+
+            if ($(this).cleanVal() > max) {
+                $("#operationalFeeWithdraw").val(max).trigger("input");
+                alert("Nominal melebihi nominal uang saku tersedia!");
+            }
+        });
+    });
+
+    $(document).on("click", "#withdrawFeeProcess", function () {
+        $.ajax({
+            type: "POSS",
+            url: "/courier/fee/withdraw",
+            data: {
+                _token: csrfToken,
+                amount: $("#operationalFeeWithdraw").cleanVal(),
+            },
+            success: function (response) {
+                $("#feeAvailable").html(formatter.format(response));
+                $("#feeAvailable").attr("data-val", response);
+
+                const modal = document.getElementById("exampleModal");
+                bootstrap.Modal.getInstance(modal).hide();
+            },
+        });
+    });
+
+    // =========================================== Functions Start ==================================================
+
     const generateModal = (order, data) => {
         let codAddition = ``;
         let finishAdd = "";
         let html = `
             <div class="row">
                 <div class="form-group col-6">
-                    <label for="orderNumber"><b>Nomor Pesanan:&nbsp;</b></label>
-                    <div >
-                        <label for="orderNumber">${order.orderID}</label>
-                    </div>
-                </div>
-                <div class="form-group col-6">
                     <label for="orderNumber" ><b>Nama Pemesan:&nbsp;</b></label>
                     <div >
                         <label for="orderNumber" >${order.user.name}</label>
                     </div>
                 </div>
+                <div class="form-group col-6">
+                    <label for="hp"><b>Nomor HP:&nbsp;</b></label>
+                    <div >
+                        <label for="hp">${order.user.phoneNumber}</label>
+                    </div>
+                </div>
             </div>
-            <div class="form-group row">
-                <label for="orderNumber" class="col-sm-5 col-form-label"><b>Tanggal Pengiriman:&nbsp;</b></label>
-                <div class="col-sm-7">
-                    <label for="orderNumber" class="col-form-label">${moment(
-                        order.deliveries[0].start_date
-                    ).format("dddd, D MMMM YYYY")}</label>
+            <div class="row">
+                <div class="form-group col-6">
+                        <label for="orderNumber"><b>Nomor Pesanan:&nbsp;</b></label>
+                        <div >
+                            <label for="orderNumber">${order.orderID}</label>
+                        </div>
+                    </div>
+                <div class="form-group col-6">
+                    <label for="paymentType"><b>Jenis Pembayaran:&nbsp;</b></label>
+                    <div class="col-sm-7">
+                        <label for="paymentType" class="col-form-label">${
+                            order.payment_method == "cod"
+                                ? "Pembayaran di tempat (COD)"
+                                : "Saldo"
+                        }</label>
+                    </div>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="paymentType" class="col-sm-5 col-form-label"><b>Jenis Pembayaran:&nbsp;</b></label>
-                <div class="col-sm-7">
-                    <label for="paymentType" class="col-form-label">${
-                        order.payment_method == "cod"
-                            ? "Pembayaran di tempat (COD)"
-                            : "Saldo"
-                    }</label>
+                    <label for="orderNumber" class="col-sm-5 col-form-label"><b>Tanggal Pengiriman:&nbsp;</b></label>
+                    <div class="col-sm-7">
+                        <label for="orderNumber" class="col-form-label">${moment(
+                            order.deliveries[0].start_date
+                        ).format("dddd, D MMMM YYYY")}</label>
+                    </div>
                 </div>
-            </div>
             <div class="form-group row">
                 <label for="destination" class="col-sm-3 col-form-label"><b>Alamat Toko:&nbsp;</b></label>
                 <div class="col-sm-9">

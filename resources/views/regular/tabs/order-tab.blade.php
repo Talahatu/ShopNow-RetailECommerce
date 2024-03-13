@@ -2,6 +2,7 @@
 
 @section('contentProfile')
     <main class="card p-3 shadow-2-strong">
+        <?php setlocale(LC_TIME, 'id_ID.utf8', 'Indonesian_indonesia.1252'); ?>
         <h1>Pesanan Anda</h1>
         <!-- Tabs navs -->
         <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
