@@ -446,16 +446,15 @@ $(function () {
                 _token: csrfToken,
             },
             success: function (response) {
-                // console.log(response);
+                console.log(response);
                 const couriers = response.couriers;
                 let bodyRows = ``;
                 for (let i = 0; i < couriers.length; i++) {
-                    // Not Done
                     bodyRows += `
                     <tr>
                         <td>${i + 1}</td>
                         <td>${couriers[i].name}</td>
-                        <td>${0}</td>
+                        <td>${couriers[i].deliveries.length}</td>
                         <td>${
                             couriers[i].deliveries.length == 0
                                 ? "Tersedia"
@@ -576,6 +575,9 @@ $(function () {
                         bootstrap.Modal.getInstance(modal).hide();
                         $("#loader").addClass("d-none");
                         $("#loader").removeClass("d-flex");
+                        $(parent).next().hasClass("child")
+                            ? $(parent).next().remove()
+                            : "";
                         $(parent).remove();
                     } else {
                         console.log("Error Submit");

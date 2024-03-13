@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Cart;
 use App\Models\CreateSnapToken;
 use App\Models\Notification;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -132,6 +134,8 @@ class UserController extends Controller
         DB::transaction(function () use ($request) {
             Address::where("user_id", Auth::user()->id)->update(['current' => false]);
             Address::where("id", $request->get("id"))->update(['current' => true]);
+
+            Product::changeDistanceInCart($request->get("id"));
         });
         return response()->json(["status" => "OK"]);
     }
@@ -204,5 +208,19 @@ class UserController extends Controller
             ["user_id", Auth::user()->id],
         ])->get();
         return response()->json(compact("orders"));
+    }
+
+    public function getOrderDetail(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $orderID = $request->get("orderID");
+
+            $order = Order::with(["details.product.images", "shop", "deliveries"])
+                ->where("id", $orderID)
+                ->first();
+
+            return $order;
+        });
+        return response()->json($result);
     }
 }

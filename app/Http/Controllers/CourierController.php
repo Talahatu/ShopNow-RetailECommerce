@@ -193,7 +193,9 @@ class CourierController extends Controller
     public function getAllByShop()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        $couriers = Courier::with("deliveries")
+        $couriers = Courier::with(["deliveries" => function ($query) {
+            $query->where("status", "!=", "done");
+        }])
             ->where("shop_id", $shop->id)->get();
         return response()->json(compact("shop", "couriers"));
     }

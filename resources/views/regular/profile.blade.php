@@ -7,13 +7,11 @@
                 <!-- Tab navs -->
                 <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link nav-link-profile active" id="v-tabs-profile-tab" data-mdb-toggle="tab"
-                            href="#v-tabs-profile" role="tab" aria-controls="v-tabs-profile"
+                        <a class="nav-link nav-link-profile" id="v-tabs-profile-tab" href="{{ route('profile.bio') }}"
                             aria-selected="true">Profil</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link nav-link-profile tabs-order" id="v-tabs-order-tab" data-mdb-toggle="tab"
-                            href="#v-tabs-order" role="tab" aria-controls="v-tabs-order"
+                        <a class="nav-link nav-link-profile" id="v-tabs-order-tab" href="{{ route('profile.order') }}"
                             aria-selected="false">Pesanan</a>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -61,7 +59,6 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalBody">
-
                 </div>
                 <div class="modal-footer" id="modalFooter">
                     <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>

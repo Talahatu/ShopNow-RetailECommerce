@@ -285,6 +285,7 @@ class ProductController extends Controller
         $total = $cartTotal + $shippingFee;
         return view("regular.checkout", compact("carts", "address", "cartTotal", "shippingFee", "total"));
     }
+
     public function getShipModal(Request $request)
     {
         $addresses = Address::where("user_id", Auth::user()->id)->get();

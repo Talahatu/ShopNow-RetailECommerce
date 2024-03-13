@@ -34,6 +34,8 @@ class CreateOrderTable extends Migration
             $table->integer("shippingFee");
             $table->string("orderID");
             $table->double("distance");
+            $table->date("accept_date")->nullable();
+            $table->date("cancel_date")->nullable();
         });
     }
 

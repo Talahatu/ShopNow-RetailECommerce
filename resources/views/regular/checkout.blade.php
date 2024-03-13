@@ -59,6 +59,7 @@
                                             <th class="cart-product-name">Nama Barang</th>
                                             <th class="cart-product-price">Harga</th>
                                             <th class="cart-product-quantity">Jumlah Barang</th>
+                                            <th class="cart-product-distance">Jarak Estimasi</th>
                                             <th class="cart-product-subtotal">Total</th>
                                         </tr>
                                     </thead>
@@ -80,6 +81,9 @@
                                                 </td>
                                                 <td class="cart-product-quantity align-middle text-center">
                                                     1x{{ $item->qty }}
+                                                </td>
+                                                <td class="cart-product-distance align-middle text-center">
+                                                    {{ round($item->distance, 0) }}&nbsp;KM
                                                 </td>
                                                 <td class="cart-product-subtotal align-middle">
                                                     <span class="amount">Rp

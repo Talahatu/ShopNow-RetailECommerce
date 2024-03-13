@@ -62,6 +62,7 @@ class OrderController extends Controller
         DB::transaction(function () use ($orderID) {
             $order = Order::find($orderID);
             $order->orderStatus = "accepted";
+            $order->accept_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
             $order->save();
 
             $shopID = $order->shop_id;

@@ -49,6 +49,9 @@ $(function () {
                         case "courierPickUp":
                             title = "Pesanan Sedang Dalam Perjalanan";
                             break;
+                        case "courierFinish":
+                            title = "Pesanan Telah Berhasil Sampai";
+                            break;
                         default:
                             console.log("There is a problem!!");
                             return;

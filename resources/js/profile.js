@@ -34,6 +34,10 @@ $(function () {
         const button = $(this);
         const title = $(button).attr("data-bs-title");
         $("#modalTitle").html(title);
+        $("#modalFooter").html(`
+            <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Simpan</button>
+        `);
         $.ajax({
             type: "POST",
             url: "/getAddAddressForm",
@@ -120,7 +124,7 @@ $(function () {
                 <a href="#" class="list-group-item list-group-item-action address-item" aria-current="true">
                     <div class="d-flex w-100 justify-content-between address-content">
                         <h5 class="mb-1">${a.name} <span class="badge bg-success">Home</span></h5>
-                        <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current address</button>
+                        <button type="button" class="btn btn-outline-info btn-sm set-current-addr">Jadikan Alamat Saat Ini</button>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-info btn-update">Ubah</button>
@@ -150,7 +154,7 @@ $(function () {
                     $(prevCur)
                         .find(".address-content")
                         .append(
-                            `<button type="button" class="btn btn-outline-info btn-sm set-current-addr">Set as current address</button>`
+                            `<button type="button" class="btn btn-outline-info btn-sm set-current-addr">Jadikan Alamat Saat Ini</button>`
                         );
                     $(prevCur)
                         .find(".btn-group")
@@ -178,6 +182,10 @@ $(function () {
         const title = $(this).attr("data-bs-title");
         const type = $(a).attr("addr-type");
         $("#modalTitle").html(title);
+        $("#modalFooter").html(`
+            <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Simpan</button>
+        `);
         $.ajax({
             type: "POST",
             url: "/getUpdateAddAddressForm",
@@ -217,7 +225,7 @@ $(function () {
         });
     });
     $(document).on("click", ".btn-delete", function () {
-        const result = confirm("Are you sure you want to delete this address?");
+        const result = confirm("Apakah anda yakin ingin menghapus alamat ini?");
         if (!result) return;
         const a = $(this).parent().parent();
         const id = $(a).find(".dia").attr("attr-dia");
