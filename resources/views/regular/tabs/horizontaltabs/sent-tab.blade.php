@@ -8,13 +8,13 @@
                         <h3 class="d-flex align-items-center">{{ $item->orderID }}<span
                                 class="d-none d-md-block">&nbsp;</span>
                             @if ($item->deliveries[0]->status == 'done')
-                                <span class="badge bg-info d-none d-md-block">Mohon Selesaikan</span>
+                                <span class="badge bg-warning d-none d-md-block">Mohon Selesaikan</span>
                             @else
                                 <span class="badge bg-info d-none d-md-block">Dalam Perjalanan</span>
                             @endif
                         </h3>
                         @if ($item->deliveries[0]->status == 'done')
-                            <span class="badge bg-info d-md-none d-block">Mohon Selesaikan</span>
+                            <span class="badge bg-warning d-md-none d-block">Mohon Selesaikan</span>
                         @else
                             <span class="badge bg-info d-md-none d-block">Dalam Perjalanan</span>
                         @endif

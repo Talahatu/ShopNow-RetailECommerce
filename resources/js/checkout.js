@@ -1,4 +1,5 @@
 import $, { param } from "jquery";
+import { Resolver } from "laravel-mix/src/Resolver";
 import { now } from "lodash";
 import Push from "push.js";
 $(function () {
@@ -88,6 +89,30 @@ $(function () {
                 );
                 $("#total-label").html(formatter.format(response.total));
                 $("#total-checkout").html(response.total);
+
+                if (response.total >= response.saldo) {
+                    $("#chipDanger").html("Saldo not enough...");
+                    $("#option1").attr("disabled", true);
+                    $("#option1").attr("checked", false);
+                    $("#option1").next().addClass("btn-secondary");
+                    $("#option1").next().removeClass("btn-primary");
+
+                    $("#option2").attr("disabled", false);
+                    $("#option2").attr("checked", true);
+                    $("#option2").next().addClass("btn-primary");
+                    $("#option2").next().removeClass("btn-secondary");
+                } else {
+                    $("#chipDanger").html("");
+                    $("#option1").attr("disabled", false);
+                    $("#option1").attr("checked", true);
+                    $("#option1").next().addClass("btn-primary");
+                    $("#option1").next().removeClass("btn-secondary");
+
+                    $("#option2").attr("disabled", false);
+                    $("#option2").attr("checked", false);
+                    $("#option2").next().addClass("btn-secondary");
+                    $("#option2").next().removeClass("btn-primary");
+                }
 
                 sessionStorage.setItem("address", name);
                 sessionStorage.setItem("addressI", id);

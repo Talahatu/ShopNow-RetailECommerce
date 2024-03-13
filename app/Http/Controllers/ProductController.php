@@ -302,7 +302,8 @@ class ProductController extends Controller
         $cartTotal = Product::cartTotal(Auth::user()->id);
         $shippingFee = Product::shippingFee(Auth::user()->id);
         $total = $cartTotal + $shippingFee;
-        return response()->json(compact("cartTotal", "shippingFee", "total"));
+        $saldo = Auth::user()->saldo;
+        return response()->json(compact("cartTotal", "shippingFee", "total", "saldo"));
     }
 
     public function showWishlist()

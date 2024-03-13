@@ -32,6 +32,7 @@ $(function () {
             },
             success: function (response) {
                 const order = response;
+                let finishProof = ``;
                 let riwayatPesanan = `
                     <tr>
                         <td>${moment(order.order_date).format(
@@ -62,7 +63,8 @@ $(function () {
                     `;
                 }
                 if (order.deliveries.length > 0) {
-                    const delivery = order.deliveries;
+                    const delivery = order.deliveries[0];
+
                     riwayatPesanan += `
                         <tr>
                             <td>${moment(delivery.start_date).format(
@@ -95,6 +97,12 @@ $(function () {
                                     }.</td>
                                 </tr>
                             `;
+
+                            finishProof = `
+                            <div class="proof">
+                                <h5>Bukti foto dari kurir: </h5>
+                                <img src="${baseUrl}/deliveryProof/${delivery.proofImage}" style="width:200px;height:200px;object-fit:cover;"></img>
+                            </div>`;
                         }
                     }
                 }
@@ -186,6 +194,7 @@ $(function () {
                             ${riwayatPesanan}
                         </tbody>
                     </table>
+                    ${finishProof}
                     <hr>
                     <h1>Barang Pesanan</h1>
                     <div class="table-responsive">
@@ -204,9 +213,11 @@ $(function () {
                         </table>
                     </div>
                     <div class="order-info text-end mt-2">
-                        <h5>${formatter.format(order.subtotal)}</h5>
-                        <h5>${formatter.format(order.shippingFee)}</h5>
-                        <h2>${formatter.format(order.total)}</h2>
+                        <h5>Subtotal: ${formatter.format(order.subtotal)}</h5>
+                        <h5>Ongkos Kirim: ${formatter.format(
+                            order.shippingFee
+                        )}</h5>
+                        <h2>Total: ${formatter.format(order.total)}</h2>
                     </div>
                 `);
             },
