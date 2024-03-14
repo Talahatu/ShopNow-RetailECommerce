@@ -5,15 +5,6 @@
         <div class="container my-5">
             <div class="row mt-2 g-4">
                 @foreach ($categories as $item)
-                    {{-- <div class="col mx-1 my-2 px-2 text-center">
-                        <a href="{{ route('show.search', $item->name) }}">
-                            <div class="card">
-                                <div class="card-body text-dark">
-                                    <b>{{ $item->name }}</b>
-                                </div>
-                            </div>
-                        </a>
-                    </div> --}}
                     <a class="col-md-3 text-dark" href="{{ route('show.search', $item->name) }}">
                         <div class="card p-1">
                             <div class="d-flex justify-content-between align-items-center p-2">
