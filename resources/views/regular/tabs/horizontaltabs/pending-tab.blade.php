@@ -12,6 +12,7 @@
                         <span class="badge bg-info d-md-none d-block">Menunggu Seller</span>
                         <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;{{ $item->destination_address }}</p>
                     </div>
+
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
                         <div
                             class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">

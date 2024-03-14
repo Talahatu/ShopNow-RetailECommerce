@@ -129,6 +129,8 @@ $(function () {
                     bootstrap.Modal.getInstance(modal).hide();
                     $("#loader").removeClass("d-flex");
                     $("#loader").addClass("d-none");
+
+                    window.location.reload();
                 }
             },
         });

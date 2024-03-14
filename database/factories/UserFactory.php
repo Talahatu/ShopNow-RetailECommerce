@@ -41,7 +41,7 @@ class UserFactory extends Factory
             'password' => Hash::make($expl[0]), // password
             'remember_token' => Str::random(10),
             'phoneNumber' => "08" . $faker->unique()->numerify("##########"),
-            "type" => $selectedType,
+            "type" => "regular",
             "gender" => $gender,
             "profilePicture" => $faker->imageUrl(360, 360, 'people', true),
             "saldo" => $faker->numberBetween(1, 9) * 10000,

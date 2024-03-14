@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Factories\AddressFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as FakerFactory;
 
 class UserSeeder extends Seeder
 {

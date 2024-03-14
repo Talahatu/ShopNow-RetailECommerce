@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\Image;
+use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -139,5 +140,60 @@ class ShopController extends Controller
     public function getSeller(Request $request)
     {
         return response()->json(["data" => Shop::find($request->get("id"))]);
+    }
+
+    public function showFinancials()
+    {
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        $thisMonthRevenue = Order::select(DB::raw('SUM(orders.total) as total'))
+            ->where('shop_id', 1)
+            ->where('orderStatus', 'done')
+            ->whereRaw('MONTH(orders.order_date) = MONTH(CURRENT_DATE)')
+            ->whereRaw('YEAR(orders.order_date) = YEAR(CURRENT_DATE)')
+            ->first()
+            ->total;
+        $allRevenue = Order::select(DB::raw('SUM(orders.total) as total'))
+            ->where('shop_id', 1)
+            ->where('orderStatus', 'done')
+            ->first()
+            ->total;
+
+        return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue"));
+    }
+
+    public function productSold(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $shop = Shop::where("user_id", Auth::user()->id)->first();
+            $order = Order::select(
+                DB::raw('COUNT(orders.id) AS Sold'),
+                DB::raw('DATE_FORMAT(MIN(orders.order_date), "%M %Y") AS Month')
+            )
+                ->where('shop_id', $shop->id)
+                ->where('orderStatus', 'done')
+                ->groupBy(DB::raw('YEAR(orders.order_date), MONTH(orders.order_date)'))
+                ->get();
+            return $order;
+        });
+
+        return response()->json($result);
+    }
+
+    public function top5Popular(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $shop = Shop::where("user_id", Auth::user()->id)->first();
+
+            $data = Order::select(DB::raw('COUNT(order_details.product_id) AS Sold'), DB::raw('MIN(products.name) AS Name'))
+                ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                ->join('products', 'products.id', '=', 'order_details.product_id')
+                ->where('orders.shop_id', $shop->id)
+                ->groupBy('order_details.product_id')
+                ->limit(5)
+                ->get();
+
+            return $data;
+        });
+        return response()->json($result);
     }
 }

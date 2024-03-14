@@ -18,6 +18,8 @@ class CategorySeeder extends Seeder
         // Category::factory()->count(15)->create();
 
         $categories = ["Alat Rumah Tangga", "Buku", "Elekronik", "Mebel", "Pakaian Anak", "Pakaian Pria", "Pakaian Wanita", "Makanan", "Minuman", "Gaming", "Mainan Anak", "Alat Musik", "Handphone dan Tablet", "Kesehatan", "Kecantikan", "Komputer dan Laptop", "Hobi", "Peralatan Kantor dan Sekolah", "Olahraga", "Otomotif", "Pertukangan", "Perawatan Hewan", "Lainnya"];
-        DB::table("categories")->insert($categories);
+        foreach ($categories as  $value) {
+            DB::table("categories")->insert(["name" => $value]);
+        }
     }
 }

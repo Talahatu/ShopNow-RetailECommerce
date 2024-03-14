@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\CreateSnapToken;
+use App\Models\FinancialHistory;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\Shop;
 use App\Models\User;
+use Carbon\Carbon;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -182,8 +186,7 @@ class UserController extends Controller
         $path = public_path() . '/shopimages';
         $file->move($path, $filename);
 
-        $newShop = "";
-        DB::transaction(function () use ($request, $latlong, $filename) {
+        $newShop = DB::transaction(function () use ($request, $latlong, $filename) {
             $newShop = new Shop();
             $newShop->user_id = Auth::user()->id;
             $newShop->name = $request->get("name");
@@ -197,6 +200,8 @@ class UserController extends Controller
             $user = User::find(Auth::user()->id);
             $user->type = "seller";
             $user->save();
+
+            return $newShop;
         });
         return view('merchant.product', ["shop" => $newShop]);
     }
@@ -222,5 +227,59 @@ class UserController extends Controller
             return $order;
         });
         return response()->json($result);
+    }
+
+    public function orderFinish(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $orderID = $request->get("orderID");
+            $review = $request->get("review");
+            $rating = $request->get("rating");
+
+            $order = Order::with(["details.product.images", "shop", "deliveries"])
+                ->where("id", $orderID)
+                ->first();
+
+            $order->payment_status = "release";
+            $order->payment_release_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $order->orderStatus = "done";
+            $order->save();
+
+            $income = new FinancialHistory();
+            $income->shop_id = $order->shop_id;
+            $income->income = $order->total;
+            $income->withdrawal = 0;
+            $income->date =  Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $income->is_refund = false;
+            $income->save();
+
+            $shop = Shop::find($order->shop_id);
+            $shop->saldo_release = $shop->saldo_release + $income->income;
+            $shop->save();
+
+            foreach ($order->details as  $value) {
+                $totalSold = ProductReview::where("product_id", $value->product_id)->count();
+
+                $newReview = new ProductReview();
+                $newReview->user_id = $order->user_id;
+                $newReview->product_id = $value->product_id;
+                $newReview->rating = $rating;
+                $newReview->review = $review;
+                $newReview->save();
+
+                $product = Product::find($value->product_id);
+                $newAVG = $this->calculateNewAverageRating($product->rating, $totalSold, $rating);
+                $product->rating = $newAVG;
+                $product->save();
+            }
+
+            return true;
+        });
+        return response()->json($result);
+    }
+
+    private function calculateNewAverageRating($currentRating, $totalSold, $newRating)
+    {
+        return (($currentRating * $totalSold) + $newRating) / ($totalSold + 1);
     }
 }

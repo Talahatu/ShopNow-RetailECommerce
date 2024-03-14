@@ -91,7 +91,7 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" id="navReport">
             <a class="nav-link" data-bs-toggle="collapse" href="#financial-page" aria-expanded="false"
                 aria-controls="financial-page">
                 <span class="menu-icon">
@@ -102,12 +102,14 @@
             </a>
             <div class="collapse" id="financial-page">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">Laporan Keuangan</a>
+                    <li class="nav-item" id="myReport"> <a class="nav-link"
+                            href="{{ route('seller.financial') }}">Laporan
+                            Keuangan</a>
                     </li>
                 </ul>
             </div>
         </li>
-        <li class="nav-item menu-items">
+        {{-- <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#setting-page" aria-expanded="false"
                 aria-controls="setting-page">
                 <span class="menu-icon">
@@ -123,6 +125,6 @@
                     <li class="nav-item"> <a class="nav-link" href="#">Pengaturan Akun</a></li>
                 </ul>
             </div>
-        </li>
+        </li> --}}
     </ul>
 </nav>

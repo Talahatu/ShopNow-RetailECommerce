@@ -1,6 +1,8 @@
 import $ from "jquery";
 import moment from "moment/moment";
 import "moment/locale/id";
+import "bootstrap-star-rating/css/star-rating.min.css";
+import "bootstrap-star-rating/js/star-rating.min.js";
 
 $(function () {
     $(".nav-link-profile").removeClass("active");
@@ -33,6 +35,7 @@ $(function () {
             success: function (response) {
                 const order = response;
                 let finishProof = ``;
+                let finishFooter = ``;
                 let riwayatPesanan = `
                     <tr>
                         <td>${moment(order.order_date).format(
@@ -86,6 +89,7 @@ $(function () {
                         </tr>
                         `;
 
+                        //======================== When Courier Finish START ====================================
                         if (delivery.arrive_date != null) {
                             riwayatPesanan += `
                                 <tr>
@@ -103,7 +107,85 @@ $(function () {
                                 <h5>Bukti foto dari kurir: </h5>
                                 <img src="${baseUrl}/deliveryProof/${delivery.proofImage}" style="width:200px;height:200px;object-fit:cover;"></img>
                             </div>`;
+
+                            finishFooter = `
+                                <button type="button" class="btn btn-primary" id="btnFinishOrder" data-bs-toggle="modal" data-bs-target="#exampleModal2">Selesaikan</button>
+                            `;
+
+                            $("#modalFooter").append(finishFooter);
+
+                            $(document).on(
+                                "click",
+                                "#btnFinishOrder",
+                                function () {
+                                    const modal =
+                                        document.getElementById("exampleModal");
+                                    bootstrap.Modal.getInstance(modal).hide();
+
+                                    $("#exampleModal2")
+                                        .find("#modalTitle")
+                                        .html("Berikan ulasan pesanan");
+
+                                    $("#exampleModal2").find("#modalBody")
+                                        .html(`
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <label for="starRating" class="form-label">Berikan Rating!</label>
+                                            <input type="number" class="rating" id="starRating">
+                                        </div>
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Berikan Ulasan" id="floatingTextarea" style="height:200px"></textarea>
+                                            <label for="floatingTextarea">Ulasan...</label>
+                                        </div>
+                                    `);
+                                    $("#starRating").rating({
+                                        min: 0,
+                                        max: 5,
+                                        step: 1,
+                                        size: "lg",
+                                        showCaption: false,
+                                    });
+
+                                    $("#exampleModal2").on(
+                                        "click",
+                                        "#btnSave",
+                                        function () {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/profile/order/finish",
+                                                data: {
+                                                    _token: csrfToken,
+                                                    orderID: order.id,
+                                                    rating: $(
+                                                        "#starRating"
+                                                    ).val(),
+                                                    review: $(
+                                                        "#floatingTextarea"
+                                                    ).val(),
+                                                },
+                                                success: function (response) {
+                                                    if (response) {
+                                                        $(
+                                                            "#item-" + order.id
+                                                        ).remove();
+
+                                                        const modal =
+                                                            document.getElementById(
+                                                                "exampleModal2"
+                                                            );
+                                                        bootstrap.Modal.getInstance(
+                                                            modal
+                                                        ).hide();
+
+                                                        window.location.reload();
+                                                    }
+                                                },
+                                            });
+                                        }
+                                    );
+                                }
+                            );
                         }
+                        //======================== When Courier Finish END ====================================
                     }
                 }
 

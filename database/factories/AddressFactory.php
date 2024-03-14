@@ -25,9 +25,9 @@ class AddressFactory extends Factory
         $faker = FakerFactory::create('id_ID');
         return [
             "user_id" => $faker->numberBetween(1, 5),
-            "name" => $faker->address(),
-            "lat" => $faker->latitude,
-            "long" => $faker->longitude,
+            "name" => "Manyar Tirtoyoso Selatan No 19",
+            "lat" => -7.288380,
+            "long" => 112.772392,
             "current" => 1
         ];
     }

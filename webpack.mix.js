@@ -34,6 +34,7 @@ mix.js("resources/js/app.js", "public/js")
     .js("resources/js/courier-create.js", "public/js")
     .js("resources/js/notif-listen.js", "public/js")
     .js("resources/js/courier-home.js", "public/js")
+    .js("resources/js/financial.js", "public/js")
     .sass("resources/sass/app.scss", "public/css")
     .copy("node_modules/leaflet/dist/images", "public/css/images")
     .sourceMaps();

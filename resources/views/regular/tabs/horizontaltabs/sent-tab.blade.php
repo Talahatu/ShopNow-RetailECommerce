@@ -1,11 +1,11 @@
 <div class="list-group p-2" id="order-container">
     @if (count($sents) > 0)
         @foreach ($sents as $item)
-            <div class="list-group-item list-group-item card" aria-current="true">
+            <div class="list-group-item list-group-item card" aria-current="true" id="item-{{ $item->id }}">
                 <div class="card-body ps-2 pe-2 text-center text-md-start">
                     <div class="top-side">
                         <span class="text-muted"> {{ strftime('%A, %d %B %Y', strtotime($item->order_date)) }}</span>
-                        <h3 class="d-flex align-items-center">{{ $item->orderID }}<span
+                        <h3 class="d-md-flex align-items-center text-center">{{ $item->orderID }}<span
                                 class="d-none d-md-block">&nbsp;</span>
                             @if ($item->deliveries[0]->status == 'done')
                                 <span class="badge bg-warning d-none d-md-block">Mohon Selesaikan</span>

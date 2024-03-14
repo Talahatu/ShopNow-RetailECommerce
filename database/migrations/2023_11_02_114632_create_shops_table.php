@@ -22,7 +22,6 @@ class CreateShopsTable extends Migration
             $table->string("lat");
             $table->string("long");
             $table->string("logoImage")->nullable();
-            $table->integer("saldo_pending")->default("0");
             $table->integer("saldo_release")->default("0");
             $table->foreign("user_id")->references("id")->on("users");
             $table->timestamps();

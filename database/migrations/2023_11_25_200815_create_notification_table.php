@@ -15,6 +15,8 @@ class CreateNotificationTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("user_id");
+            $table->foreign("user_id")->references("id")->on("users");
             $table->string("header");
             $table->string("content");
             $table->dateTime("date");

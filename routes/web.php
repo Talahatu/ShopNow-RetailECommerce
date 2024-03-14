@@ -61,6 +61,7 @@ Route::middleware(["auth", "prevent.courier"])->group(function () {
     Route::get("/profile/bio", [UserController::class, "profileBio"])->name("profile.bio");
 
     Route::post("/profile/order/detail", [UserController::class, "getOrderDetail"])->name("profile.order.detail");
+    Route::post("/profile/order/finish", [UserController::class, "orderFinish"])->name("profile.order.finish");
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");
@@ -121,6 +122,10 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::post('/fetch/product/repopulate', [ProductController::class, "fetchRepopulate"]);
     Route::put("/archive/product", [ProductController::class, "archiveProduct"]);
     Route::put("/live/product", [ProductController::class, "liveProduct"]);
+
+    Route::get("/seller-financial", [ShopController::class, "showFinancials"])->name("seller.financial");
+    Route::post("/seller/financial/sold-chart", [ShopController::class, "productSold"])->name("seller.sold.chart");
+    Route::post("/seller/financial/popular", [ShopController::class, "top5Popular"])->name("seller.top5Popular");
 
     Route::get("/seller/chat/show", [ShopController::class, "showChat"])->name("seller.chat");
     Route::post("/sendMessageSeller", [ChatController::class, "sendMessageSeller"])->name("chat.send.seller");

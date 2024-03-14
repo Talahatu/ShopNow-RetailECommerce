@@ -32,3 +32,17 @@ footer {
         --scrollbar-handle-hover
     ); /* Adjust the color of the scrollbar handle on hover */
 }
+
+.rating-container .star {
+    background-image: none !important; /* Remove default background image */
+    font-family: "Font Awesome 5 Free"; /* Adjust font family as needed */
+}
+
+.rating-container .star:before {
+    content: "\f005"; /* Use MDBooststrap's star icon (font-awesome) */
+}
+
+.rating-container .star.filled {
+    /* Optionally add a different code for a filled star (optional) */
+    content: "\f005";
+}

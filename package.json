@@ -22,6 +22,8 @@
     },
     "dependencies": {
         "autonumeric": "^4.10.0",
+        "bootstrap-star-rating": "^4.1.2",
+        "chart.js": "^4.4.2",
         "datatables.net-bs5": "^1.13.7",
         "datatables.net-fixedcolumns-bs5": "^4.3.0",
         "datatables.net-fixedheader-bs5": "^3.4.0",
