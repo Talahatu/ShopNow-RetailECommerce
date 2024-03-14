@@ -1,6 +1,4 @@
-import $, { param } from "jquery";
-import { Resolver } from "laravel-mix/src/Resolver";
-import { now } from "lodash";
+import $ from "jquery";
 import Push from "push.js";
 $(function () {
     const baseUrl = window.location.protocol + "//" + window.location.host;
