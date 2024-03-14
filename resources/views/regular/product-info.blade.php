@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="{{ asset('css/product-info.css') }}">
 @endsection
 @section('content')
+    <?php setlocale(LC_TIME, 'id_ID.utf8', 'Indonesian_indonesia.1252'); ?>
     <div class="container mt-4">
         <!-- Page Title============================================= -->
         <section class="page-title bg-transparent mb-2">
@@ -131,7 +132,7 @@
                                     <hr class="mt-1 mb-3">
 
                                     <!-- Product Single - Quantity & Cart Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ============================================= -->
                                     <div class="cart mb-0  d-block d-lg-flex justify-content-between align-items-center">
                                         <div class="input-group m-lg-0 mb-3 input-quantity-width">
                                             <button class="btn  btn-dark" type="button" id="button-minus"
@@ -231,7 +232,7 @@
                                                     data-bs-target="#tabs-3" type="button" role="tab"
                                                     aria-controls="canvas-tabs-3" aria-selected="false">
                                                     <i class="me-1 bi-star-fill"></i>
-                                                    <span class="d-inline-block">Ulasan (2)</span>
+                                                    <span class="d-inline-block">Ulasan ({{ count($reviews) }})</span>
                                                 </button>
                                             </li>
                                         </ul>
@@ -243,7 +244,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="tabs-3" role="tabpanel"
                                                 aria-labelledby="canvas-tabs-3-tab" tabindex="0"
-                                                style="height: 600px; overflow-y:scroll;">
+                                                style="max-height: 400px; overflow-y:scroll;">
                                                 <div id="reviews" class="p-4">
                                                     <section class="gradient-custom">
                                                         <div class="container">
@@ -251,253 +252,40 @@
                                                                 <div class="col-12">
                                                                     <div class="row">
                                                                         <div class="col">
-                                                                            <div class="d-flex flex-start">
-                                                                                <img class="rounded-circle shadow-1-strong me-3"
-                                                                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp"
-                                                                                    alt="avatar" width="65"
-                                                                                    height="65" />
-                                                                                <div class="flex-grow-1 flex-shrink-1">
-                                                                                    <div>
-                                                                                        <div
-                                                                                            class="d-flex justify-content-between align-items-center">
-                                                                                            <p class="mb-1">
-                                                                                                Maria Smantha <span
-                                                                                                    class="small">-
-                                                                                                    2 hours
-                                                                                                    ago</span>
+                                                                            @foreach ($reviews as $item)
+                                                                                <div class="d-flex flex-start">
+                                                                                    <img class="rounded-circle shadow-1-strong me-3"
+                                                                                        src="{{ asset('profileimages/' . $item->user->profilePicture) }}"
+                                                                                        alt="avatar" width="65"
+                                                                                        height="65" />
+                                                                                    <div class="flex-grow-1 flex-shrink-1">
+                                                                                        <div>
+                                                                                            <div
+                                                                                                class="d-flex justify-content-between align-items-center">
+                                                                                                <p class="mb-1">
+                                                                                                    {{ $item->user->name }}&nbsp;
+                                                                                                    <span
+                                                                                                        class="small text-muted">{{ strftime('%A, %d %B %Y', strtotime($item->created_at)) }}</span>
+                                                                                                </p>
+                                                                                                <div
+                                                                                                    class="ms-auto text-warning">
+                                                                                                    @for ($j = 0; $j < floor($item->rating); $j++)
+                                                                                                        <i
+                                                                                                            class="fa fa-star"></i>
+                                                                                                    @endfor
+                                                                                                    @for ($j = 0; $j < floor(5 - $item->rating); $j++)
+                                                                                                        <i
+                                                                                                            class="far fa-star"></i>
+                                                                                                    @endfor
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <p class="small mb-0">
+                                                                                                {{ $item->review }}
                                                                                             </p>
-                                                                                            <a href="#!"><i
-                                                                                                    class="fas fa-reply fa-xs"></i><span
-                                                                                                    class="small">
-                                                                                                    reply</span></a>
-                                                                                        </div>
-                                                                                        <p class="small mb-0">
-                                                                                            It is a long established
-                                                                                            fact that a reader will
-                                                                                            be distracted by
-                                                                                            the readable content of
-                                                                                            a page.
-                                                                                        </p>
-                                                                                    </div>
-
-                                                                                    <div class="d-flex flex-start mt-4">
-                                                                                        <a class="me-3" href="#">
-                                                                                            <img class="rounded-circle shadow-1-strong"
-                                                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-                                                                                                alt="avatar"
-                                                                                                width="65"
-                                                                                                height="65" />
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="flex-grow-1 flex-shrink-1">
-                                                                                            <div>
-                                                                                                <div
-                                                                                                    class="d-flex justify-content-between align-items-center">
-                                                                                                    <p class="mb-1">
-                                                                                                        Simona Disa
-                                                                                                        <span
-                                                                                                            class="small">-
-                                                                                                            3 hours
-                                                                                                            ago</span>
-                                                                                                    </p>
-                                                                                                </div>
-                                                                                                <p class="small mb-0">
-                                                                                                    letters, as
-                                                                                                    opposed to using
-                                                                                                    'Content here,
-                                                                                                    content here',
-                                                                                                    making it look
-                                                                                                    like readable
-                                                                                                    English.
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div class="d-flex flex-start mt-4">
-                                                                                        <a class="me-3" href="#">
-                                                                                            <img class="rounded-circle shadow-1-strong"
-                                                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp"
-                                                                                                alt="avatar"
-                                                                                                width="65"
-                                                                                                height="65" />
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="flex-grow-1 flex-shrink-1">
-                                                                                            <div>
-                                                                                                <div
-                                                                                                    class="d-flex justify-content-between align-items-center">
-                                                                                                    <p class="mb-1">
-                                                                                                        John Smith
-                                                                                                        <span
-                                                                                                            class="small">-
-                                                                                                            4 hours
-                                                                                                            ago</span>
-                                                                                                    </p>
-                                                                                                </div>
-                                                                                                <p class="small mb-0">
-                                                                                                    the majority
-                                                                                                    have suffered
-                                                                                                    alteration in
-                                                                                                    some form, by
-                                                                                                    injected humour,
-                                                                                                    or randomised
-                                                                                                    words.
-                                                                                                </p>
-                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-
-                                                                            <div class="d-flex flex-start mt-4">
-                                                                                <img class="rounded-circle shadow-1-strong me-3"
-                                                                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(12).webp"
-                                                                                    alt="avatar" width="65"
-                                                                                    height="65" />
-                                                                                <div class="flex-grow-1 flex-shrink-1">
-                                                                                    <div>
-                                                                                        <div
-                                                                                            class="d-flex justify-content-between align-items-center">
-                                                                                            <p class="mb-1">
-                                                                                                Natalie Smith <span
-                                                                                                    class="small">-
-                                                                                                    2 hours
-                                                                                                    ago</span>
-                                                                                            </p>
-                                                                                            <a href="#!"><i
-                                                                                                    class="fas fa-reply fa-xs"></i><span
-                                                                                                    class="small">
-                                                                                                    reply</span></a>
-                                                                                        </div>
-                                                                                        <p class="small mb-0">
-                                                                                            The standard chunk of
-                                                                                            Lorem Ipsum used since
-                                                                                            the 1500s is
-                                                                                            reproduced below for
-                                                                                            those interested.
-                                                                                            Sections 1.10.32 and
-                                                                                            1.10.33.
-                                                                                        </p>
-                                                                                    </div>
-
-                                                                                    <div class="d-flex flex-start mt-4">
-                                                                                        <a class="me-3" href="#">
-                                                                                            <img class="rounded-circle shadow-1-strong"
-                                                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(31).webp"
-                                                                                                alt="avatar"
-                                                                                                width="65"
-                                                                                                height="65" />
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="flex-grow-1 flex-shrink-1">
-                                                                                            <div>
-                                                                                                <div
-                                                                                                    class="d-flex justify-content-between align-items-center">
-                                                                                                    <p class="mb-1">
-                                                                                                        Lisa Cudrow
-                                                                                                        <span
-                                                                                                            class="small">-
-                                                                                                            4 hours
-                                                                                                            ago</span>
-                                                                                                    </p>
-                                                                                                </div>
-                                                                                                <p class="small mb-0">
-                                                                                                    Cras sit amet
-                                                                                                    nibh libero, in
-                                                                                                    gravida nulla.
-                                                                                                    Nulla vel metus
-                                                                                                    scelerisque ante
-                                                                                                    sollicitudin
-                                                                                                    commodo. Cras
-                                                                                                    purus odio,
-                                                                                                    vestibulum in
-                                                                                                    vulputate at,
-                                                                                                    tempus viverra
-                                                                                                    turpis.
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div class="d-flex flex-start mt-4">
-                                                                                        <a class="me-3" href="#">
-                                                                                            <img class="rounded-circle shadow-1-strong"
-                                                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(29).webp"
-                                                                                                alt="avatar"
-                                                                                                width="65"
-                                                                                                height="65" />
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="flex-grow-1 flex-shrink-1">
-                                                                                            <div>
-                                                                                                <div
-                                                                                                    class="d-flex justify-content-between align-items-center">
-                                                                                                    <p class="mb-1">
-                                                                                                        Maggie
-                                                                                                        McLoan <span
-                                                                                                            class="small">-
-                                                                                                            5 hours
-                                                                                                            ago</span>
-                                                                                                    </p>
-                                                                                                </div>
-                                                                                                <p class="small mb-0">
-                                                                                                    a Latin
-                                                                                                    professor at
-                                                                                                    Hampden-Sydney
-                                                                                                    College in
-                                                                                                    Virginia,
-                                                                                                    looked up one of
-                                                                                                    the more obscure
-                                                                                                    Latin words,
-                                                                                                    consectetur
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div class="d-flex flex-start mt-4">
-                                                                                        <a class="me-3" href="#">
-                                                                                            <img class="rounded-circle shadow-1-strong"
-                                                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp"
-                                                                                                alt="avatar"
-                                                                                                width="65"
-                                                                                                height="65" />
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="flex-grow-1 flex-shrink-1">
-                                                                                            <div>
-                                                                                                <div
-                                                                                                    class="d-flex justify-content-between align-items-center">
-                                                                                                    <p class="mb-1">
-                                                                                                        John Smith
-                                                                                                        <span
-                                                                                                            class="small">-
-                                                                                                            6 hours
-                                                                                                            ago</span>
-                                                                                                    </p>
-                                                                                                </div>
-                                                                                                <p class="small mb-0">
-                                                                                                    Autem, totam
-                                                                                                    debitis suscipit
-                                                                                                    saepe sapiente
-                                                                                                    magnam officiis
-                                                                                                    quaerat
-                                                                                                    necessitatibus
-                                                                                                    odio assumenda,
-                                                                                                    perferendis quae
-                                                                                                    iusto
-                                                                                                    labore
-                                                                                                    laboriosam
-                                                                                                    minima numquam
-                                                                                                    impedit quam
-                                                                                                    dolorem!
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
+                                                                            @endforeach
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -505,103 +293,6 @@
                                                         </div>
                                                     </section>
                                                     <hr class="my-3">
-                                                    <!-- Modal Reviews============================================= -->
-                                                    <div class="text-end mt-4">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#reviewFormModal" class="btn btn-dark m-0">Add
-                                                            a Review</a>
-                                                    </div>
-                                                    <div class="modal fade" id="reviewFormModal" tabindex="-1"
-                                                        role="dialog" aria-labelledby="reviewFormModalLabel"
-                                                        aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title" id="reviewFormModalLabel">
-                                                                        Submit a
-                                                                        Review</h4>
-                                                                    <button type="button" class="btn-close btn-sm"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-hidden="true"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form class="row mb-0" id="template-reviewform"
-                                                                        name="template-reviewform" action="#"
-                                                                        method="post">
-
-                                                                        <div class="col-6 mb-3">
-                                                                            <label for="template-reviewform-name">Name
-                                                                                <small>*</small></label>
-                                                                            <div class="input-group">
-                                                                                <div class="input-group-text"><i
-                                                                                        class="uil uil-user"></i></div>
-                                                                                <input type="text"
-                                                                                    id="template-reviewform-name"
-                                                                                    name="template-reviewform-name"
-                                                                                    value=""
-                                                                                    class="form-control required">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-6 mb-3">
-                                                                            <label for="template-reviewform-email">Email
-                                                                                <small>*</small></label>
-                                                                            <div class="input-group">
-                                                                                <div class="input-group-text">@</div>
-                                                                                <input type="email"
-                                                                                    id="template-reviewform-email"
-                                                                                    name="template-reviewform-email"
-                                                                                    value=""
-                                                                                    class="required email form-control">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="w-100"></div>
-
-                                                                        <div class="col-12 mb-3">
-                                                                            <label
-                                                                                for="template-reviewform-rating">Rating</label>
-                                                                            <select id="template-reviewform-rating"
-                                                                                name="template-reviewform-rating"
-                                                                                class="form-select">
-                                                                                <option value="">-- Select One --
-                                                                                </option>
-                                                                                <option value="1">1</option>
-                                                                                <option value="2">2</option>
-                                                                                <option value="3">3</option>
-                                                                                <option value="4">4</option>
-                                                                                <option value="5">5</option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <div class="w-100"></div>
-
-                                                                        <div class="col-12 mb-3">
-                                                                            <label
-                                                                                for="template-reviewform-comment">Comment
-                                                                                <small>*</small></label>
-                                                                            <textarea class="required form-control" id="template-reviewform-comment" name="template-reviewform-comment"
-                                                                                rows="6" cols="30"></textarea>
-                                                                        </div>
-
-                                                                        <div class="col-12">
-                                                                            <button class="button button-3d m-0"
-                                                                                type="submit"
-                                                                                id="template-reviewform-submit"
-                                                                                name="template-reviewform-submit"
-                                                                                value="submit">Submit Review</button>
-                                                                        </div>
-
-                                                                    </form>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Close</button>
-                                                                </div>
-                                                            </div><!-- /.modal-content -->
-                                                        </div><!-- /.modal-dialog -->
-                                                    </div><!-- /.modal -->
-                                                    <!-- Modal Reviews End -->
                                                 </div>
                                             </div>
                                         </div>

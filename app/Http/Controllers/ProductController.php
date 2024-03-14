@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\Shop;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -200,6 +201,8 @@ class ProductController extends Controller
             })->get();
         $wishlistStat = Product::join("wishlist", "wishlist.product_id", "products.id")->where("wishlist.product_id", $id)->first();
 
+        $review = ProductReview::with(["user", "product"])->where("product_id", $id)->get();
+
         if (session()->has("rvp")) {
             if (!in_array($id, session('rvp'))) {
                 if (count(session('rvp')) == 4) {
@@ -213,7 +216,7 @@ class ProductController extends Controller
             session()->push("rvp", $id);
         }
 
-        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd, "wishlist" => $wishlistStat]);
+        return view("regular.product-info", ["data" => $prod, "related" => $relatedProd, "wishlist" => $wishlistStat, "reviews" => $review]);
     }
     public function buyNowCart(Request $request)
     {
