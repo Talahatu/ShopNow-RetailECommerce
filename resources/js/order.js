@@ -439,12 +439,15 @@ $(function () {
         const orderID = $(this).attr("data-dia");
         let courierID = "";
         let date = "";
+        let saku = 0;
         const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" id="saveDelivery" disabled>Simpan</button>
             `);
+
+        let orderPaymentType = null;
         // Query couriers for table and select2
         $.ajax({
             type: "POST",
@@ -455,8 +458,7 @@ $(function () {
             },
         })
             .then(function (response1) {
-                const type = response1.type;
-                console.log(response1);
+                orderPaymentType = response1.type;
                 return $.ajax({
                     type: "POST",
                     url: "/getAllCourier",
@@ -466,7 +468,6 @@ $(function () {
                 });
             })
             .then(function (response) {
-                console.log(response);
                 const couriers = response.couriers;
                 let bodyRows = ``;
                 for (let i = 0; i < couriers.length; i++) {
@@ -512,18 +513,27 @@ $(function () {
                         <span class="mdi mdi-calendar input-group-text"></span>
                       </span>
                     </div>
-                </div>
-                <div class="form mt-4">
-                    <label for="Uang Saku">Uang Operasional</label>
-                    <div class="input-group">
-                        <span class="input-group-text dark-background text-light">Rp</span>
-                        <input id="UangSaku" name="Uang Saku" type="text" class="form-control text-light" placeholder="Masukan nominal uang operasional">
-                    </div>
-                </div>
-                `);
-                $("#UangSaku").mask("#.##0", {
-                    reverse: true,
-                });
+                </div>`);
+
+                if (orderPaymentType == "cod") {
+                    $("#exampleModal").find(".modal-body").append(`
+                        <div class="form mt-4">
+                            <label for="Uang Saku">Uang Operasional</label>
+                            <div class="input-group">
+                                <span class="input-group-text dark-background text-light">Rp</span>
+                                <input id="UangSaku" name="Uang Saku" type="text" class="form-control text-light" placeholder="Masukan nominal uang operasional">
+                            </div>
+                        </div>
+                    `);
+                    $("#UangSaku").mask("#.##0", {
+                        reverse: true,
+                    });
+
+                    $(document).on("input", "#UangSaku", function () {
+                        saku = $(this).cleanVal();
+                        checkModalRequirement(date, courierID, saku);
+                    });
+                }
                 var picker = new Pikaday({
                     field: $(".datepicker")[0],
                     i18n: {
@@ -538,7 +548,7 @@ $(function () {
                     minDate: new Date(),
                     onSelect: function (value) {
                         date = this.toString("YYYY-MM-DD");
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(date, courierID, saku);
                     },
                 });
                 picker.setDate(new Date());
@@ -579,11 +589,11 @@ $(function () {
                     })
                     .on("select2:select", function (e) {
                         courierID = $(e.currentTarget).val();
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(date, courierID, saku);
                     })
                     .on("select2:unselect", function (e) {
                         courierID = "";
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(date, courierID, saku);
                     });
             })
             .catch(function (param) {
@@ -602,6 +612,7 @@ $(function () {
                     orderID: orderID,
                     deliveryDate: date,
                     courierID: courierID,
+                    operasional: saku,
                 },
                 success: function (response) {
                     if (response) {
@@ -638,8 +649,8 @@ const columnOpenFix = () => {
         });
 };
 
-const checkModalRequirement = (date, courier) => {
-    if (date != "" && courier != "") {
+const checkModalRequirement = (date, courier, saku) => {
+    if (date != "" && courier != "" && saku > 0) {
         $("#saveDelivery").attr("disabled", false);
         return;
     }

@@ -37,6 +37,8 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return redirect("/home");
 });
+Route::post('/pusher/auth', [PusherController::class, "auth"]);
+Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
 Route::middleware(["prevent.courier"])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
@@ -109,8 +111,6 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::post("/order/detail", [OrderController::class, "detailOrder"])->name("order.detail");
     Route::post("/getIdsFromOrder", [OrderController::class, "getIDs"])->name("order.getID");
 
-    Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
-
     Route::get("/myCourier", [CourierController::class, "courierIndex"])->name("courier.index");
     Route::get("/createCourier", [CourierController::class, "create"])->name("courier.create");
     Route::post("/storeCourier", [CourierController::class, "store"])->name("courier.store");
@@ -139,7 +139,6 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/getDeliveryDetail", [CourierController::class, "getDetail"])->name("courier.detail");
     Route::post("/pickupItems", [CourierController::class, "pickupItems"])->name("courier.pickup");
     Route::post("/delivery/finish", [CourierController::class, "deliveryFinish"])->name("courier.finish");
-    Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
 
     Route::get("/courier/history", [CourierController::class, "courierHistory"])->name("courier.history");
     Route::get("/courier/fee/history", [CourierController::class, "courierFeeHistory"])->name("courier.fee.history");
@@ -147,9 +146,6 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/courier/fee/withdraw", [CourierController::class, "courierWithdraw"])->name("courier.fee.withdraw");
 });
 
-Route::post('/pusher/auth', [PusherController::class, "auth"]);
-
 Route::get("/test", function (Request $request) {
-
     return view('welcome');
 });

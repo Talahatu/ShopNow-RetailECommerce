@@ -173,6 +173,7 @@ class OrderController extends Controller
             $courierID = $request->get("courierID");
             $orderID = $request->get("orderID");
             $startDate = $request->get("deliveryDate");
+            $operational = $request->get("operational");
 
             $order = Order::with(["shop", "user", "shop.couriers" => function ($query) use ($courierID) {
                 $query->where("id", $courierID)->first();
@@ -184,6 +185,7 @@ class OrderController extends Controller
             $newDelivery->start_date = $startDate;
             $newDelivery->status = "new";
             $newDelivery->resi = $this->generateResiNumber($order->shop->name, $order->user->name, $order->shop->couriers[0]->name);
+            $newDelivery->feeAssigned = $operational;
             $newDelivery->save();
 
             $order->orderStatus = "sent";
