@@ -372,10 +372,20 @@ $(function () {
                     }</label>
                 </div>
             </div>
+            <div class="style-msg infomsg">
+					<div class="sb-msg"><i class="bi-exclamation-diamond-fill"></i><strong>Perhatian!</strong> Jangan lupa untuk memastikan anda menerima uang operasional yang diberikan penjual sebelum memulai pengiriman</div>
+				</div>
+                <div class="form-group row">
+                    <label for="orderTotal" class="col-sm-5 col-form-label"><b>Nominal Uang Operational:&nbsp;</b></label>
+                    <div class="col-sm-7">
+                        <label for="orderTotal" class="col-form-label">${formatter.format(
+                            order.deliveries[0].feeAssigned
+                        )}
+                    </div>
+                </div>
             <hr>
             <div id="map" style="height: 360px" class="m-4"></div>
             `;
-
         if (data == "finish") {
             finishAdd = `
                 <div class="divider divider-rounded divider-center"><i class="bi-camera-fill"></i></div>

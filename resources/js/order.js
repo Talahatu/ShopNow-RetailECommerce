@@ -612,7 +612,7 @@ $(function () {
                     orderID: orderID,
                     deliveryDate: date,
                     courierID: courierID,
-                    operasional: saku,
+                    operational: saku,
                 },
                 success: function (response) {
                     if (response) {
