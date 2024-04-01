@@ -167,6 +167,7 @@ class CourierController extends Controller
         $newDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
             ->where("status", "new")
+            ->where("start_date", Carbon::now(new DateTimeZone("Asia/Jakarta"))->startOfDay()->toDateTimeString())
             ->get();
         $currentDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
