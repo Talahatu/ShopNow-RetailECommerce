@@ -256,40 +256,41 @@ $(function () {
             });
     });
 
-    $("#withdrawFee").on("click", function () {
-        const max = $("#feeAvailable").attr("data-val");
-        $("#exampleModal").find(".modal-footer").html(`
-            <button type="button" class="button button-border button-rounded button-teal button-fill" data-bs-dismiss="modal" id="closeModal"><span>Tutup</span></button>
-            <button type="button" class="button button-border button-rounded button-green button-fill me-2" id="withdrawFeeProcess" disabled><span>Tarik</span></button>
-            
-        `);
-        $("#exampleModalLabel").html("Penarikan Uang Saku");
+    // Might not be used at all
+    // $("#withdrawFee").on("click", function () {
+    //     const max = $("#feeAvailable").attr("data-val");
+    //     $("#exampleModal").find(".modal-footer").html(`
+    //         <button type="button" class="button button-border button-rounded button-teal button-fill" data-bs-dismiss="modal" id="closeModal"><span>Tutup</span></button>
+    //         <button type="button" class="button button-border button-rounded button-green button-fill me-2" id="withdrawFeeProcess" disabled><span>Tarik</span></button>
 
-        $("#exampleModal").find(".modal-body").html(`
-            <div class="col-12">
-                    <label for="operationalFeeWithdraw">Jumlah Uang:</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp</span>
-                            <input id="operationalFeeWithdraw" name="operationalFeeWithdraw" type="text" class="form-control" placeholder="Masukan nominal uang saku">
-                    </div>
-                </div>
-        `);
-        $("#operationalFeeWithdraw").mask("#.##0", {
-            reverse: true,
-        });
+    //     `);
+    //     $("#exampleModalLabel").html("Penarikan Uang Saku");
 
-        $(document).on("input", "#operationalFeeWithdraw", function () {
-            $("#withdrawFeeProcess").attr(
-                "disabled",
-                $(this).cleanVal() <= 5000
-            );
+    //     $("#exampleModal").find(".modal-body").html(`
+    //         <div class="col-12">
+    //                 <label for="operationalFeeWithdraw">Jumlah Uang:</label>
+    //                 <div class="input-group">
+    //                     <span class="input-group-text">Rp</span>
+    //                         <input id="operationalFeeWithdraw" name="operationalFeeWithdraw" type="text" class="form-control" placeholder="Masukan nominal uang saku">
+    //                 </div>
+    //             </div>
+    //     `);
+    //     $("#operationalFeeWithdraw").mask("#.##0", {
+    //         reverse: true,
+    //     });
 
-            if ($(this).cleanVal() > max) {
-                $("#operationalFeeWithdraw").val(max).trigger("input");
-                alert("Nominal melebihi nominal uang saku tersedia!");
-            }
-        });
-    });
+    //     $(document).on("input", "#operationalFeeWithdraw", function () {
+    //         $("#withdrawFeeProcess").attr(
+    //             "disabled",
+    //             $(this).cleanVal() <= 5000
+    //         );
+
+    //         if ($(this).cleanVal() > max) {
+    //             $("#operationalFeeWithdraw").val(max).trigger("input");
+    //             alert("Nominal melebihi nominal uang saku tersedia!");
+    //         }
+    //     });
+    // });
 
     $(document).on("click", "#withdrawFeeProcess", function () {
         $.ajax({

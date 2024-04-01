@@ -64,3 +64,13 @@ li.paginate_button.page-item > a:focus {
 .select2-default {
     color: var(--text-color) !important;
 }
+
+.mdi-calendar.input-group-text {
+    display: flex;
+    height: 100%;
+}
+
+.dark-background {
+    background-color: var(--dark-background);
+    border-color: var(--dark-background);
+}

@@ -45,7 +45,7 @@
                                     <th>Alamat Tujuan</th>
                                     <th>Jarak Tempuh</th>
                                     <th>Tipe Pembayaran</th>
-                                    <th>Aksi</th>
+                                    <th>Aksi/Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

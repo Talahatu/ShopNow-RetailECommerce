@@ -8,6 +8,12 @@ import "datatables.net-rowgroup-bs5";
 import "datatables.net-scroller-bs5";
 import "datatables.net-select-bs5";
 
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
 $(function () {
     $("#navProduct").addClass("active");
     $("#navProduct > div").addClass("show");

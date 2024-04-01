@@ -1,6 +1,13 @@
 import $ from "jquery";
 import Pusher from "pusher-js";
 
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
+
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     const channels = [];

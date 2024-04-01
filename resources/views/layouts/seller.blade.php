@@ -28,7 +28,7 @@
 </head>
 
 <body>
-    <div class="bg-dark opacity-75 loader-container d-none justify-content-center align-items-center" id="loader">
+    <div class="bg-dark opacity-75 loader-container d-flex justify-content-center align-items-center" id="loader">
         <div class="dot-opacity-loader">
             <span></span>
             <span></span>

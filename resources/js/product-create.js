@@ -3,6 +3,12 @@ import "select2/dist/css/select2.min.css";
 import "select2-bootstrap-theme/dist/select2-bootstrap.min.css";
 import "select2";
 import AutoNumeric from "autonumeric";
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
 $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     $.fn.select2.defaults.set("theme", "bootstrap");

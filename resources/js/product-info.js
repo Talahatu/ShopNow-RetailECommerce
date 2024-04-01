@@ -1,4 +1,10 @@
 import $ from "jquery";
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
 $(function () {
     var toastEl = document.getElementById("myToast");
     var toast = new bootstrap.Toast(toastEl);

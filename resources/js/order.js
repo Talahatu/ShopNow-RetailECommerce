@@ -17,6 +17,14 @@ import "select2";
 import "select2/dist/css/select2.min.css";
 import "select2-bootstrap-theme/dist/select2-bootstrap.min.css";
 
+import "jquery-mask-plugin";
+
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
 $(function () {
     $("#navOrder").addClass("active");
     $("#navOrder > div").addClass("show");
@@ -96,7 +104,7 @@ $(function () {
                     } else if (optionType == "done") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                            Rp 10.000
+                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
                         </div>`;
                     } else {
                         return `
@@ -114,17 +122,16 @@ $(function () {
             details: {
                 renderer: function (api, rowIdx, columns) {
                     var data = $.map(columns, function (col, i) {
-                        console.log(col.title);
                         return col.hidden
                             ? '<tr data-dt-row="' +
                                   col.rowIndex +
                                   '" data-dt-column="' +
                                   col.columnIndex +
                                   '">' +
-                                  (col.title == "Aksi"
+                                  (col.title == "Aksi/Keterangan"
                                       ? ``
                                       : `<td>${col.title}</td>`) +
-                                  (col.title == "Aksi"
+                                  (col.title == "Aksi/Keterangan"
                                       ? `<td>${col.data}</td>`
                                       : `<td>: ${col.data}</td>`) +
                                   "</tr>"
@@ -399,10 +406,10 @@ $(function () {
                                               '" data-dt-column="' +
                                               col.columnIndex +
                                               '">' +
-                                              (col.title == "Aksi"
+                                              (col.title == "Aksi/Keterangan"
                                                   ? ``
                                                   : `<td>${col.title}</td>`) +
-                                              (col.title == "Aksi"
+                                              (col.title == "Aksi/Keterangan"
                                                   ? `<td>${col.data}</td>`
                                                   : `<td>: ${col.data}</td>`) +
                                               "</tr>"
@@ -441,58 +448,82 @@ $(function () {
         // Query couriers for table and select2
         $.ajax({
             type: "POST",
-            url: "/getAllCourier",
+            url: "/getOrderPaymentType",
             data: {
                 _token: csrfToken,
+                orderID: orderID,
             },
-            success: function (response) {
+        })
+            .then(function (response1) {
+                const type = response1.type;
+                console.log(response1);
+                return $.ajax({
+                    type: "POST",
+                    url: "/getAllCourier",
+                    data: {
+                        _token: csrfToken,
+                    },
+                });
+            })
+            .then(function (response) {
                 console.log(response);
                 const couriers = response.couriers;
                 let bodyRows = ``;
                 for (let i = 0; i < couriers.length; i++) {
                     bodyRows += `
-                    <tr>
-                        <td>${i + 1}</td>
-                        <td>${couriers[i].name}</td>
-                        <td>${couriers[i].deliveries.length}</td>
-                        <td>${
-                            couriers[i].deliveries.length == 0
-                                ? "Tersedia"
-                                : "Sedang dalam perjalanan"
-                        }</td>
-                    </tr>
-                    `;
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${couriers[i].name}</td>
+                    <td>${couriers[i].deliveries.length}</td>
+                    <td>${
+                        couriers[i].deliveries.length == 0
+                            ? "Tersedia"
+                            : "Sedang dalam perjalanan"
+                    }</td>
+                </tr>
+                `;
                 }
                 $("#exampleModal").find(".modal-body").html(`
-                    <div class="table-responsive">
-                        <h3>Status Kurir Saat ini</h3>
-                        <table class="table table-hover sortable-table">
-                            <thead>
-                                <tr>
-                                    <td>No.</td>
-                                    <td>Nama Kurir</td>
-                                    <td>Pesanan pada kurir</td>
-                                    <td>Status</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${bodyRows}
-                            </tbody>
-                        </table>
+                <div class="table-responsive">
+                    <h3>Status Kurir Saat ini</h3>
+                    <table class="table table-hover sortable-table">
+                        <thead>
+                            <tr>
+                                <td>No.</td>
+                                <td>Nama Kurir</td>
+                                <td>Pesanan pada kurir</td>
+                                <td>Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bodyRows}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form mt-4">
+                    <label for="courier">Pilih kurir</label>
+                    <select class="form-control text-light" name="courier" id="selectCourier"></select>
+                </div>
+                <div class="form mt-4">
+                    <label for="courier">Pilih Tanggal Kirim</label>
+                    <div id="datepicker-popup" class="input-group date">
+                      <input type="text" class="form-control form-control-sm datepicker">
+                      <span class="input-group-addon input-group-append border-left datepicker-icon">
+                        <span class="mdi mdi-calendar input-group-text"></span>
+                      </span>
                     </div>
-                    <div class="form mt-4">
-                        <label for="courier">Pilih kurir</label>
-                        <select class="form-control text-light" name="courier" id="selectCourier"></select>
+                </div>
+                <div class="form mt-4">
+                    <label for="Uang Saku">Uang Operasional</label>
+                    <div class="input-group">
+                        <span class="input-group-text dark-background text-light">Rp</span>
+                        <input id="UangSaku" name="Uang Saku" type="text" class="form-control text-light" placeholder="Masukan nominal uang operasional">
                     </div>
-                    <div class="form mt-4">
-                        <label for="courier">Pilih Tanggal Kirim</label>
-                        <div id="datepicker-popup" class="input-group date">
-                          <input type="text" class="form-control form-control-sm datepicker">
-                          <span class="input-group-addon input-group-append border-left">
-                            <span class="mdi mdi-calendar input-group-text"></span>
-                          </span>
-                        </div>
-                    </div>`);
+                </div>
+                `);
+                $("#UangSaku").mask("#.##0", {
+                    reverse: true,
+                });
                 var picker = new Pikaday({
                     field: $(".datepicker")[0],
                     i18n: {
@@ -511,6 +542,10 @@ $(function () {
                     },
                 });
                 picker.setDate(new Date());
+
+                $(document).on("click", ".datepicker-icon", function () {
+                    picker.show();
+                });
 
                 $("#selectCourier")
                     .select2({
@@ -550,11 +585,10 @@ $(function () {
                         courierID = "";
                         checkModalRequirement(date, courierID);
                     });
-            },
-            error: function (param) {
+            })
+            .catch(function (param) {
                 console.log(param);
-            },
-        });
+            });
 
         // Submit Data
         $("#saveDelivery").on("click", function () {

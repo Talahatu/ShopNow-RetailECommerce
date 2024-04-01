@@ -109,6 +109,8 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::post("/order/detail", [OrderController::class, "detailOrder"])->name("order.detail");
     Route::post("/getIdsFromOrder", [OrderController::class, "getIDs"])->name("order.getID");
 
+    Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
+
     Route::get("/myCourier", [CourierController::class, "courierIndex"])->name("courier.index");
     Route::get("/createCourier", [CourierController::class, "create"])->name("courier.create");
     Route::post("/storeCourier", [CourierController::class, "store"])->name("courier.store");

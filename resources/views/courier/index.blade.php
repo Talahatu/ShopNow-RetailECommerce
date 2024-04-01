@@ -8,13 +8,15 @@
         <div class="container">
             <div class="page-title-row">
                 <div class="page-title-content">
-                    <span class="text-light">Uang Saku</span>
+                    <h1 class="text-light">Halaman Utama Kurir</h1>
+                    {{-- Might not be used at all --}}
+                    {{-- <span class="text-light">Uang Saku</span>
                     <h1 class="text-white" id="feeAvailable" data-val="{{ Auth::guard('courier')->user()->operationalFee }}">Rp
                         {{ number_format(Auth::guard('courier')->user()->operationalFee, 0, ',', '.') }}
                     </h1>
                     <button class="button button-border button-rounded button-dirtygreen mt-2" id="withdrawFee"
                         data-bs-toggle="modal" data-bs-target="#exampleModal">Tarik
-                        Uang</button>
+                        Uang</button> --}}
                 </div>
             </div>
         </div>

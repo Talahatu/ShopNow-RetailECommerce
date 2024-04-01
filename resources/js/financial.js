@@ -1,6 +1,12 @@
 import $ from "jquery";
 import { Chart } from "chart.js/auto";
 
+document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+        $("#loader").addClass("d-none");
+        $("#loader").removeClass("d-flex");
+    }
+};
 $(function () {
     $("#navReport").addClass("active");
     $("#navReport > div").addClass("show");
