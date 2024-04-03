@@ -1,0 +1,8 @@
+.leaflet-routing-container {
+    display: none;
+}
+
+#file-preview {
+    max-width: 540px;
+    height: auto;
+}

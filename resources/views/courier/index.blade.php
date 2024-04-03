@@ -52,10 +52,10 @@
                                 </ul>
                             </div>
                             <div class="entry-content my-3 text-center text-md-start">
-                                <button class="button button-border button-rounded button-green button-fill btnDeliveryDone"
-                                    data-di="{{ $delivery->order_id }}-{{ $delivery->id }}" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal"><i
-                                        class="fa-solid fa-truck-fast"></i><span>Selesaikan</span></button>
+                                <a class="button button-border button-rounded button-green button-fill btnDeliveryDone"
+                                    data-di="{{ $delivery->order_id }}-{{ $delivery->id }}"
+                                    href="{{ route('courierDelivery', [$delivery->order_id, $delivery->id]) }}"><i
+                                        class="fa-solid fa-truck-fast"></i><span>Selesaikan</span></a>
                             </div>
                         </div>
                     </div>

@@ -167,7 +167,8 @@ class CourierController extends Controller
         $newDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
             ->where("status", "new")
-            ->where("start_date", Carbon::now(new DateTimeZone("Asia/Jakarta"))->startOfDay()->toDateTimeString())
+            // Might be used
+            // ->where("start_date", Carbon::now(new DateTimeZone("Asia/Jakarta"))->startOfDay()->toDateTimeString())
             ->get();
         $currentDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
@@ -211,6 +212,13 @@ class CourierController extends Controller
         return response()->json(["data" => $data, "term" => $request->get("searchTerm")]);
     }
 
+    // Changes to new page
+    // public function getDetail(Request $request)
+    // {
+    //     $orderID = $request->get("orderID");
+    //     $order = Order::with(["deliveries", "details", "shop", "user"])->where("id", $orderID)->first();
+    //     return response()->json($order);
+    // }
     public function getDetail(Request $request)
     {
         $orderID = $request->get("orderID");
@@ -305,5 +313,14 @@ class CourierController extends Controller
             return $courier->operationalFee;
         });
         return response()->json($result);
+    }
+
+    public function deliveryDetail($orderID, $deliveryID)
+    {
+        $result = DB::transaction(function () use ($orderID, $deliveryID) {
+            $order = Order::with(["deliveries", "details", "shop", "user"])->where("id", $orderID)->first();
+            return $order;
+        });
+        return view("courier.deliveryDetail", ["order" => $result]);
     }
 }
