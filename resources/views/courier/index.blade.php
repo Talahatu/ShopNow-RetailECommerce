@@ -55,7 +55,7 @@
                                 <a class="button button-border button-rounded button-green button-fill btnDeliveryDone"
                                     data-di="{{ $delivery->order_id }}-{{ $delivery->id }}"
                                     href="{{ route('courierDelivery', [$delivery->order_id, $delivery->id]) }}"><i
-                                        class="fa-solid fa-truck-fast"></i><span>Selesaikan</span></a>
+                                        class="fa-solid fa-truck-fast"></i><span>Rinci Pengiriman</span></a>
                             </div>
                         </div>
                     </div>

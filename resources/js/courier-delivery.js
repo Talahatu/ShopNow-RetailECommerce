@@ -1,6 +1,6 @@
 import $ from "jquery";
 import "leaflet/dist/leaflet.css";
-import L, { marker } from "leaflet";
+import L, { LatLng, marker } from "leaflet";
 import "leaflet-routing-machine";
 import "lrm-graphhopper";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
@@ -74,29 +74,63 @@ $(function () {
         },
     });
 
-    $("#test1").on("change", function () {
-        console.log("Change");
-    });
-    $("#test1").on("click", function () {
-        console.log("Click");
-    });
-    $("#input-10").on("change", function () {
-        console.log("Input Change");
-        console.log($(this).val());
-        const file = this.files[0];
-        if (file) {
-            const fileReader = new FileReader();
-            fileReader.onload = function (event) {
-                $("#file-preview").attr("src", event.target.result);
-            };
-            fileReader.readAsDataURL(file);
-        }
-    });
-    $("#input-10").on("click", function () {
-        console.log("Input Click");
-    });
     $("#backButton").on("click", function () {
-        history.back();
+        window.location.href = "/courier/home";
+    });
+
+    $("#finishDelivery").on("click", function () {
+        const [orderID, deliveryID] = $("#dia").val().split("-");
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
+        $.ajax({
+            type: "POST",
+            url: "/getOrderPaymentType",
+            data: {
+                _token: csrfToken,
+                orderID: orderID,
+            },
+        })
+            .then(function (response) {
+                const type = response.type;
+                let result = true;
+                let saku = 0;
+                let image = $("#proofImage")[0];
+                if (type == "cod") {
+                    saku = $("#operationalFeeUsed").cleanVal();
+                    result = confirm(
+                        "Apakah anda yakin uang saku yang digunakan sebesar " +
+                            formatter.format(saku) +
+                            "?"
+                    );
+                }
+
+                let formData = new FormData();
+                formData.append("_token", csrfToken);
+                formData.append("file", image.files[0]);
+                formData.append("orderID", orderID);
+                formData.append("deliveryID", deliveryID);
+                formData.append("moneyUsed", saku);
+                formData.append("type", type);
+
+                if (result)
+                    return $.ajax({
+                        type: "POST",
+                        url: "/delivery/finish",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                    });
+            })
+            .then(function (response) {
+                if (response) {
+                    sessionStorage.removeItem("lat");
+                    sessionStorage.removeItem("lng");
+                    window.location.href = "/courier/home";
+                }
+            })
+            .catch(function (param) {
+                console.log(param);
+            });
     });
 
     const generateMap = (latitudeDestination, longitudeDestination) => {
@@ -117,6 +151,8 @@ $(function () {
             watch: true,
             enableHighAccuracy: true,
         });
+
+        let counter = 0; // For lighter check (hopefully)
 
         map.on("locationfound", function (e) {
             if (e.accuracy <= 50) {
@@ -163,6 +199,11 @@ $(function () {
                     routeWhileDragging: false,
                     addWaypoints: false,
                 }).addTo(map);
+
+                sessionStorage.setItem("lat", currentPosition.lat);
+                sessionStorage.setItem("lng", currentPosition.lng);
+
+                counter = 0;
             } else {
                 // For Debug Purposes
                 // console.log(
@@ -170,6 +211,57 @@ $(function () {
                 //         e.accuracy
                 // );
                 map.spin(true);
+
+                if (sessionStorage.getItem("lat") && counter <= 0) {
+                    console.log("TEST");
+                    let currentLatitude = sessionStorage.getItem("lat");
+                    let currentLongitude = sessionStorage.getItem("lng");
+                    if (!markerStart) {
+                        markerStart = L.marker(
+                            [currentLatitude, currentLongitude],
+                            {
+                                draggable: false,
+                                bubblingMouseEvents: false,
+                            }
+                        ).addTo(map);
+                        markerEnd = L.marker(
+                            [latitudeDestination, longitudeDestination],
+                            {
+                                draggable: false,
+                                bubblingMouseEvents: false,
+                            }
+                        ).addTo(map);
+                    } else {
+                        markerStart.setLatLng(
+                            new LatLng(currentLatitude, currentLongitude)
+                        );
+                    }
+
+                    // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
+                    markerStart
+                        .bindTooltip("<b>Lokasi Saat Ini</b>")
+                        .openTooltip();
+
+                    markerEnd.bindTooltip("<b>Alamat Tujuan</b>").openTooltip();
+
+                    // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
+                    let routeControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(currentLatitude, currentLongitude), // Start point
+                            L.latLng(latitudeDestination, longitudeDestination), // End point
+                        ],
+                        router: L.Routing.graphHopper(
+                            "fc06c31b-e90b-47b4-941f-42b9c8971b33"
+                        ),
+                        createMarker: function (i, waypoint, n) {
+                            return i === 0 ? markerStart : markerEnd;
+                        },
+                        routeWhileDragging: false,
+                        addWaypoints: false,
+                    }).addTo(map);
+
+                    counter++;
+                }
             }
         });
 

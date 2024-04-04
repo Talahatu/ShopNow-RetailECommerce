@@ -21,7 +21,7 @@ class CreateCourierFeeHistories extends Migration
             $table->enum("type", ["add", "withdraw", "used"]);
             $table->timestamps();
             $table->foreign("courier_id")->references("id")->on("courier");
-            $table->dateTime("tanggal");
+            $table->dateTime("date");
         });
     }
 

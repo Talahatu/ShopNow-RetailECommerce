@@ -102,7 +102,7 @@ $(function () {
                                 <div class="entry-content my-3 text-center text-md-start">
                                     <a class="button button-border button-rounded button-green button-fill btnDeliveryDone"
                                         data-di="${id}-${deliveryID}" href="${baseUrl}/courier/delivery/${id}/${deliveryID}"><i
-                                            class="fa-solid fa-truck-fast"></i><span>Selesaikan</span></a>
+                                            class="fa-solid fa-truck-fast"></i><span>Rinci Pengiriman</span></a>
                                 </div>
                             </div>
                         </div>
