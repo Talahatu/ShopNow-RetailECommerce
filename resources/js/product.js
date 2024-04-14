@@ -113,6 +113,7 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
+        columnDefs: [{ targets: [2, 3], className: "text-end" }],
     });
 
     $.ajax({
@@ -195,6 +196,7 @@ $(function () {
                         return "row_" + row.id;
                     },
                     columns: DTcolumns(type),
+                    columnDefs: [{ targets: [2, 3], className: "text-end" }],
                 });
                 table.rows.add(data).draw();
                 table.columns.adjust().draw();

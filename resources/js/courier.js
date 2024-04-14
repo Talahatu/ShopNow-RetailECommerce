@@ -88,6 +88,7 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
+        columnDefs: [{ targets: [2], className: "text-end" }],
     });
     columnOpenFix();
 });

@@ -83,24 +83,11 @@ $(function () {
                             <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim</button>
                         </div>`;
                     } else if (optionType == "sent") {
-                        if (data.deliveries[0].status == "done") {
-                            if (data.type == "cod") {
-                                return `
-                                <div class="d-flex flex-column btn-group-vertical">
-                                Menunggu kurir setor tunai
-                                </div>`;
-                            }
-
-                            return `
-                            <div class="d-flex flex-column btn-group-vertical">
-                                Menunggu persetujuan pembeli
-                            </div>`;
-                        } else {
-                            return `
-                            <div class="d-flex flex-column btn-group-vertical">
-                            Kurir sedang dalam Perjalanan
-                            </div>`;
-                        }
+                        return `
+                        <div class="d-flex flex-column btn-group-vertical">
+                        <button type="button" class="btn btn-block btn-lg btn-outline-success btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pesanan</button>
+                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail-delivery p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pengiriman</button>
+                        </div>`;
                     } else if (optionType == "done") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
@@ -147,6 +134,7 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
+        columnDefs: [{ targets: [1, 2], className: "text-end" }],
     });
 
     $.ajax({
@@ -298,6 +286,117 @@ $(function () {
                         <td class="text-center"><img src="${baseUrl}/productimages/${item.iname}"></img></td>
                         <td>${item.pname}</td>
                         <td>${item.sku}</td>
+                        <td class="text-end">${item.qty}</td>
+                        <td class="text-end">${item.price}</td>
+                        <td class="text-end">${item.subtotal}</td>
+                    </tr>
+                    `;
+                }
+                $("#exampleModal").find(".modal-body").html(`
+                <div class="orderDetails">
+                    <div class="forms-sample">
+                        <div class="form-group row">
+                            <label for="orderDate" class="col-sm-3 col-form-label">Tanggal Pesanan</label>
+                            <div class="col-sm-9">
+                                <label for="orderDate" class="col-form-label">:&nbsp;${
+                                    ordersInfo.order_date
+                                }</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Nama Pelanggan" class="col-sm-3 col-form-label">Nama Pelanggan</label>
+                            <div class="col-sm-9">
+                                <label for="destination" class="col-form-label">:&nbsp;${
+                                    ordersInfo.user.name
+                                }</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="destination" class="col-sm-3 col-form-label">Alamat Tujuan</label>
+                            <div class="col-sm-9">
+                                <label for="destination" class="col-form-label">:&nbsp;${
+                                    ordersInfo.destination_address
+                                }&nbsp;
+                                    <span class="text-muted">&lpar;Jarak Perkiraan ${Math.round(
+                                        products[0].distance
+                                    )} KM&rpar;</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="paymentMethod" class="col-sm-3 col-form-label">Metode Pembayaran</label>
+                            <div class="col-sm-9">
+                                <label for="paymentMethod" class="col-form-label">:&nbsp;${
+                                    ordersInfo.payment_method
+                                }</label>
+                            </div>
+                        </div>
+                        <hr>
+                        <h3>Produk Dipesan: </h3>
+                        <div class="card table-responsive">
+                            <table class="table table-hover sortable-table">
+                                <thead>
+                                    <tr>
+                                        <th>Gambar</th>
+                                        <th>Nama</th>
+                                        <th>SKU</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga/pcs</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    ${tableRow}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="footer mt-1 text-end" style="padding-bottom:0px;">
+                        <h4 class="subtotal">Subtotal: ${formatter.format(
+                            ordersInfo.subtotal
+                        )}</h4>
+                        <h4 class="shippingFee">Ongkos Kirim: ${formatter.format(
+                            ordersInfo.shippingFee
+                        )}</h4>
+                        <h2 class="totalAll">Total: ${formatter.format(
+                            ordersInfo.total
+                        )}</h2>
+                    </div>
+                </div>
+                `);
+            },
+            error: function (param) {
+                console.log(param);
+            },
+        });
+    });
+
+    $(document).on("click", ".btn-detail-delivery", function () {
+        const orderID = $(this).attr("data-dia");
+        const IDOrder = $("#row_" + orderID)
+            .find("td.dtr-control")
+            .text();
+        $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
+        $("#exampleModal").find(".modal-footer").html(`
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        `);
+        $.ajax({
+            type: "POST",
+            url: "/order/detail",
+            data: {
+                _token: csrfToken,
+                orderID: orderID,
+            },
+            success: function (response) {
+                const ordersInfo = response.info;
+                const products = response.products;
+                let tableRow = "";
+                console.log(ordersInfo);
+                for (const item of products) {
+                    tableRow += `
+                    <tr>
+                        <td class="text-center"><img src="${baseUrl}/productimages/${item.iname}"></img></td>
+                        <td>${item.pname}</td>
+                        <td>${item.sku}</td>
                         <td>${item.qty}</td>
                         <td>${item.price}</td>
                         <td>${item.subtotal}</td>
@@ -427,6 +526,7 @@ $(function () {
                         return "row_" + row.id;
                     },
                     columns: DTcolumns(type),
+                    columnDefs: [{ targets: [0, 2], className: "text-end" }],
                 });
                 table.rows.add(data).draw();
                 table.columns.adjust().draw();
