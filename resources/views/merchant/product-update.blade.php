@@ -6,13 +6,13 @@
     <input type="hidden" name="dia" id="dia" value="{{ $data->category_id }}-{{ $data->brand_id }}">
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">Update Existing Product</h3>
+            <h3 class="page-title">Ubah Rinci Produk</h3>
         </div>
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Please Fill The Form!</h4>
-                    <p class="card-description"> {{ $data->name }}'s Information </p>
+                    <h4 class="card-title">Mohon isi data produk!</h4>
+                    <p class="card-description"> Rincian {{ $data->name }} </p>
                     <form class="forms-sample" action="{{ route('product.update', $data->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -58,8 +58,7 @@
                             {{-- Button Choose Image --}}
                             <div class="d-flex justify-content-center">
                                 <div class="btn btn-dark btn-rounded">
-                                    <label class="form-label text-white m-1" for="image">Choose
-                                        Image</label>
+                                    <label class="form-label text-white m-1" for="image">Pilih Gambar</label>
                                     <input type="file" name="image[]" class="form-control d-none" id="image"
                                         multiple />
                                     @error('image')
@@ -69,7 +68,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputName">Name</label>
+                            <label for="inputName">Nama Produk</label>
                             <input type="text" class="form-control text-light @error('name') is-invalid @enderror"
                                 value="{{ $data->name }}" id="inputName" name="name" placeholder="Name">
                             @error('name')
@@ -78,7 +77,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputDesc">Description</label>
+                            <label for="inputDesc">Deskripsi</label>
                             <textarea class="form-control text-light @error('desc') is-invalid @enderror" id="inputDesc" name="desc"
                                 placeholder="Description" rows="4">{{ $data->description }}</textarea>
                             @error('desc')
@@ -87,7 +86,7 @@
                             @enderror
                         </div>
                         <div class="form-group mb-4">
-                            <label for="">Choose a category</label>
+                            <label for="">Pilih Kategori</label>
                             <select class="form-control text-light @error('category') is-invalid @enderror" name="category"
                                 id="selectCategory">
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -98,7 +97,7 @@
                             @enderror
                         </div>
                         <div class="form-group mb-4">
-                            <label for="">Choose a brand</label>
+                            <label for="">Pilih Merek</label>
                             <select class="form-control text-light  @error('brand') is-invalid @enderror" name="brand"
                                 id="selectBrand">
                                 <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -109,7 +108,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputWeight">Weight</label>
+                            <label for="inputWeight">Berat</label>
                             <div class="input-group">
                                 <input type="number"
                                     class="form-control text-light @error('weight') is-invalid @enderror"
@@ -125,7 +124,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputStock">Stock</label>
+                            <label for="inputStock">Jumlah Tersedia</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('stock') is-invalid @enderror"
                                     value="{{ $data->stock }}" id="inputStock" name="stock" placeholder="Stock"
@@ -137,7 +136,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="inputPrice">Price</label>
+                            <label for="inputPrice">Harga</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Rp.</span>
@@ -151,8 +150,8 @@
                                     {{ $message }}</label>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary me-2">Submit</button>
-                        <a class="btn btn-dark" href="{{ route('product.index') }}">Cancel</a>
+                        <button type="submit" class="btn btn-primary me-2">Simpan</button>
+                        <a class="btn btn-dark" href="{{ route('product.index') }}">Batalkan</a>
                     </form>
                 </div>
             </div>

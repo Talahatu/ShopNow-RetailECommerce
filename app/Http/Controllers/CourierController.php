@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use PDO;
 
 use function Ramsey\Uuid\v1;
 
@@ -56,6 +57,27 @@ class CourierController extends Controller
 
             $this->newCourierSendMail($email, $newCourier);
             $newCourier->password = bcrypt($newCourier->password);
+            $newCourier->save();
+        });
+        return redirect()->route("courier.index");
+    }
+
+    public function showUpdatePage($id)
+    {
+        $courier = Courier::find($id);
+        $shop = Shop::where("user_id", Auth::user()->id)->first();
+        return view("merchant.courier-update", compact("courier", "shop"));
+    }
+    public function update(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $name = $request->get("name");
+            $email = $request->get("email");
+            $id = $request->get("dia");
+
+            $newCourier = Courier::find($id);
+            $newCourier->name = $name;
+            $newCourier->email = $email;
             $newCourier->save();
         });
         return redirect()->route("courier.index");
@@ -322,5 +344,15 @@ class CourierController extends Controller
             return $order;
         });
         return view("courier.deliveryDetail", ["order" => $result]);
+    }
+
+    public function deleteCourier($id)
+    {
+        $result = DB::transaction(function () use ($id) {
+            $courier = Courier::find($id);
+            $courier->delete();
+            return true;
+        });
+        return response()->json($result);
     }
 }

@@ -43,7 +43,9 @@ $(function () {
 
     var DTcolumns = () => {
         return [
-            { data: "id" },
+            {
+                data: "id",
+            },
             { data: "name" },
             {
                 data: "operationalFee",
@@ -52,7 +54,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    const html = `<button class="btn btn-outline-success">Saku</button>`;
+                    const html = `<a class="btn btn-outline-info btn-update m-1" data-di="${data.id}" href="${baseUrl}/courier/update/${data.id}">Ubah</a><br><button class="btn btn-outline-danger btn-delete m-1" data-di="${data.id}">Hapus</button>`;
                     return html;
                 },
             },
@@ -84,13 +86,31 @@ $(function () {
             },
         },
         language: opsiLanguage,
-        rowId: function (row) {
-            return "row_" + row.id;
-        },
         columns: DTcolumns(),
-        columnDefs: [{ targets: [2], className: "text-end" }],
+        columnDefs: [
+            { targets: [2], className: "text-end" },
+            { targets: [0], visible: false },
+        ],
     });
     columnOpenFix();
+
+    $(document).on("click", ".btn-delete", function () {
+        let result = confirm("Apakah anda yakin ingin menghapus kurir ini?");
+        if (!result) return;
+        const id = $(this).attr("data-di");
+        $.ajax({
+            type: "DELETE",
+            url: "/courier/delete/" + id,
+            headers: { "X-CSRF-TOKEN": csrfToken },
+            success: function (response) {
+                if (!response) return;
+                $("#row_" + id).remove();
+            },
+            error: function (er) {
+                console.log(er);
+            },
+        });
+    });
 });
 
 const columnOpenFix = () => {

@@ -18,7 +18,7 @@
                         style="width: 100% !important">
                         <thead>
                             <tr>
-                                <th>No.</th>
+                                <th>id</th>
                                 <th>Nama</th>
                                 <th>Uang Saku</th>
                                 <th>Status Pengiriman</th>
@@ -27,13 +27,16 @@
                         </thead>
                         <tbody>
                             @for ($i = 0; $i < count($couriers); $i++)
-                                <tr>
-                                    <td>{{ $i + 1 }}</td>
+                                <tr id="row_{{ $couriers[$i]->id }}">
+                                    <td>{{ $couriers[$i]->id }}</td>
                                     <td>{{ $couriers[$i]->name }}</td>
-                                    <td>{{ $couriers[$i]->operationalFee }}</td>
+                                    <td>Rp {{ $couriers[$i]->operationalFee }}</td>
                                     <td>{{ count($couriers[$i]->filteredDeliveries('progress')) <= 0 ? 'Tersedia' : 'Sedang Dalam Perjalanan' }}
                                     </td>
-                                    <td><button class="btn btn-outline-success">Saku</button></td>
+                                    <td><a class="btn btn-outline-info btn-update m-1" data-di="{{ $couriers[$i]->id }}"
+                                            href="{{ route('courier.show.update', $couriers[$i]->id) }}">Ubah</a><br><button
+                                            class="btn btn-outline-danger btn-delete m-1"
+                                            data-di="{{ $couriers[$i]->id }}">Hapus</button></td>
                                 </tr>
                             @endfor
                         </tbody>

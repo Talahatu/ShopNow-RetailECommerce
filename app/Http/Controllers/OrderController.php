@@ -235,4 +235,17 @@ class OrderController extends Controller
         // Inisial Nama Toko + Inisial Nama Pelanggan + Inisial Nama Kurir + Tanggal Pengiriman (Ymds)
         return strtoupper($toko[0]) . strtoupper($user[0]) . strtoupper($courier[0]) . now()->format("Ymds");
     }
+
+    public function deliveryDetail(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $orderID = $request->get("orderID");
+
+            $order = Order::with(["deliveries.courier"])->where("id", $orderID)->first();
+
+            return $order;
+        });
+
+        return response()->json($result);
+    }
 }
