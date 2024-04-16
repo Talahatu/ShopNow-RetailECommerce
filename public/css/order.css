@@ -74,3 +74,7 @@ li.paginate_button.page-item > a:focus {
     background-color: var(--dark-background);
     border-color: var(--dark-background);
 }
+
+.bg-lighter {
+    background-color: var(--text-color);
+}

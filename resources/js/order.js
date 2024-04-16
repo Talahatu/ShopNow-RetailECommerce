@@ -377,7 +377,9 @@ $(function () {
             .text();
         $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Selesaikan Pengiriman</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
 
         $.ajax({
@@ -388,7 +390,78 @@ $(function () {
                 orderID: orderID,
             },
             success: function (response) {
-                console.log(response);
+                const data = response;
+                const delivery = data.deliveries[0];
+                // Tanggal pickup/mulai pengiriman, tanggal selesai pengirimaan
+                let tableRow = `
+                    <tr>
+                        <td>Mulai Pengiriman</td>
+                        <td>${
+                            delivery.pickup_date ? delivery.pickup_date : "-"
+                        }</td>
+                        <td class="text-end">${delivery.courier.name}</td>
+                    </tr>
+                    <tr>
+                        <td>Sampai Tujuan</td>
+                        <td>${
+                            delivery.arrive_date ? delivery.arrive_date : "-"
+                        }</td>
+                        <td class="text-end">${delivery.courier.name}</td>
+                    </tr>
+                    `;
+                const downContent =
+                    data.payment_method == "cod"
+                        ? `<h5 class="subtotal muted">Uang Saku Diberikan: ${formatter.format(
+                              delivery.feeAssigned
+                          )}</h5>
+                <h5 class="shippingFee muted">Uang Saku Digunakan: ${formatter.format(
+                    delivery.feeUsed
+                )}</h5>
+                <h5 class="totalAll muted">Total Pesanan: ${formatter.format(
+                    data.total
+                )}</h5>
+                <h4>Nominal Uang Diterima Dari Kurir: ${formatter.format(
+                    data.total + (delivery.feeAssigned - delivery.feeUsed)
+                )}</h4>
+                <small>*Pastikan telah menerima uang dari kurir!</small>`
+                        : `<h5 class="totalAll muted">Total Pesanan: ${formatter.format(
+                              data.total
+                          )}</h5>`;
+
+                $("#exampleModal").find(".modal-body").html(`
+                <div class="orderDetails">
+                        <div class="card table-responsive">
+                            <table class="table table-hover sortable-table">
+                                <thead>
+                                    <tr>
+                                        <th>Keterangan</th>
+                                        <th>Tanggal</th>
+                                        <th>Nama Kurir</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    ${tableRow}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="footer mt-1 text-end" style="padding-bottom:0px;">
+                        <h5 class="subtotal muted">Uang Saku Diberikan: ${formatter.format(
+                            delivery.feeAssigned
+                        )}</h5>
+                        <h5 class="shippingFee muted">Uang Saku Digunakan: ${formatter.format(
+                            delivery.feeUsed
+                        )}</h5>
+                        <h5 class="totalAll muted">Total Pesanan: ${formatter.format(
+                            data.total
+                        )}</h5>
+                        <h4>Nominal Uang Diterima Dari Kurir: ${formatter.format(
+                            data.total +
+                                (delivery.feeAssigned - delivery.feeUsed)
+                        )}</h4>
+                        <small>*Pastikan telah menerima uang dari kurir!</small>
+                        </div>
+                </div>
+                `);
             },
             error: function (param) {
                 console.log(param);
