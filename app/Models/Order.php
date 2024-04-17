@@ -154,6 +154,41 @@ class Order extends Model
 
     public static function getOrder($shopID, $type)
     {
+        if ($type == "sent") {
+            return Order::with(["details", "deliveries"])
+                ->join("delivery", "delivery.order_id", "orders.id")
+                ->where("orders.shop_id", $shopID)
+                ->where("orders.orderStatus", "sent")
+                ->orWhere(function ($query) {
+                    $query->where("orders.orderStatus", "done")
+                        ->where("delivery.status", "!=", "done");
+                })
+                ->get(
+                    [
+                        "orders.id",
+                        "orders.destination_address",
+                        DB::raw("ROUND(orders.distance,0) AS distance"),
+                        "orders.payment_method",
+                        "orders.orderID",
+                    ]
+                );
+        }
+        if ($type == "done") {
+            return Order::with(["details", "deliveries"])
+                ->join("delivery", "delivery.order_id", "orders.id")
+                ->where("orders.shop_id", $shopID)
+                ->where("orders.orderStatus", "done")
+                ->where("delivery.status", "done")
+                ->get(
+                    [
+                        "orders.id",
+                        "orders.destination_address",
+                        DB::raw("ROUND(orders.distance,0) AS distance"),
+                        "orders.payment_method",
+                        "orders.orderID",
+                    ]
+                );
+        }
         return Order::with(["details", "deliveries"])
             ->where([
                 ["orders.shop_id", $shopID],

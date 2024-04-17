@@ -118,70 +118,94 @@ $(function () {
                                 "click",
                                 "#btnFinishOrder",
                                 function () {
-                                    const modal =
-                                        document.getElementById("exampleModal");
-                                    bootstrap.Modal.getInstance(modal).hide();
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/profile/order/finish",
+                                        data: {
+                                            _token: csrfToken,
+                                            orderID: order.id,
+                                        },
+                                        success: function (response) {
+                                            if (response) {
+                                                $("#item-" + order.id).remove();
 
-                                    $("#exampleModal2")
-                                        .find("#modalTitle")
-                                        .html("Berikan ulasan pesanan");
+                                                const modal =
+                                                    document.getElementById(
+                                                        "exampleModal"
+                                                    );
+                                                bootstrap.Modal.getInstance(
+                                                    modal
+                                                ).hide();
 
-                                    $("#exampleModal2").find("#modalBody")
-                                        .html(`
-                                        <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <label for="starRating" class="form-label">Berikan Rating!</label>
-                                            <input type="number" class="rating" id="starRating">
-                                        </div>
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Berikan Ulasan" id="floatingTextarea" style="height:200px"></textarea>
-                                            <label for="floatingTextarea">Ulasan...</label>
-                                        </div>
-                                    `);
-                                    $("#starRating").rating({
-                                        min: 0,
-                                        max: 5,
-                                        step: 1,
-                                        size: "lg",
-                                        showCaption: false,
-                                    });
+                                                $("#exampleModal2")
+                                                    .find("#modalTitle")
+                                                    .html(
+                                                        "Berikan ulasan pesanan"
+                                                    );
 
-                                    $("#exampleModal2").on(
-                                        "click",
-                                        "#btnSave",
-                                        function () {
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "/profile/order/finish",
-                                                data: {
-                                                    _token: csrfToken,
-                                                    orderID: order.id,
-                                                    rating: $(
-                                                        "#starRating"
-                                                    ).val(),
-                                                    review: $(
-                                                        "#floatingTextarea"
-                                                    ).val(),
-                                                },
-                                                success: function (response) {
-                                                    if (response) {
-                                                        $(
-                                                            "#item-" + order.id
-                                                        ).remove();
+                                                $("#exampleModal2").find(
+                                                    "#modalBody"
+                                                ).html(`
+                                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                                            <label for="starRating" class="form-label">Berikan Rating!</label>
+                                                            <input type="number" class="rating" id="starRating">
+                                                        </div>
+                                                        <div class="form-floating">
+                                                            <textarea class="form-control" placeholder="Berikan Ulasan" id="floatingTextarea" style="height:200px"></textarea>
+                                                            <label for="floatingTextarea">Ulasan...</label>
+                                                        </div>
+                                                    `);
+                                                $("#starRating").rating({
+                                                    min: 0,
+                                                    max: 5,
+                                                    step: 1,
+                                                    size: "lg",
+                                                    showCaption: false,
+                                                });
 
-                                                        const modal =
-                                                            document.getElementById(
-                                                                "exampleModal2"
-                                                            );
-                                                        bootstrap.Modal.getInstance(
-                                                            modal
-                                                        ).hide();
-
-                                                        window.location.reload();
+                                                $("#exampleModal2").on(
+                                                    "click",
+                                                    "#btnSave",
+                                                    function () {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: "/profile/order/giveRating",
+                                                            data: {
+                                                                _token: csrfToken,
+                                                                orderID:
+                                                                    order.id,
+                                                                rating: $(
+                                                                    "#starRating"
+                                                                ).val(),
+                                                                review: $(
+                                                                    "#floatingTextarea"
+                                                                ).val(),
+                                                            },
+                                                            success: function (
+                                                                response
+                                                            ) {
+                                                                const modal =
+                                                                    document.getElementById(
+                                                                        "exampleModal2"
+                                                                    );
+                                                                bootstrap.Modal.getInstance(
+                                                                    modal
+                                                                ).hide();
+                                                                window.location.reload();
+                                                            },
+                                                        });
                                                     }
-                                                },
-                                            });
-                                        }
-                                    );
+                                                );
+                                            }
+
+                                            $("#exampleModal2").on(
+                                                "hidden.bs.modal",
+                                                function () {
+                                                    window.location.reload();
+                                                }
+                                            );
+                                        },
+                                    });
                                 }
                             );
                         }

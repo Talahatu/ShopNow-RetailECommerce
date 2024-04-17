@@ -233,8 +233,6 @@ class UserController extends Controller
     {
         $result = DB::transaction(function () use ($request) {
             $orderID = $request->get("orderID");
-            $review = $request->get("review");
-            $rating = $request->get("rating");
 
             $order = Order::with(["details.product.images", "shop", "deliveries"])
                 ->where("id", $orderID)
@@ -257,23 +255,38 @@ class UserController extends Controller
             $shop->saldo_release = $shop->saldo_release + $income->income;
             $shop->save();
 
+            return true;
+        });
+        return response()->json($result);
+    }
+
+    public function giveRating(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $review = $request->get("review");
+            $rating = $request->get("rating");
+            $orderID = $request->get("orderID");
+
+            $order = Order::with(["details.product.images"])
+                ->where("id", $orderID)
+                ->first();
             foreach ($order->details as  $value) {
                 $totalSold = ProductReview::where("product_id", $value->product_id)->count();
 
-                $newReview = new ProductReview();
-                $newReview->user_id = $order->user_id;
-                $newReview->product_id = $value->product_id;
-                $newReview->rating = $rating;
-                $newReview->review = $review;
-                $newReview->save();
+                if ($review != "") {
+                    $newReview = new ProductReview();
+                    $newReview->user_id = $order->user_id;
+                    $newReview->product_id = $value->product_id;
+                    $newReview->rating = $rating;
+                    $newReview->review = $review;
+                    $newReview->save();
+                }
 
                 $product = Product::find($value->product_id);
                 $newAVG = $this->calculateNewAverageRating($product->rating, $totalSold, $rating);
                 $product->rating = $newAVG;
                 $product->save();
             }
-
-            return true;
         });
         return response()->json($result);
     }

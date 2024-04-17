@@ -64,6 +64,7 @@ Route::middleware(["auth", "prevent.courier"])->group(function () {
 
     Route::post("/profile/order/detail", [UserController::class, "getOrderDetail"])->name("profile.order.detail");
     Route::post("/profile/order/finish", [UserController::class, "orderFinish"])->name("profile.order.finish");
+    Route::post("/profile/order/giveRating", [UserController::class, "giveRating"]);
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");
@@ -111,6 +112,7 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::post("/order/detail", [OrderController::class, "detailOrder"])->name("order.detail");
     Route::post("/getIdsFromOrder", [OrderController::class, "getIDs"])->name("order.getID");
     Route::post("/delivery/detail", [OrderController::class, "deliveryDetail"])->name("order.delivery.detail");
+    Route::post("/delivery/done", [OrderController::class, "deliveryDone"]);
 
     Route::get("/myCourier", [CourierController::class, "courierIndex"])->name("courier.index");
     Route::get("/createCourier", [CourierController::class, "create"])->name("courier.create");

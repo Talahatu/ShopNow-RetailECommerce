@@ -79,14 +79,14 @@ $(function () {
                     } else if (optionType == "accepted") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
                             <button type="button" class="btn btn-block btn-lg btn-outline-success btn-send p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Kirim</button>
                         </div>`;
                     } else if (optionType == "sent") {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                        <button type="button" class="btn btn-block btn-lg btn-outline-success btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pesanan</button>
-                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail-delivery p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pengiriman</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-success btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pesanan</button>
+                            <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail-delivery p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian Pengiriman</button>
                         </div>`;
                     } else if (optionType == "done") {
                         return `
@@ -279,7 +279,6 @@ $(function () {
                 const ordersInfo = response.info;
                 const products = response.products;
                 let tableRow = "";
-                console.log(ordersInfo);
                 for (const item of products) {
                     tableRow += `
                     <tr>
@@ -378,7 +377,7 @@ $(function () {
         $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
         
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Selesaikan Pengiriman</button>
+        <button type="button" class="btn btn-success" id="finishDelivery">Selesaikan Pengiriman</button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
 
@@ -420,7 +419,8 @@ $(function () {
                 <h5 class="totalAll muted">Total Pesanan: ${formatter.format(
                     data.total
                 )}</h5>
-                <h4>Nominal Uang Diterima Dari Kurir: ${formatter.format(
+                <hr>
+                <h4>Nominal Uang Dari Pengiriman: ${formatter.format(
                     data.total + (delivery.feeAssigned - delivery.feeUsed)
                 )}</h4>
                 <small>*Pastikan telah menerima uang dari kurir!</small>`
@@ -430,6 +430,7 @@ $(function () {
 
                 $("#exampleModal").find(".modal-body").html(`
                 <div class="orderDetails">
+                <h3>Riwayat Pengiriman: </h3>
                         <div class="card table-responsive">
                             <table class="table table-hover sortable-table">
                                 <thead>
@@ -445,23 +446,38 @@ $(function () {
                             </table>
                         </div>
                         <div class="footer mt-1 text-end" style="padding-bottom:0px;">
-                        <h5 class="subtotal muted">Uang Saku Diberikan: ${formatter.format(
-                            delivery.feeAssigned
-                        )}</h5>
-                        <h5 class="shippingFee muted">Uang Saku Digunakan: ${formatter.format(
-                            delivery.feeUsed
-                        )}</h5>
-                        <h5 class="totalAll muted">Total Pesanan: ${formatter.format(
-                            data.total
-                        )}</h5>
-                        <h4>Nominal Uang Diterima Dari Kurir: ${formatter.format(
-                            data.total +
-                                (delivery.feeAssigned - delivery.feeUsed)
-                        )}</h4>
-                        <small>*Pastikan telah menerima uang dari kurir!</small>
+                        ${downContent}
                         </div>
                 </div>
                 `);
+
+                $(document).on("click", "#finishDelivery", function () {
+                    const parent = $("#row_" + orderID);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/delivery/done",
+                        data: {
+                            _token: csrfToken,
+                            deliveryID: delivery.id,
+                        },
+                        success: function (response) {
+                            if (response) {
+                                const modal =
+                                    document.getElementById("exampleModal");
+                                bootstrap.Modal.getInstance(modal).hide();
+
+                                $(parent).next().hasClass("child")
+                                    ? $(parent).next().remove()
+                                    : "";
+                                $(parent).remove();
+                            }
+                        },
+                        error: function (param) {
+                            console.log(param);
+                        },
+                    });
+                });
             },
             error: function (param) {
                 console.log(param);
@@ -519,6 +535,9 @@ $(function () {
                 table.rows.add(data).draw();
                 table.columns.adjust().draw();
                 columnOpenFix();
+            },
+            error: function (err) {
+                console.log(err);
             },
         });
     });

@@ -121,8 +121,8 @@
                     saku digunakan" untuk menyelesaikan pengiriman</div>
             </div>
             <div class="form-group row">
-                <label for="orderTotal" class="col-sm-5 col-form-label"><b>Total Pembayaran:&nbsp;</b></label>
-                <div class="col-sm-7">
+                <label for="orderTotal" class="col-sm-3 col-form-label"><b>Total Pembayaran:&nbsp;</b></label>
+                <div class="col-sm-9">
                     <label for="orderTotal" class="col-form-label">Rp. {{ number_format($order->total, 0, ',', '.') }}
                 </div>
             </div>

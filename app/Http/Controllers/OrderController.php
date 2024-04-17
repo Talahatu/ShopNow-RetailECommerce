@@ -248,4 +248,16 @@ class OrderController extends Controller
 
         return response()->json($result);
     }
+
+    public function deliveryDone(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $deliveryID = $request->get("deliveryID");
+            $delivery = Delivery::find($deliveryID);
+            $delivery->status = "done";
+            $delivery->save();
+            return true;
+        });
+        return response()->json($result);
+    }
 }

@@ -30,7 +30,7 @@ class Delivery extends Model
     public static function processSaldo($delivery, $order, $image)
     {
         $delivery->arrive_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-        $delivery->status = "done";
+        // $delivery->status = "done";
 
         $filename = hrtime(true) . "-proof" . "." . $image->getClientOriginalExtension();
         $path = public_path() . "/deliveryProof";
@@ -46,7 +46,7 @@ class Delivery extends Model
     public static function processCOD($delivery, $order, $image, $money)
     {
         $delivery->arrive_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-        $delivery->status = "done";
+        // $delivery->status = "done";
 
         $filename = hrtime(true) . "-proof" . "." . $image->getClientOriginalExtension();
         $path = public_path() . "/deliveryProof";
@@ -56,15 +56,16 @@ class Delivery extends Model
         $delivery->feeUsed = $money;
         $delivery->save();
 
-        if ($money > 0) {
-            $newFeeHistory = new CourierFeeHistory();
-            $newFeeHistory->courier_id = $delivery->courier_id;
-            $newFeeHistory->nominal = $money;
-            $newFeeHistory->description = "Uang saku digunakan kurir dalam proses transaksi pada pesanan nomor $order->orderID";
-            $newFeeHistory->type = "used";
-            $newFeeHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-            $newFeeHistory->save();
-        }
+        // Changed because operational fee is not separated with delivery!
+        // if ($money > 0) {
+        //     $newFeeHistory = new CourierFeeHistory();
+        //     $newFeeHistory->courier_id = $delivery->courier_id;
+        //     $newFeeHistory->nominal = $money;
+        //     $newFeeHistory->description = "Uang saku digunakan kurir dalam proses transaksi pada pesanan nomor $order->orderID";
+        //     $newFeeHistory->type = "used"; 
+        //     $newFeeHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+        //     $newFeeHistory->save();
+        // }
 
         Delivery::courierFinishNotification($order);
 

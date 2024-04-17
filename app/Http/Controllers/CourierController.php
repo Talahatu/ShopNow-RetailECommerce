@@ -194,7 +194,8 @@ class CourierController extends Controller
             ->get();
         $currentDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
-            ->where("status", "progress")
+            ->whereNotNull("pickup_date")
+            ->whereNull("arrive_date")
             ->get();
         return view('courier.index', compact("newDeliveries", "currentDeliveries"));
     }

@@ -7,7 +7,7 @@
                         <span class="text-muted"> {{ strftime('%A, %d %B %Y', strtotime($item->order_date)) }}</span>
                         <h3 class="d-md-flex align-items-center text-center">{{ $item->orderID }}<span
                                 class="d-none d-md-block">&nbsp;</span>
-                            @if ($item->deliveries[0]->status == 'done')
+                            @if ($item->deliveries[0]->arrive_date != null)
                                 <span class="badge bg-warning d-none d-md-block">Mohon Selesaikan</span>
                             @else
                                 <span class="badge bg-info d-none d-md-block">Dalam Perjalanan</span>
