@@ -1,7 +1,7 @@
 <div class="list-group p-2" id="order-container">
     @if (count($pendings) > 0)
         @foreach ($pendings as $item)
-            <div class="list-group-item list-group-item card" aria-current="true">
+            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-{{ $item->id }}">
                 <div class="card-body ps-2 pe-2 text-center text-md-start">
                     <div class="top-side">
                         <span class="text-muted"> {{ strftime('%A, %d %B %Y', strtotime($item->order_date)) }}</span>
@@ -39,7 +39,8 @@
                             </div>
                         </div>
                         <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
-                            data-di="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                            data-di="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            current-tab="new">Rincian
                             Pesanan</button>
                     </div>
                 </div>

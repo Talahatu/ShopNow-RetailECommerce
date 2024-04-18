@@ -53,6 +53,7 @@ $(function () {
     var DTcolumns = (optionType = "new") => {
         return [
             { data: "orderID" },
+            { data: "order_date", visible: false },
             { data: "destination_address" },
             {
                 data: null,
@@ -134,8 +135,11 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
-        columnDefs: [{ targets: [1, 2], className: "text-end" }],
+        columnDefs: [{ targets: [0, 3], className: "text-end" }],
+        order: [[1, "DESC"]],
     });
+
+    // table.order.order([1, "DESC"]).draw();
 
     $.ajax({
         type: "POST",
@@ -329,6 +333,22 @@ $(function () {
                                 }</label>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="Nama Pelanggan" class="col-sm-3 col-form-label">Status Pesanan</label>
+                            <div class="col-sm-9">
+                                <label for="destination" class="col-form-label">:&nbsp;${
+                                    ordersInfo.orderStatus == "new"
+                                        ? "Pesanan baru"
+                                        : ordersInfo.orderStatus == "accepted"
+                                        ? "Telah diterima"
+                                        : ordersInfo.orderStatus == "sent"
+                                        ? "Telah diberikan ke kurir"
+                                        : ordersInfo.orderStatus == "done"
+                                        ? "Pesanan selesai"
+                                        : "Pesanan dibatalkan"
+                                }</label>
+                            </div>
+                        </div>
                         <hr>
                         <h3>Produk Dipesan: </h3>
                         <div class="card table-responsive">
@@ -376,7 +396,6 @@ $(function () {
             .text();
         $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
-        
         <button type="button" class="btn btn-success" id="finishDelivery">Selesaikan Pengiriman</button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
@@ -427,10 +446,15 @@ $(function () {
                         : `<h5 class="totalAll muted">Total Pesanan: ${formatter.format(
                               data.total
                           )}</h5>`;
-
+                if (delivery.status == "done" && data.orderStatus != "done") {
+                    $("#exampleModal").find(".modal-footer").html(`
+                    <button type="button" class="btn btn-outline-secondary" disabled>Telah Disetor (Menunggu persetujuan pembeli)</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                    `);
+                }
                 $("#exampleModal").find(".modal-body").html(`
                 <div class="orderDetails">
-                <h3>Riwayat Pengiriman: </h3>
+                    <h3>Riwayat Pengiriman: </h3>
                         <div class="card table-responsive">
                             <table class="table table-hover sortable-table">
                                 <thead>
@@ -462,6 +486,7 @@ $(function () {
                             deliveryID: delivery.id,
                         },
                         success: function (response) {
+                            console.log(response);
                             if (response) {
                                 const modal =
                                     document.getElementById("exampleModal");
@@ -530,7 +555,8 @@ $(function () {
                         return "row_" + row.id;
                     },
                     columns: DTcolumns(type),
-                    columnDefs: [{ targets: [0, 2], className: "text-end" }],
+                    columnDefs: [{ targets: [0, 3], className: "text-end" }],
+                    order: [[1, "DESC"]],
                 });
                 table.rows.add(data).draw();
                 table.columns.adjust().draw();

@@ -23,8 +23,15 @@ $(function () {
     $(document).on("click", ".btn-profile-order-detail", function () {
         const orderID = $(this).attr("data-di");
         $("#modalTitle").html("Rincian Pesanan");
-        $("#modalFooter").html(`
+        if ($(this).attr("current-tab") == "new") {
+            $("#modalFooter").html(`
+            <button type="button" class="btn btn-danger" id="btnCancelOrder">Batalkan Pesanan</button>
+            <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>`);
+        } else {
+            $("#modalFooter").html(`
         <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>`);
+        }
+
         $.ajax({
             type: "POST",
             url: "/profile/order/detail",
@@ -129,6 +136,17 @@ $(function () {
                                             if (response) {
                                                 $("#item-" + order.id).remove();
 
+                                                if (
+                                                    $(
+                                                        "#order-container"
+                                                    ).children().length > 0
+                                                ) {
+                                                    $("#order-container")
+                                                        .html(`<div class="text text-center text-muted">
+                                                    <p>Tidak ada pesanan</p>
+                                                </div>`);
+                                                }
+
                                                 const modal =
                                                     document.getElementById(
                                                         "exampleModal"
@@ -191,19 +209,11 @@ $(function () {
                                                                 bootstrap.Modal.getInstance(
                                                                     modal
                                                                 ).hide();
-                                                                window.location.reload();
                                                             },
                                                         });
                                                     }
                                                 );
                                             }
-
-                                            $("#exampleModal2").on(
-                                                "hidden.bs.modal",
-                                                function () {
-                                                    window.location.reload();
-                                                }
-                                            );
                                         },
                                     });
                                 }
@@ -326,6 +336,469 @@ $(function () {
                         <h2>Total: ${formatter.format(order.total)}</h2>
                     </div>
                 `);
+
+                $(document).on("click", "#btnCancelOrder", function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/profile/order/cancel",
+                        data: {
+                            _token: csrfToken,
+                            orderID: order.id,
+                        },
+                        success: function (response) {
+                            if (response) {
+                                $(
+                                    `.list-group-item[data-dia="order-${order.id}"]`
+                                ).remove();
+                                if (
+                                    $("#order-container").children().length > 0
+                                ) {
+                                    $("#order-container")
+                                        .html(`<div class="text text-center text-muted">
+                                    <p>Tidak ada pesanan</p>
+                                </div>`);
+                                }
+                            }
+                        },
+                    });
+                });
+            },
+        });
+    });
+    $(".nav-link").on("click", function () {
+        const tab = $(this).attr("data-sts");
+        $.ajax({
+            type: "POST",
+            url: "/profile/order/changeTab",
+            data: {
+                _token: csrfToken,
+                type: tab,
+            },
+            success: function (response) {
+                console.log(response);
+                let html = ``;
+                if (tab == "new") {
+                    if (response.length > 0) {
+                        for (const iterator of response) {
+                            html += `
+                            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-${
+                                iterator.id
+                            }">
+                                <div class="card-body ps-2 pe-2 text-center text-md-start">
+                                    <div class="top-side">
+                                        <span class="text-muted">${moment(
+                                            iterator.order_date
+                                        ).format("dddd, D MMMM YYYY")}</span>
+                                        <h3 class="d-md-flex align-items-center text-center">${
+                                            iterator.orderID
+                                        }
+                                            <span class="d-none d-md-block">&nbsp;</span><span
+                                                class="badge bg-info d-none d-md-block">Menunggu Seller</span>
+                                        </h3>
+                                        <span class="badge bg-info d-md-none d-block">Menunggu Seller</span>
+                                        <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;${
+                                            iterator.destination_address
+                                        }</p>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                        <div
+                                            class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">
+                                            <a href="/show-product/${
+                                                iterator.details[0].product_id
+                                            }"
+                                                class="d-flex align-items-center p-2 my-2 text-dark">
+                                                <img src="${baseUrl}/productimages/${
+                                iterator.details[0].product.images[0].name
+                            }"
+                                                    alt="Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="info-product d-none d-md-block ms-4">
+                                                    <h5 class="mb-1">${
+                                                        iterator.details[0]
+                                                            .product.name
+                                                    }</h5>
+                                                    <div class="price-info">
+                                                        <span>Qty:${
+                                                            iterator.details[0]
+                                                                .qty
+                                                        }</span>
+                                                        <h4>Rp ${formatter.format(
+                                                            iterator.total
+                                                        )}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="info-product d-block d-md-none">
+                                                <h5 class="mb-1">${
+                                                    iterator.details[0].product
+                                                        .name
+                                                }</h5>
+                                                <div class="price-info">
+                                                    <span>Qty: ${
+                                                        iterator.details[0].qty
+                                                    }</span>
+                                                    <h4>Rp ${formatter.format(
+                                                        iterator.total
+                                                    )}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
+                                            data-di="${
+                                                iterator.id
+                                            }" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                                            Pesanan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html = `<div class="text text-center text-muted">
+                        <p>Tidak ada pesanan</p>
+                    </div>`;
+                    }
+                } else if (tab == "accepted") {
+                    console.log(response.length);
+                    if (response.length > 0) {
+                        for (const iterator of response) {
+                            html += `
+                            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-${
+                                iterator.id
+                            }">
+                                <div class="card-body ps-2 pe-2 text-center text-md-start">
+                                    <div class="top-side">
+                                        <span class="text-muted">${moment(
+                                            iterator.order_date
+                                        ).format("dddd, D MMMM YYYY")}</span>
+                                        <h3 class="d-md-flex align-items-center text-center">${
+                                            iterator.orderID
+                                        }
+                                            <span class="d-none d-md-block">&nbsp;</span><span
+                                                class="badge bg-info d-none d-md-block">Sedang Diproses</span>
+                                        </h3>
+                                        <span class="badge bg-info d-md-none d-block">Sedang Diproses</span>
+                                        <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;${
+                                            iterator.destination_address
+                                        }</p>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                        <div
+                                            class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">
+                                            <a href="/show-product/${
+                                                iterator.details[0].product_id
+                                            }"
+                                                class="d-flex align-items-center p-2 my-2 text-dark">
+                                                <img src="${baseUrl}/productimages/${
+                                iterator.details[0].product.images[0].name
+                            }"
+                                                    alt="Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="info-product d-none d-md-block ms-4">
+                                                    <h5 class="mb-1">${
+                                                        iterator.details[0]
+                                                            .product.name
+                                                    }</h5>
+                                                    <div class="price-info">
+                                                        <span>Qty:${
+                                                            iterator.details[0]
+                                                                .qty
+                                                        }</span>
+                                                        <h4>Rp ${formatter.format(
+                                                            iterator.total
+                                                        )}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="info-product d-block d-md-none">
+                                                <h5 class="mb-1">${
+                                                    iterator.details[0].product
+                                                        .name
+                                                }</h5>
+                                                <div class="price-info">
+                                                    <span>Qty: ${
+                                                        iterator.details[0].qty
+                                                    }</span>
+                                                    <h4>Rp ${formatter.format(
+                                                        iterator.total
+                                                    )}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
+                                            data-di="${
+                                                iterator.id
+                                            }" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                                            Pesanan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                        console.log(html);
+                    } else {
+                        html = `<div class="text text-center text-muted">
+                        <p>Tidak ada pesanan</p>
+                    </div>`;
+                    }
+                } else if (tab == "sent") {
+                    if (response.length > 0) {
+                        for (const iterator of response) {
+                            html += `
+                                <div class="list-group-item list-group-item card" aria-current="true" id="item-${
+                                    iterator.id
+                                }">
+                                <div class="card-body ps-2 pe-2 text-center text-md-start">
+                                    <div class="top-side">
+                                        <span class="text-muted"> ${moment(
+                                            iterator.order_date
+                                        ).format("dddd, D MMMM YYYY")}</span>
+                                        <h3 class="d-md-flex align-items-center text-center">${
+                                            iterator.orderID
+                                        }<span
+                                                class="d-none d-md-block">&nbsp;</span>
+                                            ${
+                                                iterator.deliveries[0]
+                                                    .arrive_date != null
+                                                    ? `<span class="badge bg-warning d-none d-md-block">Mohon Selesaikan</span>`
+                                                    : `<span class="badge bg-info d-none d-md-block">Dalam Perjalanan</span>`
+                                            }
+                                        </h3>
+                                        ${
+                                            iterator.deliveries[0].status ==
+                                            "done"
+                                                ? `<span class="badge bg-warning d-md-none d-block">Mohon Selesaikan</span>`
+                                                : `<span class="badge bg-info d-md-none d-block">Dalam Perjalanan</span>`
+                                        }
+
+                                        <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;${
+                                            iterator.destination_address
+                                        }</p>
+                                    </div>
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                        <div
+                                            class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">
+                                            <a href="/show-product/${
+                                                iterator.details[0].product_id
+                                            }"
+                                                class="d-flex align-items-center p-2 my-2 text-dark">
+                                                <img src="${baseUrl}/productimages/${
+                                iterator.details[0].product.images[0].name
+                            }"
+                                                    alt="Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="info-product d-none d-md-block ms-4">
+                                                    <h5 class="mb-1">${
+                                                        iterator.details[0]
+                                                            .product.name
+                                                    }</h5>
+                                                    <div class="price-info">
+                                                        <span>Qty: ${
+                                                            iterator.details[0]
+                                                                .qty
+                                                        }</span>
+                                                        <h4>Rp ${formatter.format(
+                                                            iterator.total
+                                                        )}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="info-product d-block d-md-none">
+                                                <h5 class="mb-1">${
+                                                    iterator.details[0].product
+                                                        .name
+                                                }</h5>
+                                                <div class="price-info">
+                                                    <span>Qty: ${
+                                                        iterator.details[0].qty
+                                                    }</span>
+                                                    <h4>Rp ${formatter.format(
+                                                        iterator.total
+                                                    )}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
+                                            data-di="${
+                                                iterator.id
+                                            }" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                                            Pesanan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            console.log(html);
+                        }
+                    } else {
+                        html = `<div class="text text-center text-muted">
+                        <p>Tidak ada pesanan</p>
+                    </div>`;
+                    }
+                } else if (tab == "done") {
+                    if (response.length > 0) {
+                        for (const iterator of response) {
+                            html += `
+                            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-${
+                                iterator.id
+                            }">
+                                <div class="card-body ps-2 pe-2 text-center text-md-start">
+                                    <div class="top-side">
+                                        <span class="text-muted">${moment(
+                                            iterator.order_date
+                                        ).format("dddd, D MMMM YYYY")}</span>
+                                        <h3 class="d-md-flex align-items-center text-center">${
+                                            iterator.orderID
+                                        }
+                                        <span class="d-none d-md-block">&nbsp;</span><span
+                                        class="badge bg-success d-none d-md-block">Selesai</span>
+                                        </h3>
+                                        <span class="badge bg-selesai d-md-none d-block">Selesai</span>
+                                        <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;${
+                                            iterator.destination_address
+                                        }</p>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                        <div
+                                            class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">
+                                            <a href="/show-product/${
+                                                iterator.details[0].product_id
+                                            }"
+                                                class="d-flex align-items-center p-2 my-2 text-dark">
+                                                <img src="${baseUrl}/productimages/${
+                                iterator.details[0].product.images[0].name
+                            }"
+                                                    alt="Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="info-product d-none d-md-block ms-4">
+                                                    <h5 class="mb-1">${
+                                                        iterator.details[0]
+                                                            .product.name
+                                                    }</h5>
+                                                    <div class="price-info">
+                                                        <span>Qty:${
+                                                            iterator.details[0]
+                                                                .qty
+                                                        }</span>
+                                                        <h4>Rp ${formatter.format(
+                                                            iterator.total
+                                                        )}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="info-product d-block d-md-none">
+                                                <h5 class="mb-1">${
+                                                    iterator.details[0].product
+                                                        .name
+                                                }</h5>
+                                                <div class="price-info">
+                                                    <span>Qty: ${
+                                                        iterator.details[0].qty
+                                                    }</span>
+                                                    <h4>Rp ${formatter.format(
+                                                        iterator.total
+                                                    )}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
+                                            data-di="${
+                                                iterator.id
+                                            }" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                                            Pesanan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html = `<div class="text text-center text-muted">
+                            <p>Tidak ada pesanan</p>
+                        </div>`;
+                    }
+                } else if (tab == "cancel") {
+                    if (response.length > 0) {
+                        for (const iterator of response) {
+                            html += `
+                            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-${
+                                iterator.id
+                            }">
+                                <div class="card-body ps-2 pe-2 text-center text-md-start">
+                                    <div class="top-side">
+                                        <span class="text-muted">${moment(
+                                            iterator.order_date
+                                        ).format("dddd, D MMMM YYYY")}</span>
+                                        <h3 class="d-md-flex align-items-center text-center">${
+                                            iterator.orderID
+                                        }
+                                        <span class="d-none d-md-block">&nbsp;</span><span
+                                        class="badge bg-danger d-none d-md-block">Dibatalkan</span>
+                                        </h3>
+                                        <span
+                                        class="badge bg-danger d-block d-md-none">Dibatalkan</span>
+                                        <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;${
+                                            iterator.destination_address
+                                        }</p>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                        <div
+                                            class="snippet-info d-flex d-md-block flex-column align-items-center text-center text-md-start">
+                                            <a href="/show-product/${
+                                                iterator.details[0].product_id
+                                            }"
+                                                class="d-flex align-items-center p-2 my-2 text-dark">
+                                                <img src="${baseUrl}/productimages/${
+                                iterator.details[0].product.images[0].name
+                            }"
+                                                    alt="Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="info-product d-none d-md-block ms-4">
+                                                    <h5 class="mb-1">${
+                                                        iterator.details[0]
+                                                            .product.name
+                                                    }</h5>
+                                                    <div class="price-info">
+                                                        <span>Qty:${
+                                                            iterator.details[0]
+                                                                .qty
+                                                        }</span>
+                                                        <h4>Rp ${formatter.format(
+                                                            iterator.total
+                                                        )}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="info-product d-block d-md-none">
+                                                <h5 class="mb-1">${
+                                                    iterator.details[0].product
+                                                        .name
+                                                }</h5>
+                                                <div class="price-info">
+                                                    <span>Qty: ${
+                                                        iterator.details[0].qty
+                                                    }</span>
+                                                    <h4>Rp ${formatter.format(
+                                                        iterator.total
+                                                    )}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline btn-dark btn-lg btn-profile-order-detail"
+                                            data-di="${
+                                                iterator.id
+                                            }" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian
+                                            Pesanan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                    } else {
+                        html = `<div class="text text-center text-muted">
+                            <p>Tidak ada pesanan</p>
+                        </div>`;
+                    }
+                }
+
+                $(".tab-pane.active > #order-container").html(html);
             },
         });
     });

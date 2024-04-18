@@ -65,7 +65,7 @@ class Order extends Model
                         ->first([DB::raw("SUM(cart.qty*cart.price) AS cartTotal"), DB::raw("SUM(CalculateFeeByWeight(products.weight*cart.qty) + CalculateFeeByDistance(cart.distance)) AS shippingFee")]);
                     $total = $aggregateData->cartTotal + $aggregateData->shippingFee;
                     $totalCheckout += $total;
-                    if ($totalCheckout > Auth::user()->saldo) {
+                    if ($totalCheckout > Auth::user()->saldo && $payment == "saldo") {
                         throw new Exception("Saldo not enough.", 1);
                     }
 
@@ -142,7 +142,7 @@ class Order extends Model
                 $newNotif->user_id = Auth::user()->id;
                 $newNotif->save();
             });
-            return $deletedCart;
+            return response()->json($deletedCart);
         } catch (\Throwable $e) {
             return [false, $e->getMessage()];
         }
@@ -159,10 +159,12 @@ class Order extends Model
                 ->join("delivery", "delivery.order_id", "orders.id")
                 ->where("orders.shop_id", $shopID)
                 ->where("orders.orderStatus", "sent")
+                // ->where("delivery.status", "!=", "done")
                 ->orWhere(function ($query) {
                     $query->where("orders.orderStatus", "done")
                         ->where("delivery.status", "!=", "done");
                 })
+                ->orderBy("orders.order_date", "desc")
                 ->get(
                     [
                         "orders.id",
@@ -170,6 +172,8 @@ class Order extends Model
                         DB::raw("ROUND(orders.distance,0) AS distance"),
                         "orders.payment_method",
                         "orders.orderID",
+                        "orders.orderStatus",
+                        "orders.order_date"
                     ]
                 );
         }
@@ -179,6 +183,7 @@ class Order extends Model
                 ->where("orders.shop_id", $shopID)
                 ->where("orders.orderStatus", "done")
                 ->where("delivery.status", "done")
+                ->orderBy("orders.order_date", "desc")
                 ->get(
                     [
                         "orders.id",
@@ -186,6 +191,7 @@ class Order extends Model
                         DB::raw("ROUND(orders.distance,0) AS distance"),
                         "orders.payment_method",
                         "orders.orderID",
+                        "orders.order_date"
                     ]
                 );
         }
@@ -193,13 +199,16 @@ class Order extends Model
             ->where([
                 ["orders.shop_id", $shopID],
                 ["orders.orderStatus", $type]
-            ])->get(
+            ])
+            ->orderBy("orders.order_date", "desc")
+            ->get(
                 [
                     "orders.id",
                     "orders.destination_address",
                     DB::raw("ROUND(orders.distance,0) AS distance"),
                     "orders.payment_method",
                     "orders.orderID",
+                    "orders.order_date"
                 ]
             );
     }

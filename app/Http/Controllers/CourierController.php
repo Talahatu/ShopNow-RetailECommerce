@@ -204,7 +204,9 @@ class CourierController extends Controller
     {
         $finishDeliveries = Delivery::with(["order"])
             ->where("courier_id", Auth::guard("courier")->user()->id)
-            ->where("status", "done")
+            ->where("arrive_date", "!=", null)
+            ->orderBy("arrive_date", "desc")
+            ->orderByRaw("CASE WHEN status='progress' THEN 0 ELSE 1 END")
             ->get();
         return view("courier.history", compact("finishDeliveries"));
     }

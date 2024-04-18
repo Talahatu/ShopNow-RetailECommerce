@@ -65,6 +65,9 @@ Route::middleware(["auth", "prevent.courier"])->group(function () {
     Route::post("/profile/order/detail", [UserController::class, "getOrderDetail"])->name("profile.order.detail");
     Route::post("/profile/order/finish", [UserController::class, "orderFinish"])->name("profile.order.finish");
     Route::post("/profile/order/giveRating", [UserController::class, "giveRating"]);
+    Route::post("/profile/order/cancel", [UserController::class, "cancelOrder"]);
+    Route::post("/profile/order/changeTab", [UserController::class, "changeTab"]);
+
     Route::put("/profile/update", [UserController::class, 'updateProfile'])->name("profile.update");
     Route::post("/getAddAddressForm", [UserController::class, "getAddAddressForm"])->name("address.form");
     Route::post("/getUpdateAddAddressForm", [UserController::class, "getUpdateAddAddressForm"])->name("address.form.update");

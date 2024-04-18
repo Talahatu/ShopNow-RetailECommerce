@@ -8,23 +8,23 @@
         <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="ex3-tab-1" data-mdb-toggle="tab" href="#ex3-tabs-1" role="tab"
-                    aria-controls="ex3-tabs-1" aria-selected="true">Menunggu Seller</a>
+                    aria-controls="ex3-tabs-1" aria-selected="true" data-sts="new">Menunggu Seller</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-2" data-mdb-toggle="tab" href="#ex3-tabs-2" role="tab"
-                    aria-controls="ex3-tabs-2" aria-selected="false">Sedang Diproses</a>
+                    aria-controls="ex3-tabs-2" aria-selected="false" data-sts="accepted">Sedang Diproses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-3" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Sedang Dikirim</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false" data-sts="sent">Sedang Dikirim</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-4" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Selesai</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false" data-sts="done">Selesai</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#ex3-tabs-5" role="tab"
-                    aria-controls="ex3-tabs-3" aria-selected="false">Ditolak</a>
+                    aria-controls="ex3-tabs-3" aria-selected="false" data-sts="cancel">Dibatalkan</a>
             </li>
         </ul>
         <!-- Tabs navs -->

@@ -1,7 +1,7 @@
 <div class="list-group p-2" id="order-container">
     @if (count($processed) > 0)
         @foreach ($processed as $item)
-            <div class="list-group-item list-group-item card" aria-current="true">
+            <div class="list-group-item list-group-item card" aria-current="true" data-dia="order-{{ $item->id }}">
                 <div class="card-body ps-2 pe-2 text-center text-md-start">
                     <div class="top-side">
                         <span class="text-muted"> {{ strftime('%A, %d %B %Y', strtotime($item->order_date)) }}</span>

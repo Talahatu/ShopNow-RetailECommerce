@@ -7,9 +7,9 @@
                         <span class="text-muted"> {{ strftime('%A, %d %B %Y', strtotime($item->order_date)) }}</span>
                         <h3 class="d-md-flex align-items-center text-center">{{ $item->orderID }}
                             <span class="d-none d-md-block">&nbsp;</span><span
-                                class="badge bg-danger d-none d-md-block">Ditolak</span>
+                                class="badge bg-danger d-none d-md-block">Dibatalkan</span>
                         </h3>
-                        <span class="badge bg-danger d-md-none d-block">Ditolak</span>
+                        <span class="badge bg-danger d-md-none d-block">Dibatalkan</span>
                         <p><i class="fa fa-location-dot"></i>&nbsp;&nbsp;{{ $item->destination_address }}</p>
                     </div>
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">

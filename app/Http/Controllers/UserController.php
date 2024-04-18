@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\User;
 use Carbon\Carbon;
@@ -76,6 +77,19 @@ class UserController extends Controller
             ->orderBy("shop_id")
             ->get();
         return view('regular.tabs.order-tab', compact("pendings", "processed", "sents", "finished", "cancelled"));
+    }
+
+    public function changeTab(Request $request)
+    {
+
+        $data = Order::with(["shop", "details.product.images", "deliveries"])
+            ->where([
+                ["user_id", Auth::user()->id],
+                ["orderStatus", $request->get("type")]
+            ])
+            ->orderBy("shop_id")
+            ->get();
+        return response()->json($data);
     }
 
     public function getAddAddressForm(Request $request)
@@ -287,6 +301,52 @@ class UserController extends Controller
                 $product->rating = $newAVG;
                 $product->save();
             }
+        });
+        return response()->json($result);
+    }
+
+    public function cancelOrder(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $orderID = $request->get("orderID");
+
+            $order = Order::with(["details"])->where("id", $orderID)->first();
+            $status = $order->orderStatus;
+
+            if ($status != "new") {
+                return false;
+            }
+
+            if ($order->payment_method == "saldo") {
+                $user = User::find(Auth::user()->id);
+                $user->saldo = $user->saldo + $order->total;
+            }
+
+            foreach ($order->details as $key => $value) {
+                $product = Product::find($value->product_id);
+                $product->stock = $product->stock + $value->qty;
+                $product->status = ($product->stock == 0 ? "out of stock" : $product->status);
+                $product->save();
+
+                $prodHistory = new ProductStockHistory();
+                $prodHistory->product_id = $value->product_id;
+                $prodHistory->addition = $value->qty;
+                $prodHistory->substraction = 0;
+                $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                $prodHistory->save();
+            }
+            $order->orderStatus = "cancel";
+            $order->save();
+
+            $newNotif = new Notification();
+            $newNotif->header = "Pesanan anda dibatalkan!";
+            $newNotif->content = "Pesanan anda telah berhasil dibatalkan.";
+            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->user_id = Auth::user()->id;
+            $newNotif->save();
+
+
+            return true;
         });
         return response()->json($result);
     }
