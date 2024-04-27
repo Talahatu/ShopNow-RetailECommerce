@@ -149,6 +149,7 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/pickupItems", [CourierController::class, "pickupItems"])->name("courier.pickup");
     Route::get("/courier/delivery/{id}/{deliveryId}", [CourierController::class, "deliveryDetail"])->name("courierDelivery");
     Route::post("/delivery/finish", [CourierController::class, "deliveryFinish"])->name("courier.finish");
+    Route::post("/getposition/deliveries", [CourierController::class, "getDeliveriesPosition"]);
 
     Route::get("/courier/history", [CourierController::class, "courierHistory"])->name("courier.history");
     Route::get("/courier/fee/history", [CourierController::class, "courierFeeHistory"])->name("courier.fee.history");

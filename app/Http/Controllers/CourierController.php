@@ -358,4 +358,16 @@ class CourierController extends Controller
         });
         return response()->json($result);
     }
+
+    public function getDeliveriesPosition(Request $request)
+    {
+        $id = Auth::guard("courier")->user()->id;
+        $currentDeliveries = Delivery::with(["order"])
+            ->where("courier_id", $id)
+            ->whereNotNull("pickup_date")
+            ->whereNull("arrive_date")
+            ->get();
+        $shopCoord = Courier::with(["shopOwner"])->where('id', $id)->first();
+        return response()->json(compact("currentDeliveries", "shopCoord"));
+    }
 }

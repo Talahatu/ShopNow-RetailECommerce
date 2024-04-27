@@ -13,6 +13,7 @@ $(function () {
     const [orderID, deliveryID] = $("#dia").val().split("-");
     let markerStart = null;
     let markerEnd = null;
+    let routeControl = null;
 
     delete L.Icon.Default.prototype._getIconUrl;
 
@@ -133,6 +134,17 @@ $(function () {
             });
     });
 
+    // $("#test").on("click", function () {
+    //     navigator.geolocation.getCurrentPosition(success, error);
+
+    //     function success(data) {
+    //         console.log(data);
+    //     }
+    //     function error(err) {
+    //         console.log(err);
+    //     }
+    // });
+
     const generateMap = (latitudeDestination, longitudeDestination) => {
         //===================================== Map Section Start =====================================
         var map = L.map("map").setView(
@@ -185,20 +197,27 @@ $(function () {
                 markerEnd.bindTooltip("<b>Alamat Tujuan</b>").openTooltip();
 
                 // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
-                let routeControl = L.Routing.control({
-                    waypoints: [
-                        L.latLng(currentPosition.lat, currentPosition.lng), // Start point
-                        L.latLng(latitudeDestination, longitudeDestination), // End point
-                    ],
-                    router: L.Routing.graphHopper(
-                        "fc06c31b-e90b-47b4-941f-42b9c8971b33"
-                    ),
-                    createMarker: function (i, waypoint, n) {
-                        return i === 0 ? markerStart : markerEnd;
-                    },
-                    routeWhileDragging: false,
-                    addWaypoints: false,
-                }).addTo(map);
+                if (routeControl != null) {
+                    routeControl.setWaypoints([
+                        L.latLng(currentPosition.lat, currentPosition.lng),
+                        routeControl.options.waypoints[1],
+                    ]);
+                } else {
+                    routeControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(currentPosition.lat, currentPosition.lng), // Start point
+                            L.latLng(latitudeDestination, longitudeDestination), // End point
+                        ],
+                        router: L.Routing.graphHopper(
+                            "fc06c31b-e90b-47b4-941f-42b9c8971b33"
+                        ),
+                        createMarker: function (i, waypoint, n) {
+                            return i === 0 ? markerStart : markerEnd;
+                        },
+                        routeWhileDragging: false,
+                        addWaypoints: false,
+                    }).addTo(map);
+                }
 
                 sessionStorage.setItem("lat", currentPosition.lat);
                 sessionStorage.setItem("lng", currentPosition.lng);

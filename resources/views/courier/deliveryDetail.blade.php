@@ -26,6 +26,7 @@
 @endsection
 @section('content')
     <div class="ongoing-order">
+        {{-- <button id="test" class="btn btn-danger">Test</button> --}}
         <h1>Pesanan Nomor #{{ $order->orderID }}</h1>
         <input type="hidden" name="dia" id="dia" value="{{ $order->id }}-{{ $order->deliveries[0]->id }}">
         <div class=" form-group row">

@@ -19,6 +19,7 @@
                         Uang</button> --}}
                 </div>
             </div>
+            <div id="deliveryMapRoute" style="height: 360px;" class="m-4"></div>
         </div>
     </section>
 @endsection
