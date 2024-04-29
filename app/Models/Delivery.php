@@ -43,7 +43,7 @@ class Delivery extends Model
 
         return true;
     }
-    public static function processCOD($delivery, $order, $image, $money)
+    public static function processCOD($delivery, $order, $image)
     {
         $delivery->arrive_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
         // $delivery->status = "done";
@@ -53,7 +53,6 @@ class Delivery extends Model
         $image->move($path, $filename);
 
         $delivery->proofImage = $filename;
-        $delivery->feeUsed = $money;
         $delivery->save();
 
         // Changed because operational fee is not separated with delivery!

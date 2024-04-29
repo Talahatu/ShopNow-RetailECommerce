@@ -116,17 +116,12 @@ $(function () {
                     ? `<h5 class="text-end">Operational:&nbsp;+&nbsp;${formatter.format(
                           order.deliveries[0].feeAssigned
                       )}</h5>
-            <h5 class="text-end">Digunakan:&nbsp;-&nbsp;${formatter.format(
-                order.deliveries[0].feeUsed
-            )}</h5>
             <h5 class="text-end">Total Pesanan:&nbsp;+&nbsp;${formatter.format(
                 order.total
             )}</h5>
             <hr>
             <h3 class="text-end">Disetor:&nbsp;${formatter.format(
-                order.deliveries[0].feeAssigned -
-                    order.deliveries[0].feeUsed +
-                    order.total
+                order.deliveries[0].feeAssigned + order.total
             )}</h3>`
                     : `
             <h5 class="text-end">Total Pesanan:&nbsp;+&nbsp;${formatter.format(

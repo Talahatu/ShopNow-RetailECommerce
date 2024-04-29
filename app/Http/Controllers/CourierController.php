@@ -301,14 +301,13 @@ class CourierController extends Controller
         $orderID = $request->get("orderID");
         $deliveryID = $request->get("deliveryID");
         $type = $request->get("type");
-        $moneyUsed = $request->get("moneyUsed");
         $image = $request->file("file");
 
-        $result = DB::transaction(function () use ($orderID, $deliveryID, $type, $moneyUsed, $image) {
+        $result = DB::transaction(function () use ($orderID, $deliveryID, $type, $image) {
             $delivery = Delivery::find($deliveryID);
             $order = Order::find($orderID);
             if ($type == "cod") {
-                Delivery::processCOD($delivery, $order, $image, $moneyUsed);
+                Delivery::processCOD($delivery, $order, $image);
             } else {
                 Delivery::processSaldo($delivery, $order, $image);
             }

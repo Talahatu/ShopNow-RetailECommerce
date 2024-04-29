@@ -432,15 +432,12 @@ $(function () {
                         ? `<h5 class="subtotal muted">Uang Saku Diberikan: ${formatter.format(
                               delivery.feeAssigned
                           )}</h5>
-                <h5 class="shippingFee muted">Uang Saku Digunakan: ${formatter.format(
-                    delivery.feeUsed
-                )}</h5>
                 <h5 class="totalAll muted">Total Pesanan: ${formatter.format(
                     data.total
                 )}</h5>
                 <hr>
                 <h4>Nominal Uang Dari Pengiriman: ${formatter.format(
-                    data.total + (delivery.feeAssigned - delivery.feeUsed)
+                    data.total + delivery.feeAssigned
                 )}</h4>
                 <small>*Pastikan telah menerima uang dari kurir!</small>`
                         : `<h5 class="totalAll muted">Total Pesanan: ${formatter.format(

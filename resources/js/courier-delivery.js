@@ -94,23 +94,13 @@ $(function () {
             .then(function (response) {
                 const type = response.type;
                 let result = true;
-                let saku = 0;
                 let image = $("#proofImage")[0];
-                if (type == "cod") {
-                    saku = $("#operationalFeeUsed").cleanVal();
-                    result = confirm(
-                        "Apakah anda yakin uang saku yang digunakan sebesar " +
-                            formatter.format(saku) +
-                            "?"
-                    );
-                }
 
                 let formData = new FormData();
                 formData.append("_token", csrfToken);
                 formData.append("file", image.files[0]);
                 formData.append("orderID", orderID);
                 formData.append("deliveryID", deliveryID);
-                formData.append("moneyUsed", saku);
                 formData.append("type", type);
 
                 if (result)

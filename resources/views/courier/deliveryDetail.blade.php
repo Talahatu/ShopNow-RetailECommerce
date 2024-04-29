@@ -127,14 +127,6 @@
                     <label for="orderTotal" class="col-form-label">Rp. {{ number_format($order->total, 0, ',', '.') }}
                 </div>
             </div>
-            <div class="col-12">
-                <label for="operationalFeeUsed">Uang Saku Digunakan:</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input id="operationalFeeUsed" name="operationalFeeUsed" type="text" class="form-control"
-                        placeholder="Masukan nominal uang saku">
-                </div>
-            </div>
         @endif
 
         <div class="button-group-footer text-end mt-4">
