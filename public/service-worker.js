@@ -1,3 +1,5 @@
+importScripts("https://js.pusher.com/beams/service-worker.js");
+
 var staticCacheName = "pwa-v" + new Date().getTime();
 var filesToCache = [
     "/offline",
@@ -51,6 +53,21 @@ self.addEventListener("fetch", (event) => {
     );
 });
 
-self.addEventListener("push", (event) => {
-    console.log(event);
+self.addEventListener("push", function (event) {
+    if (!(self.Notification && self.Notification.permission == "granted")) {
+        console.log("Notification are not supported or not granted");
+        return;
+    }
+    // if (event.data) {
+    //     var msg =
+    //         typeof event.data == "string" ? "Its a string" : "Its an object";
+    //     console.log(msg, typeof event.data, event.data);
+    //     event.waitUntil(
+    //         self.registration.showNotification(msg.title, {
+    //             body: msg.body,
+    //             icon: msg.icon,
+    //             actions: msg.actions,
+    //         })
+    //     );
+    // }
 });

@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->enum("gender", ["man", "woman", "other"])->nullable();
             $table->string("profilePicture", 255)->nullable();
             $table->double("saldo")->default("0");
-            $table->boolean("autoTopup")->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

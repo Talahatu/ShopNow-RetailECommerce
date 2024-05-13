@@ -10,11 +10,15 @@ use App\Models\ChatContent;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
+use App\Notifications\TestNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Pusher\Pusher;
+use Pusher\PushNotifications\PushNotifications;
 
 use function Ramsey\Uuid\v1;
 
@@ -94,5 +98,33 @@ class HomeController extends Controller
     {
         $shop = Shop::with(["products.category", "products.images"])->where("id", $id)->first();
         return view('regular.shop', compact("shop"));
+    }
+
+    public function testing(Request $request)
+    {
+        // Not Working
+        // Log::info("Initiate Notification...");
+        // Notification::send(User::all(), new TestNotification("multiple"));
+        // $user = User::find(2);
+        // $user->notify(new TestNotification("single"));
+        // Log::info("Notification send...");
+
+        // Pusher Beam
+        $beamsClient = new PushNotifications(array(
+            "instanceId" => "41478210-9249-430a-8232-6659fa6e957b",
+            "secretKey" => "D4BC56010FC6C07388DF9972A6FCD3773070758946FEE3416288610F0371D035",
+        ));
+        $id = "2";
+        $beamsClient->publishToUsers(
+            array("$id"),
+            array(
+                "web" => array("notification" => array(
+                    "title" => "Hello User $id",
+                    "body" => "Hello, World!",
+                    "deep_link" => "http://127.0.0.1:8000/",
+                )),
+            )
+        );
+        return response()->json($id);
     }
 }

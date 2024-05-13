@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Cart;
-use App\Models\CreateSnapToken;
 use App\Models\FinancialHistory;
 use App\Models\Notification;
 use App\Models\Order;
@@ -18,6 +16,8 @@ use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Pusher\PushNotifications\PushNotifications;
 
 use function Ramsey\Uuid\v1;
 
@@ -354,5 +354,34 @@ class UserController extends Controller
     private function calculateNewAverageRating($currentRating, $totalSold, $newRating)
     {
         return (($currentRating * $totalSold) + $newRating) / ($totalSold + 1);
+    }
+
+    // Not Used Maybe
+    public function userPushSubscribe(Request $request)
+    {
+        $this->validate($request, [
+            'endpoint' => "required",
+            "keys.auth" => "required",
+            "keys.p256dh" => "required"
+        ]);
+        $endpoint = $request->endpoint;
+        $token = $request->keys['auth'];
+        $key = $request->keys['p256dh'];
+        $user = User::find(Auth::user()->id);
+        $user->updatePushSubscription($endpoint, $key, $token);
+
+        return response()->json(['success' => true], 200);
+    }
+
+    public function generatePusherToken(Request $request)
+    {
+        $beamsClient = new PushNotifications(array(
+            "instanceId" => "41478210-9249-430a-8232-6659fa6e957b",
+            "secretKey" => "D4BC56010FC6C07388DF9972A6FCD3773070758946FEE3416288610F0371D035",
+        ));
+        $id = Auth::user()->id;
+        $token = $beamsClient->generateToken("$id");
+        Log::info($token);
+        return response()->json($token);
     }
 }

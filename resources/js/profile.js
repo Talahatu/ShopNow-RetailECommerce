@@ -65,12 +65,19 @@ $(function () {
         $("#btnSave").attr("disabled", false);
         var address = $(this).val();
         map.on("click", onMapClick);
+        console.log(
+            location.protocol +
+                "//nominatim.openstreetmap.org/search?format=json&q=" +
+                address
+        );
         $.get(
             location.protocol +
                 "//nominatim.openstreetmap.org/search?format=json&q=" +
                 address,
             function (data) {
+                console.log(data);
                 const location = data[0];
+                console.log(location);
                 map.setView(L.latLng(location.lat, location.lon), 15);
                 $("#ll").val(`${location.lat},${location.lon}`);
                 // Draw map & marker

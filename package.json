@@ -21,6 +21,7 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
+        "@pusher/push-notifications-web": "^1.1.0",
         "autonumeric": "^4.10.0",
         "bootstrap-star-rating": "^4.1.2",
         "chart.js": "^4.4.2",
@@ -31,6 +32,7 @@
         "datatables.net-rowgroup-bs5": "^1.4.1",
         "datatables.net-scroller-bs5": "^2.3.0",
         "datatables.net-select-bs5": "^1.7.0",
+        "dotenv": "^16.4.5",
         "jquery": "^3.7.1",
         "jquery-mask-plugin": "^1.14.16",
         "laravel-echo": "^1.15.3",
@@ -45,6 +47,7 @@
         "pusher-js": "^8.4.0-rc1",
         "select2": "^4.1.0-rc.0",
         "select2-bootstrap-theme": "^0.1.0-beta.10",
-        "spin.js": "^4.1.1"
+        "spin.js": "^4.1.1",
+        "web-push": "^3.6.7"
     }
 }

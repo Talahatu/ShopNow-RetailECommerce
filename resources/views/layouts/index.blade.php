@@ -28,6 +28,7 @@
 <body class="d-flex flex-column min-vh-100">
     <!-- Header -->
     @include('layouts.navbar')
+    <button class="btn btn-black btn-rounded" id="btnTesting">TESTING</button>
     <!-- Content -->
     <div class="container my-4">
         @yield('content')
@@ -64,7 +65,9 @@
         integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
     </script>
     <!-- Custom scripts -->
-    <script src="{{ asset('js/notif-listen.js') }}"></script>
+    @auth
+        <script src="{{ asset('js/notif-listen.js') }}"></script>
+    @endauth
     <script src="{{ asset('js/index.js') }}"></script>
     @yield('js')
 </body>

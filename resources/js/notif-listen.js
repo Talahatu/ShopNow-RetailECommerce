@@ -1,73 +1,161 @@
 import $ from "jquery";
-import Pusher from "pusher-js";
-import Push from "push.js";
+import * as PusherPushNotifications from "@pusher/push-notifications-web";
 
 $(function () {
-    const baseUrl = window.location.protocol + "//" + window.location.host;
+    const token = document
+        .querySelector("meta[name=csrf-token]")
+        .getAttribute("content");
+    initServiceWorker(token);
+    console.log("TESTT");
+});
+const initServiceWorker = (token) => {
+    console.log("Initiate notification script...");
+    if (!"serviceWorker" in navigator) {
+        console.log("service worker is not supported");
+        return;
+    }
 
-    const csrfToken = $('meta[name="csrf-token"]').attr("content");
-    var pusher = new Pusher("c58a82be41ea6c60c1d7", {
-        cluster: "ap1",
-        channelAuthorization: {
-            endpoint: "/pusher/auth",
-            headers: { "X-CSRF-Token": csrfToken },
-        },
+    if (PushManager in window) {
+        console.log("Push is not supported");
+        return;
+    }
+
+    navigator.serviceWorker
+        .register("/service-worker.js")
+        .then((response) => {
+            console.log("Service worker is installed");
+            initPush(token);
+        })
+        .catch((err) => {
+            console.log("ERROR: " + err);
+        });
+};
+
+const initPusher = (token) => {
+    const beamsClient = new PusherPushNotifications.Client({
+        instanceId: "41478210-9249-430a-8232-6659fa6e957b",
     });
 
-    console.log(Push.Permission.has());
-    if (!Push.Permission.has()) {
-        Push.Permission.request(onGranted, onDenied);
-    }
-    const onGranted = (params) => {
-        // console.log(params);
-    };
-    const onDenied = (params) => {
-        // console.log(params);
-    };
+    const beamTokenProvider = new PusherPushNotifications.TokenProvider({
+        url: "/pusher/request-token",
+        headers: {
+            "X-CSRF_TOKEN": token,
+        },
+    });
+    beamsClient
+        .start()
+        .then(() => beamsClient.setUserId("0", beamTokenProvider))
+        .catch(console.error);
 
+    // Device Interest
+    // window.navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+    //     const beamsClient = new PusherPushNotifications.Client({
+    //         instanceId: "41478210-9249-430a-8232-6659fa6e957b",
+    //         serviceWorkerRegistration: serviceWorkerRegistration,
+    //     });
+    //     beamsClient
+    //         .start()
+    //         .then((beamsClient) => beamsClient.getDeviceId())
+    //         .then((deviceId) =>
+    //             console.log(
+    //                 "Successfully registered with Beams. Device ID:",
+    //                 deviceId
+    //             )
+    //         )
+    //         .then(() => {
+    //             beamsClient.addDeviceInterest("Notification");
+    //         })
+    //         .then(() => beamsClient.getDeviceInterests())
+    //         .then((interests) => console.log("Current interests:", interests))
+    //         .catch(console.error);
+    // });
+};
+
+const initPush = (token) => {
+    if (!navigator.serviceWorker.ready) {
+        console.log("Service worker is not ready!!");
+        return;
+    }
+
+    new Promise(function (resolve, reject) {
+        const permissionResult = Notification.requestPermission(function (
+            result
+        ) {
+            resolve(result);
+        });
+
+        if (permissionResult) {
+            permissionResult.then(resolve, reject);
+        }
+    })
+        .then((permissionResult) => {
+            if (permissionResult !== "granted") {
+                throw new Error("We weren't granted permission.");
+            }
+            // Not working i dunno
+            // subscribeUser();
+
+            initPusher(token);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+const subscribeUser = () => {
+    navigator.serviceWorker.ready
+        .then((registration) => {
+            const subscribeOptions = {
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(
+                    "BCXOau7LQQJy-k5B8_aolbDVbw7II3rdNuX8JCfvYYBsw4vnFaG4WALCL9eoaTJNmL2YOxNit9tKUiex4ER4rWI"
+                ),
+            };
+
+            return registration.pushManager.subscribe(subscribeOptions);
+        })
+        .then((pushSubscription) => {
+            console.log(
+                "Received PushSubscription: ",
+                JSON.stringify(pushSubscription)
+            );
+            storePushSubscription(pushSubscription);
+        });
+};
+
+const storePushSubscription = (pushSubscription) => {
+    const details = JSON.stringify(pushSubscription);
+    console.log(details);
     $.ajax({
         type: "POST",
-        url: "/getAllRelatedShop",
-        data: {
-            _token: csrfToken,
+        url: "/pushSubscription",
+        data: details,
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRF_TOKEN", token);
         },
         success: function (response) {
-            for (const order of response.orders) {
-                let channel = pusher.subscribe(
-                    `private-my-channel-${order.user_id}-${order.shop_id}`
-                );
-
-                channel.bind("client-notif", function (data) {
-                    let title = ``;
-                    switch (data.key) {
-                        case "accept":
-                            title = "Pesanan Diterima";
-                            break;
-                        case "sentToCourier":
-                            title = "Pesanan Diberikan Ke Kurir";
-                            break;
-                        case "courierPickUp":
-                            title = "Pesanan Sedang Dalam Perjalanan";
-                            break;
-                        case "courierFinish":
-                            title = "Pesanan Telah Berhasil Sampai";
-                            break;
-                        default:
-                            console.log("There is a problem!!");
-                            return;
-                    }
-                    Push.create(title, {
-                        body: data.message + " " + data.time,
-                        icon: baseUrl + "/images/logoshpnw2_ver4.png",
-                        link: "/profile/notif",
-                        timeout: 4000,
-                        onClick: function () {
-                            window.focus();
-                            this.close();
-                        },
-                    });
-                });
-            }
+            console.log("Success: ");
+            console.log(response);
+        },
+        error: function (err) {
+            console.log("Error: ");
+            console.log(err);
         },
     });
-});
+};
+
+const urlBase64ToUint8Array = (base64String) => {
+    var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    var base64 = (base64String + padding)
+        .replace(/\-/g, "+")
+        .replace(/_/g, "/");
+
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+
+    for (var i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+};
