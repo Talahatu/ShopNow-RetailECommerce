@@ -156,11 +156,11 @@ $(function () {
                     return;
                 }
                 if (Push.Permission.has()) {
-                    Push.create("New order created!", {
+                    Push.create("Pesanan Baru Dibuat!", {
                         body:
-                            "Your new order is successfully created at " +
+                            "Pesanan anda telah berhasil dibuat! " +
                             new Date() +
-                            ". Waiting for your order to be accepted by seller.",
+                            ". Menunggu penjual untuk menerima pesanan anda.",
                         icon: baseUrl + "/images/logoshpnw2_ver4.png",
                         link: "/profile/notif",
                         timeout: 4000,

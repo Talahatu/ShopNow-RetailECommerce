@@ -49,7 +49,7 @@ class TestNotification extends Notification
             ->title('I\'m Notification Title')
             ->icon('/notification-icon.png')
             ->body('Great, Push Notifications work!')
-            ->action('View App', 'notification_action');
+            ->action('View App', 'http://127.0.0.1:8000/home');
     }
 
     /**

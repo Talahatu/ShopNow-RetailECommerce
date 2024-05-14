@@ -6,10 +6,23 @@ $(document).ready(function () {
         .querySelector("meta[name=csrf-token]")
         .getAttribute("content");
     $(document).on("click", "#logout", function () {
-        const beamsClient = new PusherPushNotifications.Client({
-            instanceId: "41478210-9249-430a-8232-6659fa6e957b",
-        });
-        beamsClient.stop();
+        // Maybe not used anymore
+        // window.navigator.serviceWorker.ready.then(
+        //     (serviceWorkerRegistration) => {
+        //         const beamsClient = new PusherPushNotifications.Client({
+        //             instanceId: "1d20c86a-7a76-4cb2-b6ff-8053628e0303",
+        //             serviceWorkerRegistration: serviceWorkerRegistration,
+        //         });
+        //         console.log(
+        //             "Log Out",
+        //             beamsClient.getDeviceInterests(),
+        //             beamsClient.getUserId(),
+        //             beamsClient.userId
+        //         );
+        //         beamsClient.clearAllState();
+        //         beamsClient.stop();
+        //     }
+        // );
         $(this).parent().submit();
     });
 

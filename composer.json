@@ -19,7 +19,8 @@
         "midtrans/midtrans-php": "^2.5",
         "pusher/pusher-php-server": "^7.2",
         "pusher/pusher-push-notifications": "^1.1",
-        "silviolleite/laravelpwa": "^2.0"
+        "silviolleite/laravelpwa": "^2.0",
+        "minishlink/web-push": "v7.1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

@@ -16,6 +16,7 @@ use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Pusher\PushNotifications\PushNotifications;
 
 use function Ramsey\Uuid\v1;
 
@@ -67,23 +68,25 @@ class OrderController extends Controller
 
             $shopID = $order->shop_id;
             $userID = $order->user_id;
-            $options = array(
-                'cluster' => 'ap1',
-                'useTLS' => true
-            );
-            $pusher = new \Pusher\Pusher(
-                'c58a82be41ea6c60c1d7',
-                '8264fc21e2b5035cc329',
-                '1716744',
-                $options
-            );
 
-            $data['message'] = "Pesanan anda dengan nomor $order->orderID telah diterima";
-            $data["key"] = "accept";
-            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            // Deprecated
+            // $options = array(
+            //     'cluster' => 'ap1',
+            //     'useTLS' => true
+            // );
+            // $pusher = new \Pusher\Pusher(
+            //     'c58a82be41ea6c60c1d7',
+            //     '8264fc21e2b5035cc329',
+            //     '1716744',
+            //     $options
+            // );
 
-            // regular-seller
-            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+            // $data['message'] = "Pesanan anda dengan nomor $order->orderID telah diterima";
+            // $data["key"] = "accept";
+            // $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
+            // // regular-seller
+            // $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
 
             $newNotif = new Notification();
             $newNotif->header = "Pemberitahuan Pesanan";

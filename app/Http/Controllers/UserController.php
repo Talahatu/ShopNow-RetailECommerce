@@ -373,15 +373,41 @@ class UserController extends Controller
         return response()->json(['success' => true], 200);
     }
 
+    // Maybe not used anymore
     public function generatePusherToken(Request $request)
     {
+        if ($request->get("user_id") == $id = Auth::user()->id) {
+            $beamsClient = new PushNotifications(array(
+                "instanceId" => "1d20c86a-7a76-4cb2-b6ff-8053628e0303",
+                "secretKey" => "C7C265C55D4DFDF7B7D5E6114C62E5BE0AB8716B00B7DB802DC4E35E3F2AD8DA",
+            ));
+            $token = $beamsClient->generateToken("$id");
+            // $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvMWQyMGM4NmEtN2E3Ni00Y2IyLWI2ZmYtODA1MzYyOGUwMzAzLnB1c2hub3RpZmljYXRpb25zLnB1c2hlci5jb20iLCJzdWIiOiIxIiwiZXhwIjoxNzE1Nzg2MTQzfQ.E6jcUp-7EJbUrs-b_hKqNJW_Mxu-cmvt_JaXjnN6X2U";
+
+            Log::info($token);
+            return response()->json($token);
+        } else {
+            Log::info("Inconsistent User ID...");
+            return response('Inconsistent request', 401);
+        }
+    }
+
+    public function getLoggedInID(Request $request)
+    {
+        return response()->json(Auth::user()->id);
+    }
+
+    // Maybe not used anymore
+    public function notificationDenied(Request $request)
+    {
         $beamsClient = new PushNotifications(array(
-            "instanceId" => "41478210-9249-430a-8232-6659fa6e957b",
-            "secretKey" => "D4BC56010FC6C07388DF9972A6FCD3773070758946FEE3416288610F0371D035",
+            "instanceId" => "1d20c86a-7a76-4cb2-b6ff-8053628e0303",
+            "secretKey" => "C7C265C55D4DFDF7B7D5E6114C62E5BE0AB8716B00B7DB802DC4E35E3F2AD8DA",
         ));
         $id = Auth::user()->id;
-        $token = $beamsClient->generateToken("$id");
-        Log::info($token);
-        return response()->json($token);
+        $res = $beamsClient->deleteUser("$id");
+
+        Log::info($id);
+        return response()->json($res);
     }
 }

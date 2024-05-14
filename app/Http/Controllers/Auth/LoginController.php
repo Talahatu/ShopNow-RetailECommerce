@@ -9,6 +9,9 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Pusher\PushNotifications\PushNotifications;
 
 class LoginController extends Controller
 {
@@ -86,5 +89,22 @@ class LoginController extends Controller
             return ['email' => $request->get('email'), 'password' => $request->get('password')];
         }
         return ['username' => $request->get('email'), 'password' => $request->get('password')];
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
     }
 }

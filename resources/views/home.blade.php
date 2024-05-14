@@ -11,8 +11,7 @@
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarLeftAlignExample"
                 aria-controls="navbarLeftAlignExample" aria-expanded="false" aria-label="Toggle navigation"><i
-                    class="fas fa-bars"></i>
-            </button>
+                    class="fas fa-bars"></i>&nbsp;&nbsp; <span>Kategori</span></button>
             <!-- Collapsible wrapper -->
             <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
                 <!-- Left links -->

@@ -24,7 +24,7 @@ class Address extends Model
         return $this->belongsTo(User::class, "user_id", "id");
     }
 
-    public function addNewAddress($address, $id, $latlong)
+    public static function addNewAddress($address, $id, $latlong)
     {
         $newAddress = new Address();
         $newAddress->user_id = $id;

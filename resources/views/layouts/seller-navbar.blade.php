@@ -133,7 +133,7 @@
                             <p class="preview-subject mb-1">Pengaturan</p>
                         </div>
                     </a>
-                    <a class="dropdown-item preview-item" href="/">
+                    <a class="dropdown-item preview-item" href="{{ route('home') }}">
                         <div class="preview-thumbnail">
                             <div class="preview-icon bg-dark rounded-circle">
                                 <i class="mdi mdi mdi-keyboard-backspace text-warning"></i>
@@ -146,7 +146,7 @@
                     <div class="dropdown-divider"></div>
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
-                        <button class="dropdown-item preview-item" type="submit">
+                        <button class="dropdown-item preview-item" type="submit" id="btnLogoutSeller">
                             <div class="preview-thumbnail">
                                 <div class="preview-icon bg-dark rounded-circle">
                                     <i class="mdi mdi-logout text-danger"></i>

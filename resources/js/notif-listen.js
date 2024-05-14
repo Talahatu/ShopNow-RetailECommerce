@@ -1,15 +1,12 @@
 import $ from "jquery";
-import * as PusherPushNotifications from "@pusher/push-notifications-web";
 
 $(function () {
     const token = document
         .querySelector("meta[name=csrf-token]")
         .getAttribute("content");
     initServiceWorker(token);
-    console.log("TESTT");
 });
 const initServiceWorker = (token) => {
-    console.log("Initiate notification script...");
     if (!"serviceWorker" in navigator) {
         console.log("service worker is not supported");
         return;
@@ -21,9 +18,8 @@ const initServiceWorker = (token) => {
     }
 
     navigator.serviceWorker
-        .register("/service-worker.js")
+        .register("/serviceworkerV1.js")
         .then((response) => {
-            console.log("Service worker is installed");
             initPush(token);
         })
         .catch((err) => {
@@ -31,45 +27,93 @@ const initServiceWorker = (token) => {
         });
 };
 
-const initPusher = (token) => {
-    const beamsClient = new PusherPushNotifications.Client({
-        instanceId: "41478210-9249-430a-8232-6659fa6e957b",
-    });
+//     $.ajax({
+//         type: "POST",
+//         url: "/getLoggedIn",
+//         data: {
+//             _token: token,
+//         },
+//         success: function (response) {
+//             window.navigator.serviceWorker.ready.then(
+//                 (serviceWorkerRegistration) => {
+//                     const beamsClient = new PusherPushNotifications.Client({
+//                         instanceId: "1d20c86a-7a76-4cb2-b6ff-8053628e0303",
+//                         serviceWorkerRegistration: serviceWorkerRegistration,
+//                     });
+//                     const beamTokenProvider =
+//                         new PusherPushNotifications.TokenProvider({
+//                             url: "/pusher/request-token",
+//                             headers: {
+//                                 "X-CSRF_TOKEN": token,
+//                             },
+//                         });
+//                     beamsClient.getRegistrationState().then((state) => {
+//                         let states = PusherPushNotifications.RegistrationState;
+//                         console.log(state);
+//                         switch (state) {
+//                             case states.PERMISSION_GRANTED_REGISTERED_WITH_BEAMS:
+//                             case states.PERMISSION_PROMPT_REQUIRED:
+//                                 beamsClient
+//                                     .start()
+//                                     .then(() =>
+//                                         beamsClient.setUserId(
+//                                             `${response}`,
+//                                             beamTokenProvider
+//                                         )
+//                                     )
+//                                     .catch(console.error);
+//                                 break;
+//                             case states.PERMISSION_GRANTED_NOT_REGISTERED_WITH_BEAMS:
+//                                 beamsClient.start().then(() => {
+//                                     beamsClient.setUserId(
+//                                         `${response}`,
+//                                         beamTokenProvider
+//                                     );
+//                                 });
+//                             case states.PERMISSION_DENIED:
+//                                 beamsClient.stop();
+//                                 $.ajax({
+//                                     type: "POST",
+//                                     url: "/notification/change/denied",
+//                                     data: {
+//                                         _token: token,
+//                                     },
+//                                     success: function (response) {
+//                                         console.log(response);
+//                                     },
+//                                 });
+//                             default:
+//                                 break;
+//                         }
+//                     });
+//                 }
+//             );
+//         },
+//     });
 
-    const beamTokenProvider = new PusherPushNotifications.TokenProvider({
-        url: "/pusher/request-token",
-        headers: {
-            "X-CSRF_TOKEN": token,
-        },
-    });
-    beamsClient
-        .start()
-        .then(() => beamsClient.setUserId("0", beamTokenProvider))
-        .catch(console.error);
-
-    // Device Interest
-    // window.navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-    //     const beamsClient = new PusherPushNotifications.Client({
-    //         instanceId: "41478210-9249-430a-8232-6659fa6e957b",
-    //         serviceWorkerRegistration: serviceWorkerRegistration,
-    //     });
-    //     beamsClient
-    //         .start()
-    //         .then((beamsClient) => beamsClient.getDeviceId())
-    //         .then((deviceId) =>
-    //             console.log(
-    //                 "Successfully registered with Beams. Device ID:",
-    //                 deviceId
-    //             )
-    //         )
-    //         .then(() => {
-    //             beamsClient.addDeviceInterest("Notification");
-    //         })
-    //         .then(() => beamsClient.getDeviceInterests())
-    //         .then((interests) => console.log("Current interests:", interests))
-    //         .catch(console.error);
-    // });
-};
+//     // Device Interest
+//     window.navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+//         const beamsClient = new PusherPushNotifications.Client({
+//             instanceId: "41478210-9249-430a-8232-6659fa6e957b",
+//             serviceWorkerRegistration: serviceWorkerRegistration,
+//         });
+//         beamsClient
+//             .start()
+//             .then((beamsClient) => beamsClient.getDeviceId())
+//             .then((deviceId) =>
+//                 console.log(
+//                     "Successfully registered with Beams. Device ID:",
+//                     deviceId
+//                 )
+//             )
+//             .then(() => {
+//                 beamsClient.addDeviceInterest("Notification");
+//             })
+//             .then(() => beamsClient.getDeviceInterests())
+//             .then((interests) => console.log("Current interests:", interests))
+//             .catch(console.error);
+//     });
+// };
 
 const initPush = (token) => {
     if (!navigator.serviceWorker.ready) {
@@ -92,37 +136,36 @@ const initPush = (token) => {
             if (permissionResult !== "granted") {
                 throw new Error("We weren't granted permission.");
             }
-            // Not working i dunno
-            // subscribeUser();
-
-            initPusher(token);
+            subscribeUser(token);
         })
         .catch((err) => {
             console.log(err);
         });
 };
-const subscribeUser = () => {
+const subscribeUser = (token) => {
     navigator.serviceWorker.ready
         .then((registration) => {
             const subscribeOptions = {
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(
-                    "BCXOau7LQQJy-k5B8_aolbDVbw7II3rdNuX8JCfvYYBsw4vnFaG4WALCL9eoaTJNmL2YOxNit9tKUiex4ER4rWI"
+                    "BE52J9nDjDid9VXZ0F0sLnCItJGZ4Da1FYRgRhMZEw7okcqv4hfc3s9d3l0kAxvRXHwQSsrlExFwNqhep8rSyvY"
                 ),
             };
 
+            // return registration.pushManager.getSubscription();
             return registration.pushManager.subscribe(subscribeOptions);
         })
         .then((pushSubscription) => {
+            // return pushSubscription.unsubscribe();
             console.log(
                 "Received PushSubscription: ",
                 JSON.stringify(pushSubscription)
             );
-            storePushSubscription(pushSubscription);
+            storePushSubscription(pushSubscription, token);
         });
 };
 
-const storePushSubscription = (pushSubscription) => {
+const storePushSubscription = (pushSubscription, token) => {
     const details = JSON.stringify(pushSubscription);
     console.log(details);
     $.ajax({

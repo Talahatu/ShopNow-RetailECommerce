@@ -39,6 +39,7 @@ Route::get('/', function () {
 });
 Route::post('/pusher/auth', [PusherController::class, "auth"]);
 Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
+
 Route::post("/pushSubscription", [UserController::class, "userPushSubscribe"])->middleware("auth");
 Route::get("/pusher/request-token", [UserController::class, "generatePusherToken"])->middleware("auth");
 Route::middleware(["prevent.courier"])->group(function () {
@@ -102,6 +103,9 @@ Route::middleware(["auth", "prevent.courier"])->group(function () {
     Route::post("/processAcc", [UserController::class, "processSellerAcc"])->name('seller.acc.process');
 
     Route::post("/getAllRelatedShop", [UserController::class, "getAllRelatedShop"])->name("get.all");
+    Route::post("/getLoggedIn", [UserController::class, "getLoggedInID"]);
+
+    Route::post("/notification/change/denied", [UserController::class, "notificationDenied"]);
     // not used yet
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
 });

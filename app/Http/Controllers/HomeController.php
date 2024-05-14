@@ -103,28 +103,27 @@ class HomeController extends Controller
     public function testing(Request $request)
     {
         // Not Working
-        // Log::info("Initiate Notification...");
-        // Notification::send(User::all(), new TestNotification("multiple"));
-        // $user = User::find(2);
-        // $user->notify(new TestNotification("single"));
-        // Log::info("Notification send...");
+        Log::info("Initiate Notification...");
+        $user = User::find(Auth::user()->id);
+        $user->notify(new TestNotification("single"));
+        Log::info("Notification send...");
 
         // Pusher Beam
-        $beamsClient = new PushNotifications(array(
-            "instanceId" => "41478210-9249-430a-8232-6659fa6e957b",
-            "secretKey" => "D4BC56010FC6C07388DF9972A6FCD3773070758946FEE3416288610F0371D035",
-        ));
-        $id = "2";
-        $beamsClient->publishToUsers(
-            array("$id"),
-            array(
-                "web" => array("notification" => array(
-                    "title" => "Hello User $id",
-                    "body" => "Hello, World!",
-                    "deep_link" => "http://127.0.0.1:8000/",
-                )),
-            )
-        );
-        return response()->json($id);
+        // $beamsClient = new PushNotifications(array(
+        //     "instanceId" => "1d20c86a-7a76-4cb2-b6ff-8053628e0303",
+        //     "secretKey" => "C7C265C55D4DFDF7B7D5E6114C62E5BE0AB8716B00B7DB802DC4E35E3F2AD8DA",
+        // ));
+        // $id = "2";
+        // $beamsClient->publishToUsers(
+        //     array("$id"),
+        //     array(
+        //         "web" => array("notification" => array(
+        //             "title" => "Hello User $id",
+        //             "body" => "Hello, World!",
+        //             "deep_link" => "http://127.0.0.1:8000/",
+        //         )),
+        //     )
+        // );
+        return response()->json($user);
     }
 }
