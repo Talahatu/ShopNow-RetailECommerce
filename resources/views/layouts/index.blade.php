@@ -21,15 +21,22 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/style-canvas.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @yield('css')
-    @laravelPWA
+    @laravelPWA()
 
 </head>
 
 <body class="d-flex flex-column min-vh-100">
     <!-- Header -->
     @include('layouts.navbar')
-    <button class="btn btn-black btn-rounded" id="btnTesting">TESTING</button>
+    {{-- <button class="btn btn-black btn-rounded" id="btnTesting">TESTING</button> --}}
     <!-- Content -->
+    <div class="bg-light opacity-50 loader-container d-flex justify-content-center align-items-center" id="loader">
+        <div class="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
     <div class="container my-4">
         @yield('content')
     </div>

@@ -11,6 +11,8 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductStockHistory;
 use App\Models\Shop;
+use App\Models\User;
+use App\Notifications\OrderNotification;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -61,37 +63,19 @@ class OrderController extends Controller
     {
         $orderID = $request->get("orderID");
         DB::transaction(function () use ($orderID) {
+            $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
             $order = Order::find($orderID);
             $order->orderStatus = "accepted";
-            $order->accept_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $order->accept_date = $datetime;
             $order->save();
 
-            $shopID = $order->shop_id;
-            $userID = $order->user_id;
-
-            // Deprecated
-            // $options = array(
-            //     'cluster' => 'ap1',
-            //     'useTLS' => true
-            // );
-            // $pusher = new \Pusher\Pusher(
-            //     'c58a82be41ea6c60c1d7',
-            //     '8264fc21e2b5035cc329',
-            //     '1716744',
-            //     $options
-            // );
-
-            // $data['message'] = "Pesanan anda dengan nomor $order->orderID telah diterima";
-            // $data["key"] = "accept";
-            // $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-
-            // // regular-seller
-            // $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+            $user = User::find($order->user_id);
+            $user->notify(new OrderNotification("Pesanan Anda Diterima", "Pesanan anda " . $order->orderID . " telah diterima oleh seller pada $datetime. Pesanan anda saat ini sedang diproses.", route("profile.order")));
 
             $newNotif = new Notification();
             $newNotif->header = "Pemberitahuan Pesanan";
-            $newNotif->content = "Pesanan anda telah diterima oleh seller. Pesanan anda saat ini sedang diproses.";
-            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->content = "Pesanan anda $order->orderID telah diterima oleh seller pada $datetime. Pesanan anda saat ini sedang diproses.";
+            $newNotif->date = $datetime;
             $newNotif->user_id = $order->user_id;
             $newNotif->save();
         });
@@ -106,7 +90,10 @@ class OrderController extends Controller
             $order->orderStatus = "cancel";
             $order->save();
 
+            $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+
             $orderedProducts = OrderDetail::where("order_id", $order->id)->get();
+
             foreach ($orderedProducts as $key => $value) {
                 $products = Product::where('id', $value->product_id)->first();
                 $products->stock = $products->stock + $value->qty;
@@ -117,36 +104,20 @@ class OrderController extends Controller
                 $history->product_id = $value->product_id;
                 $history->addition = $value->qty;
                 $history->substraction = 0;
-                $history->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                $history->date = $datetime;
                 $history->save();
             }
 
+
+            $user = User::find($order->user_id);
+            $user->notify(new OrderNotification("Pesanan Anda Ditolak", "Pesanan anda " . $order->orderID . " ditolak oleh seller pada $datetime karena $reason.", route("profile.order")));
+
             $newNotif = new Notification();
             $newNotif->header = "Pesanan anda ditolak oleh seller";
-            $newNotif->content = "Pesanan anda ditolak oleh seller karena $reason";
-            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->content = "Pesanan anda ditolak oleh seller pada $datetime karena $reason.";
+            $newNotif->date = $datetime;
             $newNotif->user_id = $order->user_id;
             $newNotif->save();
-
-            $shopID = $order->shop_id;
-            $userID = $order->user_id;
-            $options = array(
-                'cluster' => 'ap1',
-                'useTLS' => true
-            );
-            $pusher = new \Pusher\Pusher(
-                'c58a82be41ea6c60c1d7',
-                '8264fc21e2b5035cc329',
-                '1716744',
-                $options
-            );
-
-            $data['message'] = "Pesanan anda dengan nomor $order->orderID telah ditolak";
-            $data["key"] = "accept";
-            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-
-            // regular-seller
-            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
         });
         return response()->json($orderID);
     }

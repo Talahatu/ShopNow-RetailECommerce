@@ -1,10 +1,44 @@
 :root {
     --dark-background: #191c24;
+    --dark-background-3: #1d212d;
     --dark-background-v2: #242937;
     --dark-background-2: #353b4d;
     --scrollbar-handle: #b3b3b3;
     --scrollbar-handle-hover: #717171;
 }
+#loader {
+    visibility: hidden;
+}
+.loader-container {
+    width: 100% !important;
+    height: 100vh !important;
+    position: fixed;
+    z-index: 99999;
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 60px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+    background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+    20% {
+        background-position: 0% 0%, 50% 50%, 100% 50%;
+    }
+    40% {
+        background-position: 0% 100%, 50% 0%, 100% 50%;
+    }
+    60% {
+        background-position: 0% 50%, 50% 100%, 100% 0%;
+    }
+    80% {
+        background-position: 0% 50%, 50% 50%, 100% 100%;
+    }
+}
+
 body {
     background-color: var(--dark-background-v2);
 }

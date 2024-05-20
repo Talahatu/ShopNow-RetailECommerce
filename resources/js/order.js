@@ -31,6 +31,7 @@ $(function () {
     $("#myorder > a").addClass("active");
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     const baseUrl = window.location.protocol + "//" + window.location.host;
+    let orderPaymentType = null;
 
     let formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -569,7 +570,7 @@ $(function () {
         const orderID = $(this).attr("data-dia");
         let courierID = "";
         let date = "";
-        let saku = 0;
+
         const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
@@ -577,7 +578,6 @@ $(function () {
                 <button type="button" class="btn btn-primary" id="saveDelivery" disabled>Simpan</button>
             `);
 
-        let orderPaymentType = null;
         // Query couriers for table and select2
         $.ajax({
             type: "POST",
@@ -660,8 +660,7 @@ $(function () {
                     });
 
                     $(document).on("input", "#UangSaku", function () {
-                        saku = $(this).cleanVal();
-                        checkModalRequirement(date, courierID, saku);
+                        checkModalRequirement(date, courierID);
                     });
                 }
                 var picker = new Pikaday({
@@ -676,9 +675,10 @@ $(function () {
                     format: "dddd, D MMMM YYYY",
                     defaultDate: new Date(),
                     minDate: new Date(),
+                    container: document.getElementById("datepicker-popup"),
                     onSelect: function (value) {
                         date = this.toString("YYYY-MM-DD");
-                        checkModalRequirement(date, courierID, saku);
+                        checkModalRequirement(date, courierID);
                     },
                 });
                 picker.setDate(new Date());
@@ -719,11 +719,11 @@ $(function () {
                     })
                     .on("select2:select", function (e) {
                         courierID = $(e.currentTarget).val();
-                        checkModalRequirement(date, courierID, saku);
+                        checkModalRequirement(date, courierID);
                     })
                     .on("select2:unselect", function (e) {
                         courierID = "";
-                        checkModalRequirement(date, courierID, saku);
+                        checkModalRequirement(date, courierID);
                     });
             })
             .catch(function (param) {
@@ -764,25 +764,32 @@ $(function () {
             });
         });
     });
+    const columnOpenFix = () => {
+        // datatable.net type column somehow not working, this is a makeshift solution
+        $("td")
+            .filter(function () {
+                return $(this).children("div").length === 0;
+            })
+            .on("click", function () {
+                const parent = $(this).parent();
+                const firstChild = $(parent).children().first();
+                if (!$(this).hasClass("dtr-control")) $(firstChild).click();
+            });
+    };
+
+    const checkModalRequirement = (date, courier) => {
+        if (orderPaymentType == "cod") {
+            const saku = $("#UangSaku").cleanVal();
+            if (date != "" && courier != "" && saku > 0) {
+                $("#saveDelivery").attr("disabled", false);
+                return;
+            }
+        } else if (orderPaymentType == "saldo") {
+            if (date != "" && courier != "") {
+                $("#saveDelivery").attr("disabled", false);
+                return;
+            }
+        }
+        $("#saveDelivery").attr("disabled", true);
+    };
 });
-
-const columnOpenFix = () => {
-    // datatable.net type column somehow not working, this is a makeshift solution
-    $("td")
-        .filter(function () {
-            return $(this).children("div").length === 0;
-        })
-        .on("click", function () {
-            const parent = $(this).parent();
-            const firstChild = $(parent).children().first();
-            if (!$(this).hasClass("dtr-control")) $(firstChild).click();
-        });
-};
-
-const checkModalRequirement = (date, courier, saku) => {
-    if (date != "" && courier != "" && saku > 0) {
-        $("#saveDelivery").attr("disabled", false);
-        return;
-    }
-    $("#saveDelivery").attr("disabled", true);
-};

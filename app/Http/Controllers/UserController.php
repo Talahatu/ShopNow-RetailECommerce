@@ -356,7 +356,6 @@ class UserController extends Controller
         return (($currentRating * $totalSold) + $newRating) / ($totalSold + 1);
     }
 
-    // Not Used Maybe
     public function userPushSubscribe(Request $request)
     {
         $this->validate($request, [

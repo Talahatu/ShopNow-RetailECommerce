@@ -10,6 +10,7 @@ use App\Models\ChatContent;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
+use App\Notifications\OrderNotification;
 use App\Notifications\TestNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,7 +106,7 @@ class HomeController extends Controller
         // Not Working
         Log::info("Initiate Notification...");
         $user = User::find(Auth::user()->id);
-        $user->notify(new TestNotification("single"));
+        $user->notify(new OrderNotification("TEST TITLE", "TEST BODY", route("order.index")));
         Log::info("Notification send...");
 
         // Pusher Beam

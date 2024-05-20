@@ -66,7 +66,35 @@ self.addEventListener("push", function (event) {
                 body: msg.body,
                 icon: msg.icon,
                 actions: msg.actions,
+                data: msg.data.url,
             })
         );
     }
+});
+
+self.addEventListener("notificationclick", (event) => {
+    console.log("Click New Notification");
+    const notif = event.notification;
+    const url = notif.data;
+    event.waitUntil(
+        self.clients.matchAll({ type: "window" }).then((clientsArr) => {
+            const hadWindow = clientsArr.some((client) => {
+                if (client.url === url) {
+                    client.focus();
+                    return true;
+                }
+                if (client.visibilityState === "visible") {
+                    client.navigate(url);
+                    return true;
+                }
+                return false;
+            });
+
+            if (!hadWindow) {
+                self.clients.openWindow(url).then((client) => {
+                    client ? client.focus() : null;
+                });
+            }
+        })
+    );
 });

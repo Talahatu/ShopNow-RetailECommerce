@@ -141,6 +141,9 @@ $(function () {
         const addressID = $("#btnChangeShip").attr("attr-dia");
         const method = $(".btn-method:checked").val();
         const total = $("#total-checkout").val();
+
+        $("#loader").css("visibility", "visible");
+        // Need to notify seller
         $.ajax({
             type: "POST",
             url: "/checkout/create",
@@ -170,6 +173,7 @@ $(function () {
                         },
                     });
                 }
+                $("#loader").css("visibility", "hidden");
                 window.location.href = "/profile/order";
             },
             error: function (err) {

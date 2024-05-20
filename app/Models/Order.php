@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\OrderNotification;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PDO;
 
 class Order extends Model
@@ -51,9 +53,10 @@ class Order extends Model
                     ->orderBy("products.shop_id")
                     ->get(["products.shop_id"]);
                 $allShopID = $carts->unique('shop_id')->pluck("shop_id")->values();
+                $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
 
+                // Tiap Toko
                 foreach ($allShopID as $value) {
-                    // Tiap Toko
                     $aggregateData = Cart::join("products", "products.id", "cart.product_id")
                         ->join("shops", "shops.id", "products.shop_id")
                         ->where("products.shop_id", $value)
@@ -65,6 +68,8 @@ class Order extends Model
                         ->first([DB::raw("SUM(cart.qty*cart.price) AS cartTotal"), DB::raw("SUM(CalculateFeeByWeight(products.weight*cart.qty) + CalculateFeeByDistance(cart.distance)) AS shippingFee")]);
                     $total = $aggregateData->cartTotal + $aggregateData->shippingFee;
                     $totalCheckout += $total;
+
+                    // Check saldo with checkout 
                     if ($totalCheckout > Auth::user()->saldo && $payment == "saldo") {
                         throw new Exception("Saldo not enough.", 1);
                     }
@@ -81,7 +86,7 @@ class Order extends Model
                     $newOrder = new Order();
                     $newOrder->user_id = Auth::user()->id;
                     $newOrder->shop_id = $value;
-                    $newOrder->order_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+                    $newOrder->order_date = $datetime;
                     $newOrder->orderStatus = 'new';
                     $newOrder->destination_address = $address->name;
                     $newOrder->destination_latitude = $address->lat;
@@ -95,6 +100,13 @@ class Order extends Model
                     $newOrder->distance = $cartProductsByShop[0]->distance;
                     $newOrder->save();
 
+                    // Push Notification To Every Seller 
+                    $seller = User::join("shops", "shops.user_id", "users.id")->where("shops.id", $value)->first(["users.*"]);
+                    Log::info($seller);
+                    Log::info($value);
+                    $seller->notify(new OrderNotification("Pesanan Baru!", "Terdapat pesanan baru untuk toko anda pada " . $datetime, route("order.index")));
+
+                    // Each product in cart
                     foreach ($cartProductsByShop as $item) {
                         $newDetail = new OrderDetail();
                         $newDetail->order_id = $newOrder->id;
@@ -117,28 +129,29 @@ class Order extends Model
                         $product->status = ($product->stock == 0 ? "out of stock" : $product->status);
                         $product->save();
 
-
-
                         $prodHistory = new ProductStockHistory();
                         $prodHistory->product_id = $item->product_id;
                         $prodHistory->addition = 0;
                         $prodHistory->substraction = $item->qty;
-                        $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                        $prodHistory->date = $datetime;
                         $prodHistory->save();
 
                         array_push($deletedCart, $item->id);
                     }
                 }
+
+                // update saldo
                 if ($payment == "saldo") {
                     $user = User::find(Auth::user()->id);
                     $user->saldo = $user->saldo - $total;
                     $user->save();
                 }
 
+                // Notification To Buyer 
                 $newNotif = new Notification();
                 $newNotif->header = "Pesanan baru berhasil dibuat!";
                 $newNotif->content = "Pesanan anda telah berhasil dibuat. Menunggu aksi dari seller!";
-                $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                $newNotif->date = $datetime;
                 $newNotif->user_id = Auth::user()->id;
                 $newNotif->save();
             });

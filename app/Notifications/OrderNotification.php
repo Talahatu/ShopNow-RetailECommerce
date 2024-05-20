@@ -5,25 +5,26 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
 
-class TestNotification extends Notification
+class OrderNotification extends Notification
 {
     use Queueable;
 
-    private $testing;
+    private $title, $body, $url;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($param)
+    public function __construct($title, $body, $url)
     {
-        $this->testing = $param;
+        $this->title = $title;
+        $this->body = $body;
+        $this->url = $url;
     }
 
     /**
@@ -45,7 +46,6 @@ class TestNotification extends Notification
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
             ->line('The introduction to the notification.')
             ->action('Notification Action', url('/'))
@@ -68,10 +68,10 @@ class TestNotification extends Notification
     public function toWebPush($notifiable)
     {
         return (new WebPushMessage)
-            ->title("New Notification Received!")
+            ->title($this->title)
             ->icon("/notification-icon.png")
-            ->body('Great, Push Notifications work!')
-            ->data(["url" => "http://127.0.0.1:8000/profile/bio"])
-            ->action('View App', 'notification_action');
+            ->body($this->body)
+            ->data(["url" => env("APP_URL") . $this->url])
+            ->action('Buka Pesanan', 'notification_action');
     }
 }
