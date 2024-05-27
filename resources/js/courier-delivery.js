@@ -157,6 +157,8 @@ $(function () {
         let counter = 0; // For lighter check (hopefully)
 
         map.on("locationfound", function (e) {
+            console.log("Fetching location...");
+            console.log("Accuracy: " + e.accuracy);
             if (e.accuracy <= 50) {
                 map.spin(false);
                 const currentPosition = e.latlng;

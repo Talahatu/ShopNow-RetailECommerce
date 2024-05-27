@@ -101,8 +101,9 @@ class HomeController extends Controller
         return view('regular.shop', compact("shop"));
     }
 
-    public function testing(Request $request)
+    public function testing()
     {
+        return view("welcome");
         // Not Working
         Log::info("Initiate Notification...");
         $user = User::find(Auth::user()->id);

@@ -18,6 +18,7 @@ import "select2/dist/css/select2.min.css";
 import "select2-bootstrap-theme/dist/select2-bootstrap.min.css";
 
 import "jquery-mask-plugin";
+import { padEnd } from "lodash";
 
 document.onreadystatechange = function () {
     if (document.readyState == "complete") {
@@ -55,14 +56,25 @@ $(function () {
         return [
             { data: "orderID" },
             { data: "order_date", visible: false },
-            { data: "destination_address" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    const max_length = 30;
+                    const lenght = data.destination_address.length;
+                    return lenght > 30
+                        ? data.destination_address
+                              .substring(0, max_length + 1)
+                              .padEnd(max_length + 3, ".")
+                        : data.destination_address;
+                },
+            },
+            { data: "payment_method" },
             {
                 data: null,
                 render: function (data, type, row) {
                     return data.distance + " KM";
                 },
             },
-            { data: "payment_method" },
             {
                 data: null,
                 render: function (data, type, row) {
@@ -136,7 +148,7 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
-        columnDefs: [{ targets: [0, 3], className: "text-end" }],
+        columnDefs: [{ targets: [0, 4], className: "text-end" }],
         order: [[1, "DESC"]],
     });
 
@@ -164,6 +176,9 @@ $(function () {
         const button = $(this);
         const parent = $("#row_" + orderID);
 
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
+
         $.ajax({
             type: "POST",
             url: "/getIdsFromOrder",
@@ -180,6 +195,7 @@ $(function () {
                         orderID: orderID,
                     },
                     success: function (response) {
+                        console.log(response);
                         if (response) {
                             if ($(parent).hasClass("parent"))
                                 $(button)
@@ -194,6 +210,8 @@ $(function () {
                                     .parent()
                                     .remove();
                             $(parent).remove();
+                            $("#loader").addClass("d-none");
+                            $("#loader").removeClass("d-flex");
                         } else {
                             alert(
                                 "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
@@ -212,6 +230,9 @@ $(function () {
         const orderID = $(this).attr("data-dia");
         const button = $(this);
         const parent = $("#row_" + orderID);
+
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
 
         $("#exampleModalLabel").html("Masukan alasan penolakan");
         $("#exampleModal").find(".modal-footer").html(`
@@ -251,6 +272,9 @@ $(function () {
                         $(parent).remove();
                         const modal = document.getElementById("exampleModal");
                         bootstrap.Modal.getInstance(modal).hide();
+
+                        $("#loader").addClass("d-none");
+                        $("#loader").removeClass("d-flex");
                     } else {
                         alert(
                             "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
@@ -397,9 +421,12 @@ $(function () {
             .text();
         $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
-        <button type="button" class="btn btn-success" id="finishDelivery">Selesaikan Pengiriman</button>
+        <button type="button" class="btn btn-success" id="finishDelivery" >Selesaikan Pengiriman</button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
+
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
 
         $.ajax({
             type: "POST",
@@ -409,6 +436,7 @@ $(function () {
                 orderID: orderID,
             },
             success: function (response) {
+                console.log(response);
                 const data = response;
                 const delivery = data.deliveries[0];
                 // Tanggal pickup/mulai pengiriman, tanggal selesai pengirimaan
@@ -472,6 +500,14 @@ $(function () {
                         </div>
                 </div>
                 `);
+
+                $("#loader").addClass("d-none");
+                $("#loader").removeClass("d-flex");
+
+                $("#finishDelivery").attr(
+                    "disabled",
+                    delivery.arrive_date == null
+                );
 
                 $(document).on("click", "#finishDelivery", function () {
                     const parent = $("#row_" + orderID);
@@ -553,7 +589,7 @@ $(function () {
                         return "row_" + row.id;
                     },
                     columns: DTcolumns(type),
-                    columnDefs: [{ targets: [0, 3], className: "text-end" }],
+                    columnDefs: [{ targets: [0, 4], className: "text-end" }],
                     order: [[1, "DESC"]],
                 });
                 table.rows.add(data).draw();
@@ -570,6 +606,7 @@ $(function () {
         const orderID = $(this).attr("data-dia");
         let courierID = "";
         let date = "";
+        let saku = 0;
 
         const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);

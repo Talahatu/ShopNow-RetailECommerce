@@ -37,11 +37,10 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return redirect("/home");
 });
-Route::post('/pusher/auth', [PusherController::class, "auth"]);
 Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
-
-Route::post("/pushSubscription", [UserController::class, "userPushSubscribe"])->middleware("auth");
-Route::get("/pusher/request-token", [UserController::class, "generatePusherToken"])->middleware("auth");
+Route::middleware("either")->group(function () {
+    Route::post("/pushSubscription", [UserController::class, "userPushSubscribe"]);
+});
 Route::middleware(["prevent.courier"])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get("/search/{query}", [HomeController::class, "searchShow"])->name("show.search");
@@ -163,4 +162,4 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::post("/courier/fee/withdraw", [CourierController::class, "courierWithdraw"])->name("courier.fee.withdraw");
 });
 
-Route::post("/test", [HomeController::class, "testing"]);
+Route::get("/testing", [HomeController::class, "testing"])->middleware("either");

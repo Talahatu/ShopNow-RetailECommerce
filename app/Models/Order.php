@@ -102,8 +102,6 @@ class Order extends Model
 
                     // Push Notification To Every Seller 
                     $seller = User::join("shops", "shops.user_id", "users.id")->where("shops.id", $value)->first(["users.*"]);
-                    Log::info($seller);
-                    Log::info($value);
                     $seller->notify(new OrderNotification("Pesanan Baru!", "Terdapat pesanan baru untuk toko anda pada " . $datetime, route("order.index")));
 
                     // Each product in cart

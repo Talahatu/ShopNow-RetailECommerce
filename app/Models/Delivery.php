@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\DeliveryNotification;
+use App\Notifications\OrderNotification;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,22 +82,10 @@ class Delivery extends Model
         $newNotif->user_id = $order->user_id;
         $newNotif->save();
 
-        $options = array(
-            'cluster' => 'ap1',
-            'useTLS' => true
-        );
-        $pusher = new \Pusher\Pusher(
-            'c58a82be41ea6c60c1d7',
-            '8264fc21e2b5035cc329',
-            '1716744',
-            $options
-        );
+        $user = User::find($order->user_id);
+        $user->notify(new OrderNotification("Pesanan Telah Sampai", "Pesanan anda telah berhasil sampai di lokasi tujuan!", route("profile.order")));
 
-        $data['message'] = "Pesanan anda telah berhasil sampai di lokasi tujuan!";
-        $data["key"] = "courierFinish";
-        $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-
-        // regular-seller
-        $pusher->trigger('private-my-channel-' . $order->user_id . '-' . $order->shop_id, 'client-load-chats', $data);
+        $user = User::find($order->shop->user_id);
+        $user->notify(new DeliveryNotification("Pengiriman Telah Selesai", "Pesanan nomor " . $order->orerID . " telah sampai alamat tujuan pengiriman.", route("order.index")));
     }
 }

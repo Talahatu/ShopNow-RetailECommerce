@@ -44,8 +44,8 @@
                                     <th>Nomor Pesanan</th>
                                     <th>Tanggal Pesanan</th>
                                     <th>Alamat Tujuan</th>
-                                    <th>Jarak Tempuh</th>
                                     <th>Tipe Pembayaran</th>
+                                    <th>Jarak Tempuh</th>
                                     <th>Aksi/Keterangan</th>
                                 </tr>
                             </thead>

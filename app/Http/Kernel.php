@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AuthenticateCourier;
 use App\Http\Middleware\CheckSeller;
+use App\Http\Middleware\EitherAuth;
 use App\Http\Middleware\PreventCourierAccess;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'seller' => CheckSeller::class,
         'auth.courier' => AuthenticateCourier::class,
         'prevent.courier' => PreventCourierAccess::class,
+        "either" => EitherAuth::class
     ];
 }

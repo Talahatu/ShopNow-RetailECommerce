@@ -153,6 +153,7 @@
  ============================================= -->
     <script src="{{ asset('Canvas7/js/plugins.min.js') }}"></script>
     <script src="{{ asset('Canvas7/js/functions.bundle.js') }}"></script>
+    <script src="{{ asset('js/notif-listen.js') }}"></script>
     @yield('js')
 </body>
 

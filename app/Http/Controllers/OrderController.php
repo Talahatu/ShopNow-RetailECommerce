@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\Courier;
 use App\Models\Delivery;
 use App\Models\Notification;
 use App\Models\Order;
@@ -12,12 +13,14 @@ use App\Models\Product;
 use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\User;
+use App\Notifications\DeliveryNotification;
 use App\Notifications\OrderNotification;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Pusher\PushNotifications\PushNotifications;
 
 use function Ramsey\Uuid\v1;
@@ -165,32 +168,19 @@ class OrderController extends Controller
             $order->orderStatus = "sent";
             $order->save();
 
+            $courier = Courier::find($courierID);
+            $courier->notify(new DeliveryNotification("Pengiriman Baru", "Terdapat pengiriman baru dari seller.", route("courier.home")));
+
+            $user = User::find($order->user_id);
+            $user->notify(new OrderNotification("Pesanan Pada Kurir", "Pesanan anda diberikan ke kurir, menunggu kurir mengambil barang dari seller", route('profile.order')));
+
             $newNotif = new Notification();
-            $newNotif->header = "Pesanan anda telah dikirim ke kurir";
+            $newNotif->header = "Pesanan Pada Kurir";
             $newNotif->content = "Pesanan anda diberikan ke kurir, menunggu kurir mengambil barang dari seller";
             $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
             $newNotif->user_id = $order->user_id;
             $newNotif->save();
 
-            $shopID = $order->shop_id;
-            $userID = $order->user_id;
-            $options = array(
-                'cluster' => 'ap1',
-                'useTLS' => true
-            );
-            $pusher = new \Pusher\Pusher(
-                'c58a82be41ea6c60c1d7',
-                '8264fc21e2b5035cc329',
-                '1716744',
-                $options
-            );
-
-            $data['message'] = "Pesanan anda dengan nomor $order->orderID diberikan ke kurir, menunggu kurir mengambil barang dari seller";
-            $data["key"] = "sentToCourier";
-            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-
-            // regular-seller
-            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
 
             return $order->id;
         });

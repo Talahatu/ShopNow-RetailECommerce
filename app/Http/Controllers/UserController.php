@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Courier;
 use App\Models\FinancialHistory;
 use App\Models\Notification;
 use App\Models\Order;
@@ -11,6 +12,7 @@ use App\Models\ProductReview;
 use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\User;
+use App\Notifications\OrderNotification;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -345,6 +347,9 @@ class UserController extends Controller
             $newNotif->user_id = Auth::user()->id;
             $newNotif->save();
 
+            $user = User::find($newNotif->user_id);
+            $user->notify(new OrderNotification($newNotif->header, $newNotif->content, route("profile.order")));
+
 
             return true;
         });
@@ -358,6 +363,7 @@ class UserController extends Controller
 
     public function userPushSubscribe(Request $request)
     {
+        Log::info("SUBSCRIPTION PROCESS...");
         $this->validate($request, [
             'endpoint' => "required",
             "keys.auth" => "required",
@@ -366,7 +372,9 @@ class UserController extends Controller
         $endpoint = $request->endpoint;
         $token = $request->keys['auth'];
         $key = $request->keys['p256dh'];
-        $user = User::find(Auth::user()->id);
+        $user = (Auth::guard("courier")->check() ? Courier::find(Auth::guard("courier")->user()->id) : User::find(Auth::user()->id));
+        Log::info(Auth::guard("courier")->check());
+        Log::info($user);
         $user->updatePushSubscription($endpoint, $key, $token);
 
         return response()->json(['success' => true], 200);

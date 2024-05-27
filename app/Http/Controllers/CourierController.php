@@ -9,6 +9,7 @@ use App\Models\Delivery;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Shop;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -271,25 +272,8 @@ class CourierController extends Controller
             $newNotif->user_id = $currentOrder->user_id;
             $newNotif->save();
 
-            $shopID = $currentOrder->shop_id;
-            $userID = $currentOrder->user_id;
-            $options = array(
-                'cluster' => 'ap1',
-                'useTLS' => true
-            );
-            $pusher = new \Pusher\Pusher(
-                'c58a82be41ea6c60c1d7',
-                '8264fc21e2b5035cc329',
-                '1716744',
-                $options
-            );
-
-            $data['message'] = "Pesanan anda dengan nomor $currentOrder->orderID telah diterima oleh kurir dan saat ini sedang dalam perjalanan";
-            $data["key"] = "courierPickUp";
-            $data["time"] = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-
-            // regular-seller
-            $pusher->trigger('private-my-channel-' . $userID . '-' . $shopID, 'client-notif', $data);
+            $user = User::find($currentOrder->user_id);
+            $user->notify($newNotif->header, $newNotif->content, route("profile.order"));
 
             return ["startDate" => $takenDelivery->start_date, "orderID" => $currentOrder->orderID, "id" => $orderID, "deliveryID" => $deliveryID, "address" => $currentOrder->destination_address];
         });
@@ -305,7 +289,7 @@ class CourierController extends Controller
 
         $result = DB::transaction(function () use ($orderID, $deliveryID, $type, $image) {
             $delivery = Delivery::find($deliveryID);
-            $order = Order::find($orderID);
+            $order = Order::with(["shop"])->where("id", $orderID)->first();
             if ($type == "cod") {
                 Delivery::processCOD($delivery, $order, $image);
             } else {
