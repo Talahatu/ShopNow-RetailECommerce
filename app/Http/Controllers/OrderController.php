@@ -89,8 +89,10 @@ class OrderController extends Controller
         $orderID = $request->get("orderID");
         $reason = $request->get("reason");
         DB::transaction(function () use ($orderID, $reason) {
+            $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
             $order = Order::find($orderID);
             $order->orderStatus = "cancel";
+            $order->cancel_date = $datetime;
             $order->save();
 
             $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();

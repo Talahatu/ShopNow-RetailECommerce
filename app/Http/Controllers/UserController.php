@@ -264,7 +264,6 @@ class UserController extends Controller
             $income->income = $order->total;
             $income->withdrawal = 0;
             $income->date =  Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
-            $income->is_refund = false;
             $income->save();
 
             $shop = Shop::find($order->shop_id);

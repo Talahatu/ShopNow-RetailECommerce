@@ -19,7 +19,6 @@ class CreateFinancialsHistoryTable extends Migration
             $table->integer("income");
             $table->integer("withdrawal");
             $table->date("date");
-            $table->boolean("is_refund");
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->timestamps();
         });

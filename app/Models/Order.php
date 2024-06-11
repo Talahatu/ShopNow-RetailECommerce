@@ -18,7 +18,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $table = "orders";
-    protected $fillable = ["shop_id", "user_id", "orderDate", "orderStatus", "total", "destination_address", "destination_latitude", "destination_longitude", "payment_method", "payment_status", "payment_release_date", "refund_at", "total"];
+    protected $fillable = ["shop_id", "user_id", "orderDate", "orderStatus", "total", "destination_address", "destination_latitude", "destination_longitude", "payment_method", "payment_status", "payment_release_date", "total"];
 
     public function details()
     {

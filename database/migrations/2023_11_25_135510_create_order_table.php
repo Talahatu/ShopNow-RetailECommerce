@@ -25,7 +25,6 @@ class CreateOrderTable extends Migration
             $table->enum("payment_method", ["saldo", "cod"]);
             $table->enum("payment_status", ["onhold", "release"]);
             $table->date("payment_release_date")->nullable();
-            $table->date("refund_at")->nullable();
             $table->foreign("user_id")->references("id")->on("users");
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->timestamps();
