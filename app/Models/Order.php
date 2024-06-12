@@ -71,7 +71,7 @@ class Order extends Model
 
                     // Check saldo with checkout 
                     if ($totalCheckout > Auth::user()->saldo && $payment == "saldo") {
-                        throw new Exception("Saldo not enough.", 1);
+                        throw new Exception("Saldo tidak cukup.", 1);
                     }
 
                     $cartProductsByShop = Cart::join("products", "products.id", "cart.product_id")
@@ -120,7 +120,7 @@ class Order extends Model
                         $product = Product::find($item->product_id);
 
                         if ($product->stock < $item->qty) {
-                            throw new Exception("Quantity exceed item stock", 1);
+                            throw new Exception("Melebihi jumlah stok barang", 1);
                         }
 
                         $product->stock = $product->stock - $item->qty;

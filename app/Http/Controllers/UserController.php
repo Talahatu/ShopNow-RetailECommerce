@@ -167,7 +167,6 @@ class UserController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $user->saldo = $user->saldo + $request->get("value");
-        // $snapToken = CreateSnapToken::GenerateSnapTokenTopUp($request->get("value"));
         $user->save();
         return response()->json($user);
     }

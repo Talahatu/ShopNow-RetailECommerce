@@ -116,6 +116,9 @@ class OrderController extends Controller
 
             $user = User::find($order->user_id);
             $user->notify(new OrderNotification("Pesanan Anda Ditolak", "Pesanan anda " . $order->orderID . " ditolak oleh seller pada $datetime karena $reason.", route("profile.order")));
+            if ($order->payment_method == "saldo") {
+                $user->saldo = $user->saldo + $order->total;
+            }
 
             $newNotif = new Notification();
             $newNotif->header = "Pesanan anda ditolak oleh seller";
