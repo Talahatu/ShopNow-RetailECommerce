@@ -253,11 +253,19 @@ class Product extends Model
 
     public static function getDistance($id, $latitude, $longitude)
     {
-        $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')->select(DB::raw('SQRT(
-            POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
-            + RADIANS(MIN(shops.lat))) / 2), 2) +
-            POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
-            ) * 6371 AS distance'))->where("products.id", $id)->first();
+        // Forget
+        // $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')->select(DB::raw('SQRT(
+        //     POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
+        //     + RADIANS(MIN(shops.lat))) / 2), 2) +
+        //     POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
+        //     ) * 6371 AS distance'))->where("products.id", $id)->first();
+
+        $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')
+            ->select(DB::raw('6371 * acos( cos( radians(' . $latitude . ') ) * cos( radians(shops.lat) ) * 
+            cos( radians(shops.long) - radians(' . $longitude . ') ) + sin( radians(' . $latitude . ') ) * 
+            sin(radians(shops.lat)) ) AS distance'))
+            ->where("products.id", $id)->first();
+
         return $product->distance;
     }
 

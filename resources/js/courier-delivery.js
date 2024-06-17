@@ -43,19 +43,19 @@ $(function () {
             const longitudeDestination = response.destination_longitude;
             generateMap(latitudeDestination, longitudeDestination);
 
-            if (response.payment_method == "cod") {
-                $("#operationalFeeUsed").mask("#.##0", {
-                    reverse: true,
-                });
-                $(document).on("input", "#operationalFeeUsed", function () {
-                    const image = $("#proofImage")[0];
-                    checkFilled(image, $(this).val());
-                });
-            }
+            // if (response.payment_method == "cod") {
+            //     $("#operationalFeeUsed").mask("#.##0", {
+            //         reverse: true,
+            //     });
+            //     $(document).on("input", "#operationalFeeUsed", function () {
+            //         const image = $("#proofImage")[0];
+            //         checkFilled(image, $(this).val());
+            //     });
+            // }
 
             $(document).on("change", "#proofImage", function () {
                 if (response.payment_method == "cod") {
-                    checkFilled(this, $("#operationalFeeUsed").val());
+                    checkFilled(this);
                 } else {
                     $("#finishDelivery").attr(
                         "disabled",
@@ -282,10 +282,7 @@ $(function () {
         //===================================== Map Section End =====================================
     };
 
-    const checkFilled = (image, fee) => {
-        $("#finishDelivery").attr(
-            "disabled",
-            fee == "" || image.files.length <= 0
-        );
+    const checkFilled = (image) => {
+        $("#finishDelivery").attr("disabled", image.files.length <= 0);
     };
 });
