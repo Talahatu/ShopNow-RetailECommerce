@@ -146,18 +146,17 @@ class ShopController extends Controller
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
         $thisMonthRevenue = Order::select(DB::raw('SUM(orders.total) as total'))
-            ->where('shop_id', 1)
+            ->where('shop_id', $shop->id)
             ->where('orderStatus', 'done')
-            ->whereRaw('MONTH(orders.order_date) = MONTH(CURRENT_DATE)')
-            ->whereRaw('YEAR(orders.order_date) = YEAR(CURRENT_DATE)')
+            ->whereRaw('MONTH(orders.payment_release_date) = MONTH(CURRENT_DATE)')
+            ->whereRaw('YEAR(orders.payment_release_date) = YEAR(CURRENT_DATE)')
             ->first()
             ->total;
         $allRevenue = Order::select(DB::raw('SUM(orders.total) as total'))
-            ->where('shop_id', 1)
+            ->where('shop_id', $shop->id)
             ->where('orderStatus', 'done')
             ->first()
             ->total;
-
         return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue"));
     }
 
@@ -167,11 +166,11 @@ class ShopController extends Controller
             $shop = Shop::where("user_id", Auth::user()->id)->first();
             $order = Order::select(
                 DB::raw('COUNT(orders.id) AS Sold'),
-                DB::raw('DATE_FORMAT(MIN(orders.order_date), "%M %Y") AS Month')
+                DB::raw('DATE_FORMAT(MIN(orders.payment_release_date), "%M %Y") AS Month')
             )
                 ->where('shop_id', $shop->id)
                 ->where('orderStatus', 'done')
-                ->groupBy(DB::raw('YEAR(orders.order_date), MONTH(orders.order_date)'))
+                ->groupBy(DB::raw('YEAR(orders.payment_release_date), MONTH(orders.payment_release_date)'))
                 ->get();
             return $order;
         });

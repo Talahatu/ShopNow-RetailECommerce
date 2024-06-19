@@ -176,11 +176,10 @@ class Product extends Model
             'categories.name as cname',
             'brands.name as bname',
             DB::raw('MIN(images.name) as iname'),
-            DB::raw('SQRT(
-                POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
-                + RADIANS(MIN(shops.lat))) / 2), 2) +
-                POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
-                ) * 6371 AS distance')
+            DB::raw('
+            MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
+            COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance
+                ')
         )
             ->join('categories', 'categories.id', '=', 'products.category_id')
             ->join('brands', 'brands.id', '=', 'products.brand_id')
@@ -261,9 +260,8 @@ class Product extends Model
         //     ) * 6371 AS distance'))->where("products.id", $id)->first();
 
         $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')
-            ->select(DB::raw('6371 * acos( cos( radians(' . $latitude . ') ) * cos( radians(shops.lat) ) * 
-            cos( radians(shops.long) - radians(' . $longitude . ') ) + sin( radians(' . $latitude . ') ) * 
-            sin(radians(shops.lat)) ) AS distance'))
+            ->select(DB::raw(' MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
+            COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance'))
             ->where("products.id", $id)->first();
 
         return $product->distance;
