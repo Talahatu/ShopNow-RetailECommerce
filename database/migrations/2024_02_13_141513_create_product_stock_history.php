@@ -21,6 +21,7 @@ class CreateProductStockHistory extends Migration
             $table->dateTime("date");
             $table->foreign("product_id")->references("id")->on("products")->onDelete("CASCADE");
             $table->timestamps();
+            $table->integer("total_stock");
         });
     }
 

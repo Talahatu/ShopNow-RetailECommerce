@@ -160,6 +160,7 @@ Route::middleware(['auth.courier'])->group(function () {
     Route::get("/courier/fee/history", [CourierController::class, "courierFeeHistory"])->name("courier.fee.history");
 
     Route::post("/courier/fee/withdraw", [CourierController::class, "courierWithdraw"])->name("courier.fee.withdraw");
+    Route::post("/nearDestination", [CourierController::class, "nearDestination"]);
 });
 
 Route::get("/testing", [HomeController::class, "testing"])->middleware("either");

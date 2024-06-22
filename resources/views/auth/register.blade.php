@@ -31,12 +31,11 @@
                                     <div class="form-outline mb-4">
                                         <input type="text" id="name"
                                             class="form-control form-control-lg @error('name') is-invalid @enderror"
-                                            name="name" value="{{ old('name') }}" required autofocus
-                                            autocomplete="name" />
+                                            name="name" value="{{ old('name') }}" autocomplete="name" />
                                         <label class="form-label" for="email">{{ __('Nama Anda') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -44,25 +43,23 @@
                                     <div class="form-outline mb-4">
                                         <input type="text" id="username"
                                             class="form-control form-control-lg @error('username') is-invalid @enderror"
-                                            name="username" value="{{ old('username') }}" required autofocus
-                                            autocomplete="username" />
+                                            name="username" value="{{ old('username') }}" autocomplete="username" />
                                         <label class="form-label" for="username">{{ __('Nama Alias') }}</label>
                                         @error('username')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-outline mb-4">
                                         <input type="text" id="address"
                                             class="form-control form-control-lg @error('address') is-invalid @enderror"
-                                            name="address" value="{{ old('address') }}" required autofocus
-                                            autocomplete="address" />
+                                            name="address" value="{{ old('address') }}" autocomplete="address" />
                                         <input type="hidden" name="latlng" id="ll">
                                         <label class="form-label" for="address">{{ __('Alamat Rumah') }}</label>
                                         @error('address')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -71,12 +68,11 @@
                                     <div class="form-outline mb-4">
                                         <input type="text" id="email"
                                             class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                            name="email" value="{{ old('email') }}" required autofocus
-                                            autocomplete="email" />
+                                            name="email" value="{{ old('email') }}" autocomplete="email" />
                                         <label class="form-label" for="email">Alamat Email</label>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Mohon diisi dengan format alamat email yang benar!' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -84,18 +80,22 @@
                                     <div class="form-outline mb-4">
                                         <input type="password" id="password"
                                             class="form-control form-control-lg @error('password') is-invalid @enderror"
-                                            name="password" required autofocus autocomplete="new-password" />
+                                            name="password" autocomplete="new-password" />
                                         <label class="form-label" for="password">{{ __('Kata Sandi') }}</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                @if ($message = 'The password confirmation does not match.')
+                                                    <strong>Konfirmasi kata sandi tidak sesuai dengan kata sandi</strong>
+                                                @else
+                                                    <strong>Kata sandi minimal 8 karakter</strong>
+                                                @endif
                                             </span>
                                         @enderror
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="password" id="password-confirm" class="form-control form-control-lg"
-                                            name="password_confirmation" required autocomplete="new-password" />
+                                            name="password_confirmation" autocomplete="new-password" />
                                         <label class="form-label"
                                             for="password-confirm">{{ __('Konfirmasi Kata Sandi') }}</label>
                                         @error('password')

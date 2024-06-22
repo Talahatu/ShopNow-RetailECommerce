@@ -187,7 +187,7 @@ class UserController extends Controller
                 'image' => 'required|image|mimes:jpg,png,jpeg|max:3096',
                 'name' => 'required|string',
                 'address' => 'required|string',
-                'phoneNumber' => 'required'
+                'phoneNumber' => 'required|min:10|max:13'
             ],
             [
                 "image.image" => "its not an image!",
@@ -333,6 +333,7 @@ class UserController extends Controller
                 $prodHistory->addition = $value->qty;
                 $prodHistory->substraction = 0;
                 $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                $prodHistory->total_stock = $product->stock;
                 $prodHistory->save();
             }
             $order->orderStatus = "cancel";

@@ -39,7 +39,7 @@
                                             </div>
                                             @error('image')
                                                 <br>
-                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                                <div class="alert alert-danger mt-1 mb-1">{{ 'Mohon pilih gambar toko' }}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -52,7 +52,7 @@
                                         <label class="form-label" for="name">{{ __('Nama Toko') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Mohon isikan terlebih dahulu' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -64,7 +64,7 @@
                                         <label class="form-label" for="desc">{{ __('Nomor Telepon') }}</label>
                                         @error('phoneNumber')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Nomor minimal 10 digit dan maksimal 13 digit' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -78,7 +78,7 @@
                                     </div>
                                     @error('address')
                                         <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                            <strong>{{ 'Mohon isikan terlebih dahulu' }}</strong>
                                         </span>
                                     @enderror
                                     <div id="map" style="height: 180px" class="mb-4"></div>

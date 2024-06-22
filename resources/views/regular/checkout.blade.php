@@ -136,7 +136,7 @@
                             </div>
 
                             <small class="text-danger"
-                                id="chipDanger">{{ Auth::user()->saldo < $total ? 'Saldo not enough...' : '' }}</small>
+                                id="chipDanger">{{ Auth::user()->saldo < $total ? 'Saldo tidak cukup...' : '' }}</small>
                             <div class="btn-group payment-method w-100">
                                 <input type="radio" class="btn-check btn-method" name="options" id="option1"
                                     autocomplete="off" value="ew"

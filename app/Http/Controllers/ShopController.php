@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Image;
 use App\Models\Order;
+use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -157,7 +158,13 @@ class ShopController extends Controller
             ->where('orderStatus', 'done')
             ->first()
             ->total;
-        return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue"));
+        $stockHistories = ProductStockHistory::with(["product.images", "product.shop" => function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        }])->whereHas("product.shop", function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        })->orderBy("date", "DESC")
+            ->get();
+        return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue", "stockHistories"));
     }
 
     public function productSold(Request $request)

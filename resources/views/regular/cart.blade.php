@@ -5,7 +5,7 @@
 @section('content')
     <div class="mt-4">
         <!-- Page Title
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ============================================= -->
         <section class="page-title bg-transparent mb-2">
             <div class="container">
                 <div class="page-title-row">
@@ -77,8 +77,9 @@
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                     <input type="number" step="1" min="1"
-                                                        class="form-control item-qty" value="{{ $item->qty }}"
-                                                        name="quantity" aria-label="Example text with button addon"
+                                                        max="{{ $item->stock }}" class="form-control item-qty"
+                                                        value="{{ $item->qty }}" name="quantity"
+                                                        aria-label="Example text with button addon"
                                                         aria-describedby="button-addon1" id="qty-input" />
                                                     <button class="btn btn-dark btn-sm button-plus" type="button"
                                                         data-mdb-ripple-color="dark">

@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="{{ asset('css/financial.css') }}">
 @endsection
 @section('content-wrapper')
+    <?php setlocale(LC_TIME, 'id_ID.utf8', 'Indonesian_indonesia.1252'); ?>
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">Laporan Keuangan</h3>
@@ -80,6 +81,49 @@
                         <h4 class="card-title">Produk Terlaris</h4>
                         <canvas id="barChart" style="height: 332px; display: block; box-sizing: border-box; width: 664px;"
                             width="996" height="498"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Riwayat Stok Barang</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Gambar</th>
+                                        <th> Nama </th>
+                                        <th> Tanggal </th>
+                                        <th> Bertambah </th>
+                                        <th> Berkurang </th>
+                                        <th> Total Stok </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($stockHistories as $item)
+                                        <tr>
+                                            <td>
+                                                <img src="{{ asset('productimages/' . $item->product->images[0]->name) }}"
+                                                    alt="image">
+                                            </td>
+                                            <td>
+                                                {{ $item->product->name }}
+                                            </td>
+                                            <td> {{ strftime('%A, %d %B %Y', strtotime($item->date)) }} </td>
+                                            <td class="text-success"> +{{ $item->addition }}
+                                            </td>
+                                            <td class="text-danger">
+                                                -{{ abs($item->substraction) }}
+                                            </td>
+                                            <td>{{ $item->total_stock }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

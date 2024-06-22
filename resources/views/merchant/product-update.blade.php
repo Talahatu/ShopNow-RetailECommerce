@@ -73,7 +73,7 @@
                                 value="{{ $data->name }}" id="inputName" name="name" placeholder="Name">
                             @error('name')
                                 <label id="name-error" class="error mt-2 text-danger" for="name">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -82,7 +82,7 @@
                                 placeholder="Description" rows="4">{{ $data->description }}</textarea>
                             @error('desc')
                                 <label id="desc-error" class="error mt-2 text-danger" for="desc">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group mb-4">
@@ -93,7 +93,7 @@
                             </select>
                             @error('category')
                                 <label id="category-error" class="error mt-2 text-danger" for="category">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group mb-4">
@@ -104,7 +104,7 @@
                             </select>
                             @error('brand')
                                 <label id="brand-error" class="error mt-2 text-danger" for="brand">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -120,7 +120,7 @@
                             </div>
                             @error('weight')
                                 <label id="weight-error" class="error mt-2 text-danger" for="weight">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -128,11 +128,11 @@
                             <div class="input-group">
                                 <input type="number" class="form-control text-light @error('stock') is-invalid @enderror"
                                     value="{{ $data->stock }}" id="inputStock" name="stock" placeholder="Stock"
-                                    min="1">
+                                    min="0">
                             </div>
                             @error('stock')
                                 <label id="stock-error" class="error mt-2 text-danger" for="stock">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -147,7 +147,7 @@
                             </div>
                             @error('price')
                                 <label id="price-error" class="error mt-2 text-danger" for="price">
-                                    {{ $message }}</label>
+                                    {{ 'Mohon isikan terlebih dahulu' }}</label>
                             @enderror
                         </div>
                         <button type="submit" class="btn btn-primary me-2">Simpan</button>

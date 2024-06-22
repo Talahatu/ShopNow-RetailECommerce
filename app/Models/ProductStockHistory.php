@@ -10,4 +10,9 @@ class ProductStockHistory extends Model
     use HasFactory;
 
     protected $table = "product_stock_history";
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, "product_id", "id");
+    }
 }

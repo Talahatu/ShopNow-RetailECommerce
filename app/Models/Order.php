@@ -132,6 +132,7 @@ class Order extends Model
                         $prodHistory->addition = 0;
                         $prodHistory->substraction = $item->qty;
                         $prodHistory->date = $datetime;
+                        $prodHistory->total_stock = $product->stock;
                         $prodHistory->save();
 
                         array_push($deletedCart, $item->id);

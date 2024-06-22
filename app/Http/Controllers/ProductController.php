@@ -243,7 +243,7 @@ class ProductController extends Controller
         $data = Cart::join("products AS p", "p.id", "cart.product_id")
             ->join("images AS i", "i.product_id", "p.id")
             ->where("cart.user_id", Auth::user()->id)
-            ->get(["p.name AS pname", "cart.price", "cart.qty", "cart.selected", "cart.distance", "p.weight", "i.name AS iname", "cart.id", "p.id AS pid"]);
+            ->get(["p.name AS pname", "cart.price", "cart.qty", "cart.selected", "cart.distance", "p.weight", "i.name AS iname", "cart.id", "p.id AS pid", "p.stock"]);
 
         $cartTotal = 0;
         $shippingFee = 0;

@@ -30,7 +30,7 @@
                                         <label class="form-label" for="email">Alamat email atau nama alias</label>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Alamat email tidak terdaftar!' }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -42,7 +42,7 @@
                                         <label class="form-label" for="password">Kata Sandi</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong>{{ 'Kata sandi tidak terdaftar' }}</strong>
                                             </span>
                                         @enderror
                                     </div>

@@ -47,45 +47,47 @@
             </header>
             <div class="row" id="products-row">
                 @foreach ($shop->products as $item)
-                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4 mb-lg-4">
-                        <a href="/show-product/${products[index].id}">
-                            <div class="card">
-                                <img src="{{ asset('productimages/' . $item->images[0]->name) }}" class="card-img-top"
-                                    alt="Laptop" style="aspect-ratio:1/1; object-fit:cover" />
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <p class="small"><a href="#!"
-                                                class="text-muted">{{ $item->category->name }}</a></p>
-                                    </div>
+                    @if ($item->status == 'live')
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4 mb-lg-4">
+                            <a href="/show-product/${products[index].id}">
+                                <div class="card">
+                                    <img src="{{ asset('productimages/' . $item->images[0]->name) }}" class="card-img-top"
+                                        alt="Laptop" style="aspect-ratio:1/1; object-fit:cover" />
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="small"><a href="#!"
+                                                    class="text-muted">{{ $item->category->name }}</a></p>
+                                        </div>
 
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <h5 class="mb-0 d-inline-block text-truncate" style="max-width: 100%;">
-                                            {{ $item->name }}</h5>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <h5 class="text-dark mb-0">
-                                            {{ number_format($item->price, 0, ',', '.') }}
-                                        </h5>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <p class="text-muted mb-0"><span class="fw-bold">{{ $item->stock }}</span>
-                                            Tersedia</p>
-                                        <div class="ms-auto text-warning">
-                                            @for ($j = 0; $j < floor($item->rating); $j++)
-                                                <i class="fa fa-star"></i>
-                                            @endfor
-                                            @if (fmod($item->rating, 1) != '0.0')
-                                                <i class="fa-regular fa-star-half-stroke"></i>
-                                            @endif
-                                            @for ($j = 0; $j < floor(5 - $item->rating); $j++)
-                                                <i class="far fa-star"></i>
-                                            @endfor
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <h5 class="mb-0 d-inline-block text-truncate" style="max-width: 100%;">
+                                                {{ $item->name }}</h5>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <h5 class="text-dark mb-0">
+                                                {{ number_format($item->price, 0, ',', '.') }}
+                                            </h5>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <p class="text-muted mb-0"><span class="fw-bold">{{ $item->stock }}</span>
+                                                Tersedia</p>
+                                            <div class="ms-auto text-warning">
+                                                @for ($j = 0; $j < floor($item->rating); $j++)
+                                                    <i class="fa fa-star"></i>
+                                                @endfor
+                                                @if (fmod($item->rating, 1) != '0.0')
+                                                    <i class="fa-regular fa-star-half-stroke"></i>
+                                                @endif
+                                                @for ($j = 0; $j < floor(5 - $item->rating); $j++)
+                                                    <i class="far fa-star"></i>
+                                                @endfor
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>

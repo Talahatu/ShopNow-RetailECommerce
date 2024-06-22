@@ -376,6 +376,7 @@ $(function () {
     function toRadian(angle) {
         return angle * (Math.PI / 180);
     }
+
     function haversineDistance(
         latitude,
         longitude,

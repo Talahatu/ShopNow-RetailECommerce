@@ -48,6 +48,11 @@ class Product extends Model
         return $this->hasMany(ProductReview::class, "product_id", "id");
     }
 
+    public function stockHistories()
+    {
+        return $this->hasMany(ProductStockHistory::class, "product_id", "id");
+    }
+
 
     public static function getProducts($userID, $type)
     {
@@ -80,7 +85,8 @@ class Product extends Model
             $prodHistory->product_id = $newProd->id;
             $prodHistory->addition = $request->get("stock");
             $prodHistory->substraction = 0;
-            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $prodHistory->total_stock = $newProd->stock;
             $prodHistory->save();
 
             if ($request->hasFile("image")) {
@@ -107,7 +113,7 @@ class Product extends Model
             $prod = Product::find($prodID);
 
             $prodHistory = new ProductStockHistory();
-            $temp = $prod->stock - $request->get("stock");
+            $temp =   $request->get("stock") - $prod->stock;
             $prodHistory->addition = ($temp < 0 ? 0 : $temp);
             $prodHistory->substraction = ($temp < 0 ? $temp : 0);
 
@@ -118,11 +124,12 @@ class Product extends Model
             $prod->weight = $request->get("weight");
             $prod->stock = $request->get("stock");
             $prod->price = $price;
-            $prod->status = ($prod->stock <= 0 ? "out of stock" : $prod->status);
+            $prod->status = ($prod->stock > 0 ? "live" : "out of stock");
             $prod->save();
 
             $prodHistory->product_id = $prod->id;
-            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $prodHistory->total_stock = $prod->stock;
             $prodHistory->save();
 
             if ($request->hasFile("image")) {

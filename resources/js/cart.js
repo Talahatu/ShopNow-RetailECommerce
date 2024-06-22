@@ -23,8 +23,12 @@ $(function () {
         const qty = $(parent).find("#qty-input");
         const id = $(parent).attr("attr-dia");
         let val = parseInt($(qty).val());
-        val += 1;
-        updateQTY(val, qty, parent, id);
+        console.log("TEST");
+        console.log($(qty).attr("max"));
+        if (val < $(qty).attr("max")) {
+            val += 1;
+            updateQTY(val, qty, parent, id);
+        }
     });
 
     $(".item-selected").on("click", function () {

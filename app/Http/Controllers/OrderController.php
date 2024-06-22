@@ -110,6 +110,7 @@ class OrderController extends Controller
                 $history->addition = $value->qty;
                 $history->substraction = 0;
                 $history->date = $datetime;
+                $history->total_stock = $products->stock;
                 $history->save();
             }
 
