@@ -37,6 +37,7 @@ Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return redirect("/home");
 });
+Route::post('/pusher/auth', [PusherController::class, "auth"]);
 Route::post("/getOrderPaymentType", [OrderController::class, "getPaymentType"])->name("order.payment.type");
 Route::middleware("either")->group(function () {
     Route::post("/pushSubscription", [UserController::class, "userPushSubscribe"]);

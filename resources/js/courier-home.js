@@ -273,7 +273,7 @@ $(function () {
                     };
                 });
                 map.spin(true);
-                map.once("locationfound", function (e) {
+                map.on("locationfound", function (e) {
                     console.log("Fetching coordinates...");
                     if (e.accuracy >= 50) {
                         map.spin(true);
