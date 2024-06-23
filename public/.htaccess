@@ -18,10 +18,4 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
-    #Deploy Hosting
-    RewriteCond %{HTTP_HOST} ^tugasakhir-shopnow.000webhostapp.com$ [NC,OR]
-    RewriteCond %{HTTP_HOST} ^tugasakhir-shopnow.000webhostapp.com$
-    RewriteCond %{REQUEST_URI} !public/
-    RewriteRule (.*) /public/$1 [L]
 </IfModule>

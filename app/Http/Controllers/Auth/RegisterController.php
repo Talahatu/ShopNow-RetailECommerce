@@ -60,6 +60,11 @@ class RegisterController extends Controller
             'address' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            "password.min" => "Kata sandi harus lebih dari 8 karakter",
+            "password.confirmed" => "Kata sandi tidak sama dengan kata sandi konfirmasi",
+            "email.email" => "Format alamat email tidak benar",
+            "email.unique" => "Alamat email telah digunakan"
         ]);
     }
 

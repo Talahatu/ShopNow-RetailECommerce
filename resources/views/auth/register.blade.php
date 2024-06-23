@@ -35,7 +35,8 @@
                                         <label class="form-label" for="email">{{ __('Nama Anda') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
+                                                {{-- <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong> --}}
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -47,7 +48,8 @@
                                         <label class="form-label" for="username">{{ __('Nama Alias') }}</label>
                                         @error('username')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
+                                                {{-- <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong> --}}
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -59,7 +61,8 @@
                                         <label class="form-label" for="address">{{ __('Alamat Rumah') }}</label>
                                         @error('address')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong>
+                                                {{-- <strong>{{ 'Mohon diisi terlebih dahulu!' }}</strong> --}}
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -72,7 +75,8 @@
                                         <label class="form-label" for="email">Alamat Email</label>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Mohon diisi dengan format alamat email yang benar!' }}</strong>
+                                                {{-- <strong>{{ 'Mohon diisi dengan format alamat email yang benar!' }}</strong> --}}
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -84,11 +88,12 @@
                                         <label class="form-label" for="password">{{ __('Kata Sandi') }}</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
-                                                @if ($message = 'The password confirmation does not match.')
+                                                {{-- @if ($message = 'The password confirmation does not match.')
                                                     <strong>Konfirmasi kata sandi tidak sesuai dengan kata sandi</strong>
                                                 @else
                                                     <strong>Kata sandi minimal 8 karakter</strong>
-                                                @endif
+                                                @endif --}}
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
