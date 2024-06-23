@@ -275,6 +275,7 @@ $(function () {
                 map.spin(true);
                 map.on("locationfound", function (e) {
                     console.log("Fetching coordinates...");
+                    console.log(e.accuracy);
                     if (e.accuracy >= 50) {
                         map.spin(true);
                     } else {
