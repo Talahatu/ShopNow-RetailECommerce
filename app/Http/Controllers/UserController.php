@@ -190,8 +190,13 @@ class UserController extends Controller
                 'phoneNumber' => 'required|min:10|max:13'
             ],
             [
-                "image.image" => "its not an image!",
-                "image.max" => "Image size exceed 3MB!"
+                "image.image" => "File bukan gambar!",
+                "image.max" => "Ukuran gambar melebihi 3MB!",
+                "name.required" => "Bagian nama tidak boleh dikosongi",
+                "address.required" => "Bagian alamat tidak boleh dikosongi",
+                "phoneNumber.min" => "Nomor telepon minimal 10 angka",
+                "phoneNumber.max" => "Nomor telepon maksimal 13 angka",
+                "phoneNumber.required" => "Nomor telepon tidak boleh dikosongi"
             ]
         );
         $latlong = explode(",", $request->get("latlng"));

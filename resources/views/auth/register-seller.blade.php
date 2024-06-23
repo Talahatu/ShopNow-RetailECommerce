@@ -37,11 +37,11 @@
                                                 <input type="file" name="image" class="form-control d-none changeCheck"
                                                     id="image" />
                                             </div>
-                                            @error('image')
-                                                <br>
-                                                <div class="alert alert-danger mt-1 mb-1">{{ 'Mohon pilih gambar toko' }}</div>
-                                            @enderror
                                         </div>
+                                        @error('image')
+                                            <br>
+                                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div class="form-outline mb-4">
@@ -52,7 +52,7 @@
                                         <label class="form-label" for="name">{{ __('Nama Toko') }}</label>
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Mohon isikan terlebih dahulu' }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -64,7 +64,7 @@
                                         <label class="form-label" for="desc">{{ __('Nomor Telepon') }}</label>
                                         @error('phoneNumber')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Nomor minimal 10 digit dan maksimal 13 digit' }}</strong>
+                                                <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
@@ -78,7 +78,7 @@
                                     </div>
                                     @error('address')
                                         <span class="invalid-feedback" role="alert">
-                                            <strong>{{ 'Mohon isikan terlebih dahulu' }}</strong>
+                                            <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                     <div id="map" style="height: 180px" class="mb-4"></div>

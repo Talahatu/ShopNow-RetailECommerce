@@ -83,6 +83,14 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+    }
+
     protected function credentials(Request $request)
     {
         if (filter_var($request->get("email"), FILTER_VALIDATE_EMAIL)) {
