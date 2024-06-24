@@ -65,11 +65,6 @@ $(function () {
         $("#btnSave").attr("disabled", false);
         var address = $(this).val();
         map.on("click", onMapClick);
-        console.log(
-            location.protocol +
-                "//nominatim.openstreetmap.org/search?format=json&q=" +
-                address
-        );
         $.get(
             location.protocol +
                 "//nominatim.openstreetmap.org/search?format=json&q=" +

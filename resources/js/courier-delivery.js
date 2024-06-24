@@ -14,6 +14,7 @@ $(function () {
     let markerStart = null;
     let markerEnd = null;
     let routeControl = null;
+    let courierNear = false;
 
     delete L.Icon.Default.prototype._getIconUrl;
 
@@ -214,6 +215,29 @@ $(function () {
                 sessionStorage.setItem("lat", currentPosition.lat);
                 sessionStorage.setItem("lng", currentPosition.lng);
 
+                const distance = haversineDistance(
+                    currentPosition.lat,
+                    currentPosition.lng,
+                    latitudeDestination,
+                    longitudeDestination
+                );
+                if (distance < 0.01 && !courierNear) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/nearDestination",
+                        data: {
+                            _token: csrfToken,
+                            orderID: orderID,
+                        },
+                        success: function (response) {
+                            courierNear = true;
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        },
+                    });
+                }
+
                 counter = 0;
             } else {
                 // For Debug Purposes
@@ -285,4 +309,43 @@ $(function () {
     const checkFilled = (image) => {
         $("#finishDelivery").attr("disabled", image.files.length <= 0);
     };
+
+    function toRadian(angle) {
+        return angle * (Math.PI / 180);
+    }
+
+    function haversineDistance(
+        latitude,
+        longitude,
+        shopLatitude,
+        shopLongitude
+    ) {
+        // Convert degrees to radians
+        const radiansLat1 = toRadian(latitude);
+        const radiansLat2 = toRadian(shopLatitude);
+        const radiansLon1 = toRadian(longitude);
+        const radiansLon2 = toRadian(shopLongitude);
+
+        const dLat = radiansLat2 - radiansLat1;
+        const dLon = radiansLon2 - radiansLon1;
+
+        // Earth's radius in kilometers
+        const earthRadius = 6371;
+
+        const d =
+            earthRadius *
+            2 *
+            Math.asin(
+                Math.sqrt(
+                    (1 -
+                        Math.cos(dLat) +
+                        Math.cos(radiansLat1) *
+                            Math.cos(radiansLat2) *
+                            (1 - Math.cos(dLon))) /
+                        2
+                )
+            );
+
+        return Math.round(d);
+    }
 });

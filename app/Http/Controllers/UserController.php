@@ -266,7 +266,6 @@ class UserController extends Controller
             $income = new FinancialHistory();
             $income->shop_id = $order->shop_id;
             $income->income = $order->total;
-            $income->withdrawal = 0;
             $income->date =  Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
             $income->save();
 
@@ -289,9 +288,12 @@ class UserController extends Controller
             $order = Order::with(["details.product.images"])
                 ->where("id", $orderID)
                 ->first();
-            foreach ($order->details as  $value) {
+            foreach ($order->details as $value) {
                 $totalSold = ProductReview::where("product_id", $value->product_id)->count();
-
+                $product = Product::find($value->product_id);
+                $newAVG = $this->calculateNewAverageRating($product->rating, $totalSold, $rating);
+                $product->rating = $newAVG;
+                $product->save();
                 if ($review != "") {
                     $newReview = new ProductReview();
                     $newReview->user_id = $order->user_id;
@@ -300,11 +302,6 @@ class UserController extends Controller
                     $newReview->review = $review;
                     $newReview->save();
                 }
-
-                $product = Product::find($value->product_id);
-                $newAVG = $this->calculateNewAverageRating($product->rating, $totalSold, $rating);
-                $product->rating = $newAVG;
-                $product->save();
             }
         });
         return response()->json($result);

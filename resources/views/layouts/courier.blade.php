@@ -88,11 +88,6 @@
                                         <div>Riwayat Pengiriman</div>
                                     </a>
                                 </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="{{ route('courier.fee.history') }}">
-                                        <div>Riwayat Uang Saku</div>
-                                    </a>
-                                </li>
                             </ul>
                         </nav><!-- #primary-menu end -->
                     </div>

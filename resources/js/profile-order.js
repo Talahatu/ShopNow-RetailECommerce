@@ -10,6 +10,7 @@ $(function () {
     $("#v-tabs-order-tab").addClass("active");
 
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
+    let globalOrder = null;
 
     let formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -41,8 +42,10 @@ $(function () {
             },
             success: function (response) {
                 const order = response;
+                globalOrder = order;
                 let finishProof = ``;
                 let finishFooter = ``;
+                let map = null;
                 let riwayatPesanan = `
                     <tr>
                         <td>${moment(order.order_date).format(
@@ -116,108 +119,11 @@ $(function () {
                             </div>`;
 
                             finishFooter = `
+                                <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
                                 <button type="button" class="btn btn-primary" id="btnFinishOrder" data-bs-toggle="modal" data-bs-target="#exampleModal2">Selesaikan</button>
                             `;
 
-                            $("#modalFooter").append(finishFooter);
-
-                            $(document).on(
-                                "click",
-                                "#btnFinishOrder",
-                                function () {
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/profile/order/finish",
-                                        data: {
-                                            _token: csrfToken,
-                                            orderID: order.id,
-                                        },
-                                        success: function (response) {
-                                            if (response) {
-                                                $("#item-" + order.id).remove();
-
-                                                if (
-                                                    $(
-                                                        "#order-container"
-                                                    ).children().length > 0
-                                                ) {
-                                                    $("#order-container")
-                                                        .html(`<div class="text text-center text-muted">
-                                                    <p>Tidak ada pesanan</p>
-                                                </div>`);
-                                                }
-
-                                                const modal =
-                                                    document.getElementById(
-                                                        "exampleModal"
-                                                    );
-                                                bootstrap.Modal.getInstance(
-                                                    modal
-                                                ).hide();
-
-                                                $("#exampleModal2")
-                                                    .find("#modalTitle")
-                                                    .html(
-                                                        "Berikan ulasan pesanan"
-                                                    );
-
-                                                $("#exampleModal2").find(
-                                                    "#modalBody"
-                                                ).html(`
-                                                        <div class="d-flex flex-column justify-content-center align-items-center">
-                                                            <label for="starRating" class="form-label">Berikan Rating!</label>
-                                                            <input type="number" class="rating" id="starRating">
-                                                        </div>
-                                                        <div class="form-floating">
-                                                            <textarea class="form-control" placeholder="Berikan Ulasan" id="floatingTextarea" style="height:200px"></textarea>
-                                                            <label for="floatingTextarea">Ulasan...</label>
-                                                        </div>
-                                                    `);
-                                                $("#starRating").rating({
-                                                    min: 0,
-                                                    max: 5,
-                                                    step: 1,
-                                                    size: "lg",
-                                                    showCaption: false,
-                                                });
-
-                                                $("#exampleModal2").on(
-                                                    "click",
-                                                    "#btnSave",
-                                                    function () {
-                                                        $.ajax({
-                                                            type: "POST",
-                                                            url: "/profile/order/giveRating",
-                                                            data: {
-                                                                _token: csrfToken,
-                                                                orderID:
-                                                                    order.id,
-                                                                rating: $(
-                                                                    "#starRating"
-                                                                ).val(),
-                                                                review: $(
-                                                                    "#floatingTextarea"
-                                                                ).val(),
-                                                            },
-                                                            success: function (
-                                                                response
-                                                            ) {
-                                                                const modal =
-                                                                    document.getElementById(
-                                                                        "exampleModal2"
-                                                                    );
-                                                                bootstrap.Modal.getInstance(
-                                                                    modal
-                                                                ).hide();
-                                                            },
-                                                        });
-                                                    }
-                                                );
-                                            }
-                                        },
-                                    });
-                                }
-                            );
+                            $("#modalFooter").html(finishFooter);
                         }
                         //======================== When Courier Finish END ====================================
                     }
@@ -336,32 +242,107 @@ $(function () {
                         <h2>Total: ${formatter.format(order.total)}</h2>
                     </div>
                 `);
+            },
+        });
+    });
+    $(document).on("click", "#btnCancelOrder", function () {
+        $.ajax({
+            type: "POST",
+            url: "/profile/order/cancel",
+            data: {
+                _token: csrfToken,
+                orderID: globalOrder.id,
+            },
+            success: function (response) {
+                if (response) {
+                    $(
+                        `.list-group-item[data-dia="order-${globalOrder.id}"]`
+                    ).remove();
+                    if ($("#order-container").children().length > 0) {
+                        $("#order-container")
+                            .html(`<div class="text text-center text-muted">
+                        <p>Tidak ada pesanan</p>
+                    </div>`);
+                    }
+                }
+            },
+        });
+    });
+    $(document).on("click", "#btnFinishOrder", function () {
+        console.log("Test 1");
+        $.ajax({
+            type: "POST",
+            url: "/profile/order/finish",
+            data: {
+                _token: csrfToken,
+                orderID: globalOrder.id,
+            },
+            success: function (response) {
+                if (response) {
+                    $("#item-" + globalOrder.id).remove();
 
-                $(document).on("click", "#btnCancelOrder", function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "/profile/order/cancel",
-                        data: {
-                            _token: csrfToken,
-                            orderID: order.id,
-                        },
-                        success: function (response) {
-                            if (response) {
-                                $(
-                                    `.list-group-item[data-dia="order-${order.id}"]`
-                                ).remove();
-                                if (
-                                    $("#order-container").children().length > 0
-                                ) {
-                                    $("#order-container")
-                                        .html(`<div class="text text-center text-muted">
-                                    <p>Tidak ada pesanan</p>
-                                </div>`);
-                                }
-                            }
-                        },
+                    if ($("#order-container").children().length > 0) {
+                        $("#order-container")
+                            .html(`<div class="text text-center text-muted">
+                                                    <p>Tidak ada pesanan</p>
+                                                </div>`);
+                    }
+
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
+
+                    $("#exampleModal2")
+                        .find("#modalTitle")
+                        .html("Berikan ulasan pesanan");
+
+                    $("#exampleModal2").find("#modalBody").html(`
+                                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                                            <label for="starRating" class="form-label">Berikan Rating!</label>
+                                                            <input type="number" class="rating" id="starRating" required>
+                                                        </div>
+                                                        <div class="form-floating">
+                                                            <textarea class="form-control" placeholder="Berikan Ulasan" id="floatingTextarea" style="height:200px" required></textarea>
+                                                            <label for="floatingTextarea">Ulasan...</label>
+                                                        </div>
+                                                    `);
+                    $("#exampleModal2").find("#modalFooter").html(`
+                                                        <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+                                                        <button type="button" class="btn btn-primary" id="btnSave" attr-dia="">Simpan</button>`);
+                    $("#starRating").rating({
+                        min: 0,
+                        max: 5,
+                        step: 1,
+                        size: "lg",
+                        showCaption: false,
                     });
-                });
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        });
+    });
+    $("#exampleModal2").on("click", "#btnSave", function () {
+        console.log("Test 2");
+        const rating = $("#starRating").val();
+
+        const review = $("#floatingTextarea").val();
+        if (!rating || !review) {
+            alert("Mohon isikan ulasan dan rating bintang");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/profile/order/giveRating",
+            data: {
+                _token: csrfToken,
+                orderID: globalOrder.id,
+                rating: rating,
+                review: review,
+            },
+            success: function (response) {
+                const modal = document.getElementById("exampleModal2");
+                bootstrap.Modal.getInstance(modal).hide();
             },
         });
     });
@@ -375,7 +356,6 @@ $(function () {
                 type: tab,
             },
             success: function (response) {
-                console.log(response);
                 let html = ``;
                 if (tab == "new") {
                     if (response.length > 0) {
@@ -459,7 +439,6 @@ $(function () {
                     </div>`;
                     }
                 } else if (tab == "accepted") {
-                    console.log(response.length);
                     if (response.length > 0) {
                         for (const iterator of response) {
                             html += `
@@ -535,7 +514,6 @@ $(function () {
                             </div>
                             `;
                         }
-                        console.log(html);
                     } else {
                         html = `<div class="text text-center text-muted">
                         <p>Tidak ada pesanan</p>
@@ -626,7 +604,6 @@ $(function () {
                                 </div>
                             </div>
                             `;
-                            console.log(html);
                         }
                     } else {
                         html = `<div class="text text-center text-muted">

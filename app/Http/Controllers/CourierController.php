@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
+use App\Notifications\DeliveryNotification;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -271,7 +272,8 @@ class CourierController extends Controller
             $newNotif->save();
 
             $user = User::find($currentOrder->user_id);
-            $user->notify($newNotif->header, $newNotif->content, route("profile.order"));
+
+            $user->notify(new DeliveryNotification($newNotif->header, $newNotif->content, route("profile.order")));
 
             return ["startDate" => $takenDelivery->start_date, "orderID" => $currentOrder->orderID, "id" => $orderID, "deliveryID" => $deliveryID, "address" => $currentOrder->destination_address];
         });
@@ -350,5 +352,17 @@ class CourierController extends Controller
             ->get();
         $shopCoord = Courier::with(["shopOwner"])->where('id', $id)->first();
         return response()->json(compact("currentDeliveries", "shopCoord"));
+    }
+
+    public function nearDestination(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $orderID = $request->get("orderID");
+            $order = Order::find($orderID);
+            $user = User::find($order->user_id);
+            $user->notify(new DeliveryNotification("Kurir telah sampai di lokasi anda!", "Kurir telah sampai di lokasi alamat rumah anda, mohon terima dan selesaikan pesanan setelah mengkonfirmasi pesanan", route("profile.order")));
+            return true;
+        });
+        return response()->json($result);
     }
 }

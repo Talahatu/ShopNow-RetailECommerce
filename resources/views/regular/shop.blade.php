@@ -29,6 +29,8 @@
                     <div class="shop-content ms-4">
                         <div class="btn-group btn-group-shop">
                             <a href="{{ route('chat.show', $shop->id) }}" class="btn btn-dark btn-chat">Chat</a>
+                            <button class="btn btn-dark ms-1" id="btnShopMap" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalShop" data-dis="{{ $shop->id }}">Peta</button>
                         </div>
                     </div>
                 </div>
@@ -92,6 +94,24 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="exampleModalShop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" modal-tags="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Peta Toko</h5>
+                    <button type="button" class="btn-close btnCloseModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <div class="mb-4" id="map" style="height: 300px"></div>
+                </div>
+                <div class="modal-footer" id="modalFooter">
+                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     <script src="{{ asset('js/shop.js') }}"></script>
