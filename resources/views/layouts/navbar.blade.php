@@ -38,6 +38,9 @@
                                     <a class="dropdown-item" href="{{ route('profile') }}">Profil Anda</a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('profile.order') }}" class="dropdown-item">Pesanan Anda</a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{{ route('wishlist.show') }}">Wishlist</a>
                                 </li>
                                 <li><a href="{{ route('allChat.show') }}" class="dropdown-item">Chats</a></li>
