@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\FinancialHistory;
 use App\Models\Image;
 use App\Models\Order;
 use App\Models\ProductStockHistory;
@@ -24,7 +25,13 @@ class ShopController extends Controller
     public function index()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('merchant.product', compact('shop'));
+        $stockHistories = ProductStockHistory::with(["product.images", "product.shop" => function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        }])->whereHas("product.shop", function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        })->orderBy("date", "DESC")
+            ->get();
+        return view('merchant.product', compact('shop', 'stockHistories'));
     }
 
     /**
@@ -158,13 +165,8 @@ class ShopController extends Controller
             ->where('orderStatus', 'done')
             ->first()
             ->total;
-        $stockHistories = ProductStockHistory::with(["product.images", "product.shop" => function ($query) use ($shop) {
-            $query->where("id", $shop->id);
-        }])->whereHas("product.shop", function ($query) use ($shop) {
-            $query->where("id", $shop->id);
-        })->orderBy("date", "DESC")
-            ->get();
-        return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue", "stockHistories"));
+        $financialHistories = FinancialHistory::where("shop_id", $shop->id)->orderBy("date", "DESC")->get();
+        return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue", "financialHistories"));
     }
 
     public function productSold(Request $request)

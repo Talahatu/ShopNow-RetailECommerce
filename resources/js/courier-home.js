@@ -279,7 +279,7 @@ $(function () {
                 map.on("locationfound", function (e) {
                     console.log("Fetching coordinates...");
                     console.log(e.accuracy);
-                    if (e.accuracy >= 50) {
+                    if (e.accuracy >= 500000000) {
                         map.spin(true);
                     } else {
                         map.spin(false);

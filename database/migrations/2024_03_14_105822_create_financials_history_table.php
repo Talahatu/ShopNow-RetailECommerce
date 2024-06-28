@@ -18,6 +18,7 @@ class CreateFinancialsHistoryTable extends Migration
             $table->unsignedBigInteger("shop_id");
             $table->integer("income");
             $table->date("date");
+            $table->string("metode");
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->timestamps();
         });

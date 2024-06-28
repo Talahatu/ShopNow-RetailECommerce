@@ -119,6 +119,7 @@ class OrderController extends Controller
             $user->notify(new OrderNotification("Pesanan Anda Ditolak", "Pesanan anda " . $order->orderID . " ditolak oleh seller pada $datetime karena $reason.", route("profile.order")));
             if ($order->payment_method == "saldo") {
                 $user->saldo = $user->saldo + $order->total;
+                $user->save();
             }
 
             $newNotif = new Notification();

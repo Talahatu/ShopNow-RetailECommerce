@@ -1,6 +1,7 @@
 import $ from "jquery";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import "jquery-mask-plugin";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -252,6 +253,10 @@ $(function () {
 
 $("#btnTopup").on("click", function () {
     const value = $("#topup").val();
+    if (value <= 1000) {
+        alert("Nominal saldo harus lebih besar dari 1000 ");
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/saldo/topup",

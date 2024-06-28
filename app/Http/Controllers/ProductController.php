@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -27,7 +28,13 @@ class ProductController extends Controller
     public function index()
     {
         $shop = Shop::where("user_id", Auth::user()->id)->first();
-        return view('merchant.product', compact("shop"));
+        $stockHistories = ProductStockHistory::with(["product.images", "product.shop" => function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        }])->whereHas("product.shop", function ($query) use ($shop) {
+            $query->where("id", $shop->id);
+        })->orderBy("date", "DESC")
+            ->get();
+        return view('merchant.product', compact("shop", "stockHistories"));
     }
 
     /**

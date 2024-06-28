@@ -48,6 +48,49 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Riwayat Stok Barang</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Gambar</th>
+                                        <th> Nama </th>
+                                        <th> Tanggal </th>
+                                        <th> Bertambah </th>
+                                        <th> Berkurang </th>
+                                        <th> Total Stok </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($stockHistories as $item)
+                                        <tr>
+                                            <td>
+                                                <img src="{{ asset('productimages/' . $item->product->images[0]->name) }}"
+                                                    alt="image">
+                                            </td>
+                                            <td>
+                                                {{ $item->product->name }}
+                                            </td>
+                                            <td> {{ strftime('%A, %d %B %Y', strtotime($item->date)) }} </td>
+                                            <td class="text-success"> +{{ $item->addition }}
+                                            </td>
+                                            <td class="text-danger">
+                                                -{{ abs($item->substraction) }}
+                                            </td>
+                                            <td>{{ $item->total_stock }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('js')

@@ -32,7 +32,7 @@ class Delivery extends Model
     public static function processSaldo($delivery, $order, $image)
     {
         $delivery->arrive_date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
-        // $delivery->status = "done";
+        $delivery->status = "done";
 
         $filename = hrtime(true) . "-proof" . "." . $image->getClientOriginalExtension();
         $path = public_path() . "/deliveryProof";

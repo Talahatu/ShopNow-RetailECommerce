@@ -36,7 +36,8 @@
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                                     <h2 class="mb-0">Rp {{ number_format($thisMonthRevenue, 0, '.', ',') }}</h2>
                                 </div>
-                                <h6 class="text-muted font-weight-normal">Nominal pendapatan selama satu bulan</h6>
+                                <h6 class="text-muted font-weight-normal">Nominal pendapatan gabungan antara metode
+                                    pembayaran saldo dengan COD selama satu bulan</h6>
                             </div>
                             <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                                 <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
@@ -85,40 +86,26 @@
                 </div>
             </div>
         </div>
-        <div class="row ">
+        <div class="row mt-4">
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Riwayat Stok Barang</h4>
+                        <h4 class="card-title">Riwayat Pemasukan</h4>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th> Gambar</th>
-                                        <th> Nama </th>
-                                        <th> Tanggal </th>
-                                        <th> Bertambah </th>
-                                        <th> Berkurang </th>
-                                        <th> Total Stok </th>
+                                        <th> Tanggal</th>
+                                        <th> Nominal </th>
+                                        <th> Metode Pembayaran </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($stockHistories as $item)
+                                    @foreach ($financialHistories as $item)
                                         <tr>
-                                            <td>
-                                                <img src="{{ asset('productimages/' . $item->product->images[0]->name) }}"
-                                                    alt="image">
-                                            </td>
-                                            <td>
-                                                {{ $item->product->name }}
-                                            </td>
                                             <td> {{ strftime('%A, %d %B %Y', strtotime($item->date)) }} </td>
-                                            <td class="text-success"> +{{ $item->addition }}
-                                            </td>
-                                            <td class="text-danger">
-                                                -{{ abs($item->substraction) }}
-                                            </td>
-                                            <td>{{ $item->total_stock }}</td>
+                                            <td>{{ number_format($item->income, 0, '.', ',') }}</td>
+                                            <td class="text-success"> {{ $item->metode }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

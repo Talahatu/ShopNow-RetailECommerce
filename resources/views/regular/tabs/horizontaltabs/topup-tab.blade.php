@@ -7,7 +7,8 @@
         </div><br>
 
         <h1>Tambahkan Saldo</h1>
-        <input type="number" name="topup" id="topup" class="form-control mt-4 mb-2" value="0">
+        <input type="number" name="topup" id="topup" class="form-control mt-4 mb-2" value="1000" step="1000"
+            min="1000">
         <button class="btn btn-dark" id="btnTopup">Tambahkan</button>
     </div>
 </div>

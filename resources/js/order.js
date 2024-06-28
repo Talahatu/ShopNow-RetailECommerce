@@ -33,6 +33,9 @@ $(function () {
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
     const baseUrl = window.location.protocol + "//" + window.location.host;
     let orderPaymentType = null;
+    let btnReject = null;
+    let deliveryFinish = null;
+    let deliverySaku = 0;
 
     let formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -228,63 +231,63 @@ $(function () {
 
     $(document).on("click", ".btn-reject", function () {
         const orderID = $(this).attr("data-dia");
-        const button = $(this);
-        const parent = $("#row_" + orderID);
-
-        $("#loader").addClass("d-flex");
-        $("#loader").removeClass("d-none");
-
+        btnReject = $(this);
         $("#exampleModalLabel").html("Masukan alasan penolakan");
         $("#exampleModal").find(".modal-footer").html(`
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModal">Tutup</button>
-        <button type="button" class="btn btn-primary" id="simpanAlasan">Simpan</button>
+        <button type="button" class="btn btn-primary" id="simpanAlasan" data-oid=${orderID}>Simpan</button>
     `);
         $("#exampleModal").find(".modal-body").html(`
         <label for="reason">Alasan: </label>
         <input type="text" name="reason" id="reason" placeholder="Penolakan Karena..."
             class="form-control text-white">
         `);
+    });
 
-        $(document).on("click", "#simpanAlasan", function () {
-            const alasan = $("#reason").val();
-            $.ajax({
-                type: "POST",
-                url: "/order/reject",
-                data: {
-                    _token: csrfToken,
-                    orderID: orderID,
-                    reason: alasan,
-                },
-                success: function (response) {
-                    if (response) {
-                        if ($(parent).hasClass("parent"))
-                            $(button)
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .parent()
-                                .remove();
-                        $(parent).remove();
-                        const modal = document.getElementById("exampleModal");
-                        bootstrap.Modal.getInstance(modal).hide();
+    $(document).on("click", "#simpanAlasan", function () {
+        const orderID = $(this).attr("data-oid");
+        const button = btnReject;
+        const parent = $("#row_" + orderID);
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
+        const alasan = $("#reason").val();
+        $.ajax({
+            type: "POST",
+            url: "/order/reject",
+            data: {
+                _token: csrfToken,
+                orderID: orderID,
+                reason: alasan,
+            },
+            success: function (response) {
+                if (response) {
+                    if ($(parent).hasClass("parent"))
+                        $(button)
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .parent()
+                            .remove();
+                    $(parent).remove();
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
 
-                        $("#loader").addClass("d-none");
-                        $("#loader").removeClass("d-flex");
-                    } else {
-                        alert(
-                            "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
-                        );
-                    }
-                },
-                error: function (err) {
-                    console.log(err);
-                },
-            });
+                    $("#loader").addClass("d-none");
+                    $("#loader").removeClass("d-flex");
+                } else {
+                    alert(
+                        "Terdapat masalah ketika menerima pesanan, hubungi staff divisi bantuan pelayanan"
+                    );
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            },
         });
     });
 
@@ -421,7 +424,7 @@ $(function () {
             .text();
         $("#exampleModalLabel").html(`Rincian Pengiriman ${IDOrder}`);
         $("#exampleModal").find(".modal-footer").html(`
-        <button type="button" class="btn btn-success" id="finishDelivery" >Selesaikan Pengiriman</button>
+        <button type="button" class="btn btn-success" id="finishDelivery" data-oid=${orderID} >Konfirmasi Setoran</button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
         `);
 
@@ -439,6 +442,7 @@ $(function () {
                 console.log(response);
                 const data = response;
                 const delivery = data.deliveries[0];
+                deliveryFinish = delivery;
                 // Tanggal pickup/mulai pengiriman, tanggal selesai pengirimaan
                 let tableRow = `
                     <tr>
@@ -474,7 +478,7 @@ $(function () {
                           )}</h5>`;
                 if (delivery.status == "done" && data.orderStatus != "done") {
                     $("#exampleModal").find(".modal-footer").html(`
-                    <button type="button" class="btn btn-outline-secondary" disabled>Telah Disetor (Menunggu persetujuan pembeli)</button>
+                    <button type="button" class="btn btn-outline-secondary" disabled>(Menunggu persetujuan pembeli)</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
                     `);
                 }
@@ -508,35 +512,33 @@ $(function () {
                     "disabled",
                     delivery.arrive_date == null
                 );
+            },
+            error: function (param) {
+                console.log(param);
+            },
+        });
+    });
+    $(document).on("click", "#finishDelivery", function () {
+        const orderID = $(this).attr("data-oid");
+        const parent = $("#row_" + orderID);
 
-                $(document).on("click", "#finishDelivery", function () {
-                    const parent = $("#row_" + orderID);
+        $.ajax({
+            type: "POST",
+            url: "/delivery/done",
+            data: {
+                _token: csrfToken,
+                deliveryID: deliveryFinish.id,
+            },
+            success: function (response) {
+                if (response) {
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/delivery/done",
-                        data: {
-                            _token: csrfToken,
-                            deliveryID: delivery.id,
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            if (response) {
-                                const modal =
-                                    document.getElementById("exampleModal");
-                                bootstrap.Modal.getInstance(modal).hide();
-
-                                $(parent).next().hasClass("child")
-                                    ? $(parent).next().remove()
-                                    : "";
-                                $(parent).remove();
-                            }
-                        },
-                        error: function (param) {
-                            console.log(param);
-                        },
-                    });
-                });
+                    $(parent).next().hasClass("child")
+                        ? $(parent).next().remove()
+                        : "";
+                    $(parent).remove();
+                }
             },
             error: function (param) {
                 console.log(param);
@@ -606,7 +608,6 @@ $(function () {
         const orderID = $(this).attr("data-dia");
         let courierID = "";
         let date = "";
-        let saku = 0;
 
         const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
@@ -700,6 +701,7 @@ $(function () {
                         checkModalRequirement(date, courierID);
                     });
                 }
+
                 var picker = new Pikaday({
                     field: $(".datepicker")[0],
                     i18n: {
@@ -779,7 +781,7 @@ $(function () {
                     orderID: orderID,
                     deliveryDate: date,
                     courierID: courierID,
-                    operational: saku,
+                    operational: deliverySaku,
                 },
                 success: function (response) {
                     if (response) {
@@ -817,8 +819,9 @@ $(function () {
     const checkModalRequirement = (date, courier) => {
         if (orderPaymentType == "cod") {
             const saku = $("#UangSaku").cleanVal();
-            if (date != "" && courier != "" && saku > 0) {
+            if (date != "" && courier != "" && saku > 1000) {
                 $("#saveDelivery").attr("disabled", false);
+                deliverySaku = saku;
                 return;
             }
         } else if (orderPaymentType == "saldo") {

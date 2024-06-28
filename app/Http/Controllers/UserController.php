@@ -266,12 +266,15 @@ class UserController extends Controller
             $income = new FinancialHistory();
             $income->shop_id = $order->shop_id;
             $income->income = $order->total;
+            $income->metode = $order->payment_method;
             $income->date =  Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
             $income->save();
 
-            $shop = Shop::find($order->shop_id);
-            $shop->saldo_release = $shop->saldo_release + $income->income;
-            $shop->save();
+            if ($order->payment_method == "saldo") {
+                $shop = Shop::find($order->shop_id);
+                $shop->saldo_release = $shop->saldo_release + $income->income;
+                $shop->save();
+            }
 
             return true;
         });
