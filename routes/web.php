@@ -143,6 +143,7 @@ Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
     Route::get("/seller-financial", [ShopController::class, "showFinancials"])->name("seller.financial");
     Route::post("/seller/financial/sold-chart", [ShopController::class, "productSold"])->name("seller.sold.chart");
     Route::post("/seller/financial/popular", [ShopController::class, "top5Popular"])->name("seller.top5Popular");
+    Route::post("/withdraw/saldo", [ShopController::class, "withdrawSaldo"]);
 
     Route::get("/seller/chat/show", [ShopController::class, "showChat"])->name("seller.chat");
     Route::post("/sendMessageSeller", [ChatController::class, "sendMessageSeller"])->name("chat.send.seller");

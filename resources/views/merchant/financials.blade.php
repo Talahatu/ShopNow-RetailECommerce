@@ -16,13 +16,18 @@
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <h2 class="mb-0">Rp {{ number_format($shop->saldo_release, 0, '.', ',') }}</h2>
+                                    <h2 class="mb-0" id="nominalSaldo">Rp
+                                        {{ number_format($shop->saldo_release, 0, '.', ',') }}</h2>
                                 </div>
                                 <h6 class="text-muted font-weight-normal">Nominal saldo yang dimiliki toko saat ini</h6>
                             </div>
                             <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                                 <i class="icon-lg mdi mdi-wallet text-primary ml-auto"></i>
                             </div>
+                        </div>
+                        <div class="row">
+                            <button type="button" class="btn btn-primary" id="btnWithdraw" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalFinance">Tarik Tunai</button>
                         </div>
                     </div>
                 </div>
@@ -112,6 +117,30 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalFinance" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tarik Saldo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <hr style="margin-top: 0px">
+                <div class="modal-body">
+                    <label for="withdrawMoney">Nominal Uang</label>
+                    <div class="input-group">
+                        <input id="withdrawMoney" name="withdrawMoney" type="text" class="form-control text-light"
+                            placeholder="Masukan nominal uang yang ditarik">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="withdraw">Tarik</button>
                 </div>
             </div>
         </div>

@@ -14,6 +14,13 @@ $(function () {
 
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
+    let formatter = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
+
     $.ajax({
         type: "POST",
         url: "/seller/financial/sold-chart",
@@ -95,5 +102,28 @@ $(function () {
         error: function (param) {
             console.log(param);
         },
+    });
+
+    $("#withdraw").on("click", function () {
+        const nominal = $("#withdrawMoney").val();
+        $.ajax({
+            type: "POST",
+            url: "/withdraw/saldo",
+            data: {
+                _token: csrfToken,
+                nominal: nominal,
+            },
+            success: function (response) {
+                if (!response) {
+                    return;
+                }
+                $("#nominalSaldo").html(formatter.format(response));
+                const modal = document.getElementById("exampleModalFinance");
+                bootstrap.Modal.getInstance(modal).hide();
+            },
+            error: function (param) {
+                console.log(param);
+            },
+        });
     });
 });

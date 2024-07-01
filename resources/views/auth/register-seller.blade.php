@@ -35,7 +35,7 @@
                                             <div class="btn btn-dark btn-rounded">
                                                 <label class="form-label text-white m-1" for="image">Pilih gambar</label>
                                                 <input type="file" name="image" class="form-control d-none changeCheck"
-                                                    id="image" />
+                                                    id="image" required />
                                             </div>
                                         </div>
                                         @error('image')
@@ -59,7 +59,7 @@
                                     <div class="form-outline mb-4">
                                         <input type="tel" id="phoneNumber"
                                             class="form-control form-control-lg @error('phoneNumber') is-invalid @enderror changeCheck"
-                                            name="phoneNumber" value="{{ old('phoneNumber') }}" autofocus
+                                            name="phoneNumber" value="{{ old('phoneNumber') }}" required autofocus
                                             autocomplete="phoneNumber">
                                         <label class="form-label" for="desc">{{ __('Nomor Telepon') }}</label>
                                         @error('phoneNumber')
@@ -85,7 +85,7 @@
 
                                     <div class="pt-1 mb-4">
                                         <button class="btn btn-dark btn-lg btn-block" disabled type="submit"
-                                            id="btnsbmt">{{ __('Open Account') }}</button>
+                                            id="btnsbmt">{{ __('Buka Akun') }}</button>
                                         <a href="/" class="btn btn-outline-dark btn-lg btn-block">Kembali</a>
                                     </div>
                                 </form>

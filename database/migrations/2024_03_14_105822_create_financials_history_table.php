@@ -16,11 +16,12 @@ class CreateFinancialsHistoryTable extends Migration
         Schema::create('financials_history', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("shop_id");
-            $table->integer("income");
+            $table->integer("income")->nullable();
             $table->date("date");
-            $table->string("metode");
+            $table->string("metode")->nullable();
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->timestamps();
+            $table->integer("withdraw")->nullable();
         });
     }
 

@@ -9,6 +9,9 @@ use App\Models\Order;
 use App\Models\ProductStockHistory;
 use App\Models\Shop;
 use App\Models\User;
+use Carbon\Carbon;
+use DateTimeZone;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -165,7 +168,7 @@ class ShopController extends Controller
             ->where('orderStatus', 'done')
             ->first()
             ->total;
-        $financialHistories = FinancialHistory::where("shop_id", $shop->id)->orderBy("date", "DESC")->get();
+        $financialHistories = FinancialHistory::where("shop_id", $shop->id)->where("withdraw", 0)->orderBy("date", "DESC")->get();
         return view("merchant.financials", compact("shop", "thisMonthRevenue", "allRevenue", "financialHistories"));
     }
 
@@ -202,6 +205,34 @@ class ShopController extends Controller
 
             return $data;
         });
+        return response()->json($result);
+    }
+    public function withdrawSaldo(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            $nominal = $request->get("nominal");
+            $shop = Shop::where("user_id", Auth::user()->id)->first();
+            $saldo = $shop->saldo_release;
+            if ($nominal > $saldo) {
+                throw new Exception("Nominal lebih besar dari total saldo, mohon diisi ulang!");
+                return false;
+            } elseif ($nominal <= 0) {
+                throw new Exception("Nominal tidak bisa negatif atau kurang dari 0, mohon diisi ulang!");
+                return false;
+            }
+
+            $newFinance = new FinancialHistory();
+            $newFinance->shop_id = $shop->id;
+            $newFinance->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateString();
+            $newFinance->withdraw = $nominal;
+            $newFinance->save();
+
+            $shop->saldo_release = $saldo - $nominal;
+            $shop->save();
+
+            return $shop->saldo_release;
+        });
+
         return response()->json($result);
     }
 }
