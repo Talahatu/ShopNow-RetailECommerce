@@ -30,6 +30,7 @@
  ============================================= -->
     <title>Halaman Kurir</title>
     @yield('css')
+    @laravelPWA()
 </head>
 
 <body class="stretched">

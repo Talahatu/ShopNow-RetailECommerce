@@ -25,6 +25,7 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('corona/images/favicon.png') }}" />
     @yield('css')
+    @laravelPWA()
 </head>
 
 <body>

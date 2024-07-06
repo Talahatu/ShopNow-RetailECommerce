@@ -18,7 +18,7 @@ const initServiceWorker = (token) => {
     }
 
     navigator.serviceWorker
-        .register("/serviceworkerV1.js")
+        .register("/serviceworker.js")
         .then((response) => {
             initPush(token);
         })
