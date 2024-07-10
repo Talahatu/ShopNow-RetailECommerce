@@ -19,13 +19,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Midtrans\Snap;
 use Pusher\PushNotifications\PushNotifications;
+use Midtrans\Config;
+
 
 use function Ramsey\Uuid\v1;
 
 class UserController extends Controller
 {
     //
+    public function __construct()
+    {
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
+    }
     public function profile()
     {
         return redirect()->route('profile.bio');
@@ -420,5 +430,29 @@ class UserController extends Controller
 
         Log::info($id);
         return response()->json($res);
+    }
+
+
+    public function getTokenSnap(Request $request)
+    {
+
+        $userId = Auth::user()->id;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => rand(),
+                'gross_amount' => $request->value,
+            ],
+            'credit_card' => [
+                'secure' => true
+            ],
+            'customer_details' => [
+                'first_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+            ],
+        ];
+        $snap = Snap::getSnapToken($params);
+
+        return response()->json($snap);
     }
 }

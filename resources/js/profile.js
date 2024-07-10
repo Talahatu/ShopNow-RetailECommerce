@@ -253,25 +253,54 @@ $(function () {
 
 $("#btnTopup").on("click", function () {
     const value = $("#topup").val();
-    if (value <= 1000) {
-        alert("Nominal saldo harus lebih besar dari 1000 ");
-        return;
-    }
+
     $.ajax({
         type: "POST",
-        url: "/saldo/topup",
+        url: "/getTokenSnap",
         data: {
             _token: csrfToken,
             value: value,
         },
         success: function (response) {
-            if (!response) return;
-            $("#balance").html(
-                formatter.format(
-                    parseInt($("#balance-val").val()) + parseInt(value)
-                )
-            );
-            $("#topup").val(0);
+            console.log("TOKEN: ");
+            console.log(response);
+            const token = response;
+            window.snap.pay(token, {
+                onSuccess: function (param) {
+                    console.log("Success");
+                    // console.log(param);
+                    const nominal = param.gross_amount;
+                    $.ajax({
+                        type: "post",
+                        url: "/saldo/topup",
+                        data: {
+                            _token: csrfToken,
+                            value: nominal,
+                        },
+                        success: function (response) {
+                            if (!response) return;
+                            $("#balance").html(
+                                formatter.format(
+                                    parseInt($("#balance-val").val()) +
+                                        parseInt(value)
+                                )
+                            );
+                            $("#topup").val(0);
+                        },
+                    });
+                },
+                onPending: function (param) {
+                    console.log("Pending");
+                    console.log(param);
+                },
+                onError: function (param) {
+                    console.log("Error");
+                    console.log(param);
+                },
+            });
+        },
+        error: function (param) {
+            console.log(param);
         },
     });
 });

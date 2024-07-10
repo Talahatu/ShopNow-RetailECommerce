@@ -108,6 +108,9 @@ Route::middleware(["auth", "prevent.courier"])->group(function () {
     Route::post("/notification/change/denied", [UserController::class, "notificationDenied"]);
     // not used yet
     Route::post("/getSeller", [ShopController::class, "getSeller"])->name("seller.get");
+    Route::post("/getTokenSnap", [UserController::class, "getTokenSnap"]);
+
+    // Route::post("/midtrans/finish/topup", [UserController::class, "finishTopup"]);
 });
 
 Route::middleware(["auth", "seller", "prevent.courier"])->group(function () {
