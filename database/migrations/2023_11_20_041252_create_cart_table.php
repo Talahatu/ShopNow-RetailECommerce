@@ -23,8 +23,8 @@ class CreateCartTable extends Migration
             $table->integer("price");
             $table->double("distance");
             $table->boolean("selected")->default(false);
-            $table->foreign("product_id")->references("id")->on("products");
-            $table->foreign("user_id")->references("id")->on("users");
+            $table->foreign("product_id")->references("id")->on("products")->onDelete("CASCADE");
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("CASCADE");
             $table->timestamps();
         });
     }
