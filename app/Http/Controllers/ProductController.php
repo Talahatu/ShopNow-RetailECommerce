@@ -131,7 +131,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         DB::transaction(function () use ($id) {
-            Product::deleteImages($id);
+            // Product::deleteImages($id);
             Product::find($id)->delete();
         });
         return response()->json(true);

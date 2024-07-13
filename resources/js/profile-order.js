@@ -522,7 +522,6 @@ $(function () {
                 } else if (tab == "sent") {
                     if (response.length > 0) {
                         for (const iterator of response) {
-                            console.log(iterator);
                             html += `
                                 <div class="list-group-item list-group-item card" aria-current="true" id="item-${
                                     iterator.id

@@ -43,6 +43,7 @@
                                 <tr>
                                     <th>Nomor Pesanan</th>
                                     <th>Tanggal Pesanan</th>
+                                    <th>Tenggat Waktu</th>
                                     <th>Alamat Tujuan</th>
                                     <th>Tipe Pembayaran</th>
                                     <th>Jarak Tempuh</th>

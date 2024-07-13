@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $, { data } from "jquery";
 
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
@@ -59,6 +59,23 @@ $(function () {
         return [
             { data: "orderID" },
             { data: "order_date", visible: false },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    // 2PM
+                    let result = "Hari ini";
+                    const acceptDate = data.accept_date;
+                    if (acceptDate) {
+                        const hour = acceptDate.split(" ")[1].split(":")[0];
+                        if (hour > 14) {
+                            result = moment(acceptDate)
+                                .add(1, "day")
+                                .format("dddd, D MMMM YYYY");
+                        }
+                    }
+                    return result;
+                },
+            },
             {
                 data: null,
                 render: function (data, type, row) {
@@ -151,7 +168,10 @@ $(function () {
             return "row_" + row.id;
         },
         columns: DTcolumns(),
-        columnDefs: [{ targets: [0, 4], className: "text-end" }],
+        columnDefs: [
+            { targets: [0, 5], className: "text-end" },
+            { targets: [2], visible: false },
+        ],
         order: [[1, "DESC"]],
     });
 
@@ -167,6 +187,7 @@ $(function () {
             const data = response.data;
             table.rows.add(data).draw();
             table.columns.adjust().draw();
+            table.column(2).visible(false);
             columnOpenFix();
         },
         error: function (err) {
@@ -329,9 +350,9 @@ $(function () {
                         <div class="form-group row">
                             <label for="orderDate" class="col-sm-3 col-form-label">Tanggal Pesanan</label>
                             <div class="col-sm-9">
-                                <label for="orderDate" class="col-form-label">:&nbsp;${
+                                <label for="orderDate" class="col-form-label">:&nbsp;${moment(
                                     ordersInfo.order_date
-                                }</label>
+                                ).format("dddd, D MMMM YYYY")}</label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -596,6 +617,11 @@ $(function () {
                 });
                 table.rows.add(data).draw();
                 table.columns.adjust().draw();
+                table
+                    .column(2)
+                    .visible(
+                        !(type == "new" || type == "done" || type == "cancel")
+                    );
                 columnOpenFix();
             },
             error: function (err) {

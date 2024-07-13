@@ -17,7 +17,7 @@ class CreateOrderTable extends Migration
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("shop_id");
-            $table->date("order_date");
+            $table->dateTime("order_date");
             $table->enum("orderStatus", ['new', 'accepted', 'sent', "done", "cancel"]);
             $table->string("destination_address");
             $table->string("destination_latitude");
@@ -33,8 +33,8 @@ class CreateOrderTable extends Migration
             $table->integer("shippingFee");
             $table->string("orderID");
             $table->double("distance");
-            $table->date("accept_date")->nullable();
-            $table->date("cancel_date")->nullable();
+            $table->dateTime("accept_date")->nullable();
+            $table->dateTime("cancel_date")->nullable();
         });
     }
 

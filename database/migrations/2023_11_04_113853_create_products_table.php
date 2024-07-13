@@ -32,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->foreign("shop_id")->references("id")->on("shops");
             $table->foreign("brand_id")->references("id")->on("brands");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

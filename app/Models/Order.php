@@ -185,7 +185,8 @@ class Order extends Model
                         "orders.payment_method",
                         "orders.orderID",
                         "orders.orderStatus",
-                        "orders.order_date"
+                        "orders.order_date",
+                        "orders.accept_date"
                     ]
                 );
         }
@@ -203,7 +204,8 @@ class Order extends Model
                         DB::raw("ROUND(orders.distance,0) AS distance"),
                         "orders.payment_method",
                         "orders.orderID",
-                        "orders.order_date"
+                        "orders.order_date",
+                        "orders.accept_date"
                     ]
                 );
         }
@@ -220,7 +222,8 @@ class Order extends Model
                     DB::raw("ROUND(orders.distance,0) AS distance"),
                     "orders.payment_method",
                     "orders.orderID",
-                    "orders.order_date"
+                    "orders.order_date",
+                    "orders.accept_date"
                 ]
             );
     }
