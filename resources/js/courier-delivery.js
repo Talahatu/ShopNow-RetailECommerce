@@ -9,7 +9,6 @@ import "leaflet-spin";
 
 $(function () {
     const baseUrl = window.location.protocol + "//" + window.location.host;
-
     const [orderID, deliveryID] = $("#dia").val().split("-");
     let markerStart = null;
     let markerEnd = null;
@@ -43,16 +42,6 @@ $(function () {
             const latitudeDestination = response.destination_latitude;
             const longitudeDestination = response.destination_longitude;
             generateMap(latitudeDestination, longitudeDestination);
-
-            // if (response.payment_method == "cod") {
-            //     $("#operationalFeeUsed").mask("#.##0", {
-            //         reverse: true,
-            //     });
-            //     $(document).on("input", "#operationalFeeUsed", function () {
-            //         const image = $("#proofImage")[0];
-            //         checkFilled(image, $(this).val());
-            //     });
-            // }
 
             $(document).on("change", "#proofImage", function () {
                 if (response.payment_method == "cod") {

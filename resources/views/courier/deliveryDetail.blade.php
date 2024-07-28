@@ -86,6 +86,15 @@
                 </div>
             </div>
         @endif
+        @if ($order->payment_method == 'cod')
+            <div class="divider divider-rounded divider-center"><i class="bi-pencil"></i></div>
+            <div class="form-group row">
+                <label for="orderTotal" class="col-sm-3 col-form-label"><b>Total Pembayaran:&nbsp;</b></label>
+                <div class="col-sm-9">
+                    <label for="orderTotal" class="col-form-label">Rp. {{ number_format($order->total, 0, ',', '.') }}
+                </div>
+            </div>
+        @endif
         <hr>
         <div class="style-msg alertmsg">
             <div class="sb-msg"><i class="bi-exclamation-diamond-fill"></i><strong>Perhatian!</strong> Nyalakan GPS dan
@@ -112,22 +121,6 @@
                 <img src="#" alt="Mohon berikan bukti selesai pengiriman" id="file-preview">
             </div>
         </div>
-
-
-        @if ($order->payment_method == 'cod')
-            <div class="divider divider-rounded divider-center"><i class="bi-pencil"></i></div>
-            <div class="style-msg alertmsg">
-                <div class="sb-msg"><i class="bi-exclamation-diamond-fill"></i><strong>Perhatian!</strong> Isi bagian
-                    "Uang
-                    saku digunakan" untuk menyelesaikan pengiriman</div>
-            </div>
-            <div class="form-group row">
-                <label for="orderTotal" class="col-sm-3 col-form-label"><b>Total Pembayaran:&nbsp;</b></label>
-                <div class="col-sm-9">
-                    <label for="orderTotal" class="col-form-label">Rp. {{ number_format($order->total, 0, ',', '.') }}
-                </div>
-            </div>
-        @endif
 
         <div class="button-group-footer text-end mt-4">
             <button type="button" class="button button-border button-rounded button-teal button-fill"

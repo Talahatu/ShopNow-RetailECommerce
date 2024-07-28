@@ -167,14 +167,16 @@ class Order extends Model
     public static function getOrder($shopID, $type)
     {
         if ($type == "sent") {
+            Log::info($shopID);
             return Order::with(["details", "deliveries"])
                 ->join("delivery", "delivery.order_id", "orders.id")
                 ->where("orders.shop_id", $shopID)
                 ->where("orders.orderStatus", "sent")
                 // ->where("delivery.status", "!=", "done")
-                ->orWhere(function ($query) {
+                ->orWhere(function ($query) use ($shopID) {
                     $query->where("orders.orderStatus", "done")
-                        ->where("delivery.status", "!=", "done");
+                        ->where("delivery.status", "!=", "done")
+                        ->where("orders.shop_id", $shopID);
                 })
                 ->orderBy("orders.order_date", "desc")
                 ->get(

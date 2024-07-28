@@ -20,8 +20,7 @@
                             <tr>
                                 <th>id</th>
                                 <th>Nama</th>
-                                <th>Uang Saku</th>
-                                <th>Status Pengiriman</th>
+                                <th>Jumlah Pengiriman</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -30,8 +29,7 @@
                                 <tr id="row_{{ $couriers[$i]->id }}">
                                     <td>{{ $couriers[$i]->id }}</td>
                                     <td>{{ $couriers[$i]->name }}</td>
-                                    <td>Rp {{ $couriers[$i]->operationalFee }}</td>
-                                    <td>{{ count($couriers[$i]->filteredDeliveries('progress')) <= 0 ? 'Tersedia' : 'Sedang Dalam Perjalanan' }}
+                                    <td>{{ count($couriers[$i]->filteredDeliveries('progress')) + count($couriers[$i]->filteredDeliveries('new')) }}
                                     </td>
                                     <td><a class="btn btn-outline-info btn-update m-1" data-di="{{ $couriers[$i]->id }}"
                                             href="{{ route('courier.show.update', $couriers[$i]->id) }}">Ubah</a><br><button

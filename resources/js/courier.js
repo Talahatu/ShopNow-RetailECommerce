@@ -48,9 +48,8 @@ $(function () {
             },
             { data: "name" },
             {
-                data: "operationalFee",
+                data: "status",
             },
-            { data: "status" },
             {
                 data: null,
                 render: function (data, type, row) {
@@ -65,6 +64,7 @@ $(function () {
         responsive: {
             details: {
                 renderer: function (api, rowIdx, columns) {
+                    console.log(columns);
                     var data = $.map(columns, function (col, i) {
                         return col.hidden
                             ? '<tr data-dt-row="' +
@@ -103,7 +103,12 @@ $(function () {
             url: "/courier/delete/" + id,
             headers: { "X-CSRF-TOKEN": csrfToken },
             success: function (response) {
-                if (!response) return;
+                if (!response) {
+                    alert(
+                        "Kurir masih membawa pesanan, pastikan kurir tidak membawa pesanan sebelum menghapus kurir!"
+                    );
+                    return;
+                }
                 $("#row_" + id).remove();
             },
             error: function (er) {

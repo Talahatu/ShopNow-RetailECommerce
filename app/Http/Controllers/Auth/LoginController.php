@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Pusher\PushNotifications\PushNotifications;
 
@@ -69,16 +70,20 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
         if ($this->attemptLogin($request)) {
+
+            Log::info("SUCCESS!!!");
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
             return $this->sendLoginResponse($request);
         }
-
+        Log::info("NOT SUCCESS!!!");
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
+
+        Log::info($request);
 
         return $this->sendFailedLoginResponse($request);
     }
@@ -88,6 +93,9 @@ class LoginController extends Controller
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
+        ], [
+            "password" => "Password tidak benar!!!",
+            $this->username() => "Email atau username tidak benar!!!"
         ]);
     }
 

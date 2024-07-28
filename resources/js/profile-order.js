@@ -55,6 +55,12 @@ $(function () {
                     </tr>`;
 
                 let products = ``;
+                if (order.orderStatus == "new") {
+                    $("#modalFooter").html(`
+                        <button type="button" class="btn btn-danger" id="btnCancelOrder">Batalkan Pesanan</button>
+                        <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>`);
+                }
+                // if accepted
                 if (order.accept_date) {
                     riwayatPesanan += `
                         <tr>
@@ -65,6 +71,7 @@ $(function () {
                         </tr>
                     `;
                 }
+                // if cancelled
                 if (order.cancel_date) {
                     riwayatPesanan += `
                         <tr>
@@ -75,6 +82,7 @@ $(function () {
                         </tr>
                     `;
                 }
+                // If sent
                 if (order.deliveries.length > 0) {
                     const delivery = order.deliveries[0];
 
@@ -127,6 +135,16 @@ $(function () {
                         }
                         //======================== When Courier Finish END ====================================
                     }
+                }
+                if (
+                    order.orderStatus == "done" ||
+                    order.orderStatus == "cancel"
+                ) {
+                    finishFooter = `
+                    <button type="button" class="btn btn-secondary btnCloseModal" data-bs-dismiss="modal">Tutup</button>
+                `;
+
+                    $("#modalFooter").html(finishFooter);
                 }
 
                 for (const iterator of order.details) {
@@ -246,6 +264,7 @@ $(function () {
         });
     });
     $(document).on("click", "#btnCancelOrder", function () {
+        $("#loader").css("visibility", "visible");
         $.ajax({
             type: "POST",
             url: "/profile/order/cancel",
@@ -264,12 +283,16 @@ $(function () {
                         <p>Tidak ada pesanan</p>
                     </div>`);
                     }
+
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
+                    $("#loader").css("visibility", "hidden");
                 }
             },
         });
     });
     $(document).on("click", "#btnFinishOrder", function () {
-        console.log("Test 1");
+        $("#loader").css("visibility", "visible");
         $.ajax({
             type: "POST",
             url: "/profile/order/finish",
@@ -279,6 +302,7 @@ $(function () {
             },
             success: function (response) {
                 if (response) {
+                    $("#loader").css("visibility", "hidden");
                     $("#item-" + globalOrder.id).remove();
 
                     if ($("#order-container").children().length > 0) {
@@ -323,6 +347,7 @@ $(function () {
         });
     });
     $("#exampleModal2").on("click", "#btnSave", function () {
+        $("#loader").css("visibility", "visible");
         console.log("Test 2");
         const rating = $("#starRating").val();
 
@@ -343,6 +368,7 @@ $(function () {
             success: function (response) {
                 const modal = document.getElementById("exampleModal2");
                 bootstrap.Modal.getInstance(modal).hide();
+                $("#loader").css("visibility", "hidden");
             },
         });
     });

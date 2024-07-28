@@ -12,10 +12,10 @@ class PusherController extends Controller
     public function auth(Request $request)
     {
         $pusher = new Pusher(
-            env("PUSHER_APP_KEY"),
-            env("PUSHER_APP_SECRET"),
-            env("PUSHER_APP_ID"),
-            array('cluster' => env("PUSHER_APP_CLUSTER"))
+            env("PUSHER_APP_KEY", "c58a82be41ea6c60c1d7"),
+            env("PUSHER_APP_SECRET", "8264fc21e2b5035cc329"),
+            env("PUSHER_APP_ID", "1716744"),
+            array('cluster' => env("PUSHER_APP_CLUSTER", "ap1"))
         );
         echo $pusher->authorizeChannel($request->channel_name, $request->socket_id);
     }

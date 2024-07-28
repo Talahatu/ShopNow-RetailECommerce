@@ -21,31 +21,23 @@
 
                                     <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Masuk ke akun
                                     </h5>
-
+                                    @if ($errors->has('email'))
+                                        <span class="text-danger mb-2">
+                                            <strong>{{ 'Email dan kata sandi tidak benar!!!' }}</strong>
+                                        </span>
+                                    @endif
                                     <div class="form-outline mb-4">
-                                        <input type="text" id="email"
-                                            class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                            name="email" value="{{ old('email') }}" required autofocus
-                                            autocomplete="email" />
+                                        <input type="text" id="email" class="form-control form-control-lg "
+                                            name="email" required autofocus autocomplete="email" />
                                         <label class="form-label" for="email">Alamat email atau nama alias</label>
-                                        @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Alamat email tidak terdaftar!' }}</strong>
-                                            </span>
-                                        @enderror
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <input id="password" type="password"
-                                            class="form-control form-control-lg @error('password') is-invalid @enderror"
+                                        <input id="password" type="password" class="form-control form-control-lg "
                                             name="password" required autocomplete="current-password" />
                                         <label class="form-label" for="password">Kata Sandi</label>
-                                        @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ 'Kata sandi tidak terdaftar' }}</strong>
-                                            </span>
-                                        @enderror
                                     </div>
+
 
                                     <div class="pt-1 mb-4">
                                         <button class="btn btn-dark btn-lg btn-block" type="submit">Masuk Akun</button>

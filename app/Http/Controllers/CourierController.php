@@ -55,9 +55,9 @@ class CourierController extends Controller
             $newCourier->email = $email;
             $newCourier->username = ucwords($name[0]) . ucwords($shop->name[0]) . Carbon::now(new DateTimeZone("Asia/Jakarta"))->format('dmY');
             $newCourier->password = random_int(100000, 999999);
-            $newCourier->operationalFee = 0;
 
             $this->newCourierSendMail($email, $newCourier);
+
             $newCourier->password = bcrypt($newCourier->password);
             $newCourier->save();
         });
@@ -336,6 +336,11 @@ class CourierController extends Controller
     {
         $result = DB::transaction(function () use ($id) {
             $courier = Courier::find($id);
+
+            $deliveries = Delivery::where("courier_id", $id)->where("status", "!=", "done")->get();
+            if (count($deliveries) > 0) {
+                return false;
+            }
             $courier->delete();
             return true;
         });

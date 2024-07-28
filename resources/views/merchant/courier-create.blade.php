@@ -13,7 +13,7 @@
                     <h4 class="card-title">Mohon isi form berikut!</h4>
                     <p class="card-description">Informasi Kurir </p>
                     <form class="forms-sample" action="{{ route('courier.store') }}" method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data" id="formcreatecourier">
                         @csrf
                         <div class="form-group">
                             <label for="inputName">Nama Kurir</label>

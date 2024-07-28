@@ -23,6 +23,7 @@ class CreateCourierTable extends Migration
             $table->integer("operationalFee");
             $table->string("email");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

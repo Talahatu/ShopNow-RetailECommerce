@@ -19,9 +19,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Midtrans\Snap;
+
 use Pusher\PushNotifications\PushNotifications;
-use Midtrans\Config;
+
 
 
 use function Ramsey\Uuid\v1;
@@ -31,10 +31,6 @@ class UserController extends Controller
     //
     public function __construct()
     {
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = config('midtrans.is_sanitized');
-        Config::$is3ds = config('midtrans.is_3ds');
     }
     public function profile()
     {
@@ -324,6 +320,7 @@ class UserController extends Controller
     {
         $result = DB::transaction(function () use ($request) {
             $orderID = $request->get("orderID");
+            $datetime = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
 
             $order = Order::with(["details"])->where("id", $orderID)->first();
             $status = $order->orderStatus;
@@ -332,22 +329,25 @@ class UserController extends Controller
                 return false;
             }
 
+            Log::info("TEST CANCEL");
+
             if ($order->payment_method == "saldo") {
                 $user = User::find(Auth::user()->id);
                 $user->saldo = $user->saldo + $order->total;
+                $user->save();
             }
 
             foreach ($order->details as $key => $value) {
                 $product = Product::find($value->product_id);
                 $product->stock = $product->stock + $value->qty;
-                $product->status = ($product->stock == 0 ? "out of stock" : $product->status);
+                $product->status = "live";
                 $product->save();
 
                 $prodHistory = new ProductStockHistory();
                 $prodHistory->product_id = $value->product_id;
                 $prodHistory->addition = $value->qty;
                 $prodHistory->substraction = 0;
-                $prodHistory->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+                $prodHistory->date = $datetime;
                 $prodHistory->total_stock = $product->stock;
                 $prodHistory->save();
             }
@@ -357,7 +357,7 @@ class UserController extends Controller
             $newNotif = new Notification();
             $newNotif->header = "Pesanan anda dibatalkan!";
             $newNotif->content = "Pesanan anda telah berhasil dibatalkan.";
-            $newNotif->date = Carbon::now(new DateTimeZone("Asia/Jakarta"))->toDateTimeString();
+            $newNotif->date = $datetime;
             $newNotif->user_id = Auth::user()->id;
             $newNotif->save();
 
@@ -433,26 +433,26 @@ class UserController extends Controller
     }
 
 
-    public function getTokenSnap(Request $request)
-    {
+    // public function getTokenSnap(Request $request)
+    // {
 
-        $userId = Auth::user()->id;
+    //     $userId = Auth::user()->id;
 
-        $params = [
-            'transaction_details' => [
-                'order_id' => rand(),
-                'gross_amount' => $request->value,
-            ],
-            'credit_card' => [
-                'secure' => true
-            ],
-            'customer_details' => [
-                'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-            ],
-        ];
-        $snap = Snap::getSnapToken($params);
+    //     $params = [
+    //         'transaction_details' => [
+    //             'order_id' => rand(),
+    //             'gross_amount' => $request->value,
+    //         ],
+    //         'credit_card' => [
+    //             'secure' => true
+    //         ],
+    //         'customer_details' => [
+    //             'first_name' => Auth::user()->name,
+    //             'email' => Auth::user()->email,
+    //         ],
+    //     ];
+    //     $snap = Snap::getSnapToken($params);
 
-        return response()->json($snap);
-    }
+    //     return response()->json($snap);
+    // }
 }

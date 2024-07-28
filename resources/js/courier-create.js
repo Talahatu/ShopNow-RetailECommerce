@@ -16,4 +16,9 @@ $(function () {
     $("#navCourier").addClass("active");
     $("#navCourier > div").addClass("show");
     $("#newCourier > a").addClass("active");
+
+    $(document).on("submit", "#formcreatecourier", function (e) {
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
+    });
 });

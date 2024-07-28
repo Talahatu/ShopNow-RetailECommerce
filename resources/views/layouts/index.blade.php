@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="{{ asset('mdb5/css/mdb.min.css') }}" />
 
     {{-- SNAP --}}
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-Oi821fMphAsX4A9G
-        "></script>
+    {{-- <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-Oi821fMphAsX4A9G
+        "></script> --}}
 
     <!-- CSS -->
     {{-- <link rel="stylesheet" href="{{ asset('css/style-canvas.css') }}"> --}}

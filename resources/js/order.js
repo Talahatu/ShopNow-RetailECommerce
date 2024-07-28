@@ -8,7 +8,7 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-rowgroup-bs5";
 import "datatables.net-scroller-bs5";
 import "datatables.net-select-bs5";
-import moment from "moment/moment";
+import moment, { now } from "moment/moment";
 import "moment/locale/id";
 import Pikaday from "pikaday";
 import "pikaday/css/pikaday.css";
@@ -36,6 +36,7 @@ $(function () {
     let btnReject = null;
     let deliveryFinish = null;
     let deliverySaku = 0;
+    let courierID = "";
 
     let formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -542,7 +543,8 @@ $(function () {
     $(document).on("click", "#finishDelivery", function () {
         const orderID = $(this).attr("data-oid");
         const parent = $("#row_" + orderID);
-
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
         $.ajax({
             type: "POST",
             url: "/delivery/done",
@@ -559,6 +561,8 @@ $(function () {
                         ? $(parent).next().remove()
                         : "";
                     $(parent).remove();
+                    $("#loader").addClass("d-none");
+                    $("#loader").removeClass("d-flex");
                 }
             },
             error: function (param) {
@@ -632,14 +636,12 @@ $(function () {
     $(document).on("click", ".btn-send", function () {
         // Show Modal
         const orderID = $(this).attr("data-dia");
-        let courierID = "";
-        let date = "";
 
         const parent = $("#row_" + orderID);
         $("#exampleModalLabel").html(`Pilih kurir untuk pengiriman`);
         $("#exampleModal").find(".modal-footer").html(`
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" id="saveDelivery" disabled>Simpan</button>
+                <button type="button" class="btn btn-primary" id="saveDelivery" data-dia="${orderID}" disabled>Simpan</button>
             `);
 
         // Query couriers for table and select2
@@ -700,9 +702,13 @@ $(function () {
                     <select class="form-control text-light" name="courier" id="selectCourier"></select>
                 </div>
                 <div class="form mt-4">
-                    <label for="courier">Pilih Tanggal Kirim</label>
+                    <label for="courier">Tanggal Kirim</label>
                     <div id="datepicker-popup" class="input-group date">
-                      <input type="text" class="form-control form-control-sm datepicker">
+                      <input type="text" class="form-control form-control-sm datepicker" id="pickingDate" readonly attr-real="${moment(
+                          now()
+                      ).format(
+                          "YYYY-MM-DD"
+                      )}" value="${moment(now()).format("dddd, D MMMM YYYY")}">
                       <span class="input-group-addon input-group-append border-left datepicker-icon">
                         <span class="mdi mdi-calendar input-group-text"></span>
                       </span>
@@ -724,33 +730,9 @@ $(function () {
                     });
 
                     $(document).on("input", "#UangSaku", function () {
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(courierID);
                     });
                 }
-
-                var picker = new Pikaday({
-                    field: $(".datepicker")[0],
-                    i18n: {
-                        previousMonth: "Bulan Sebelumnya",
-                        nextMonth: "Bulan Selanjutnya",
-                        months: moment.localeData().months(),
-                        weekdays: moment.localeData().weekdays(),
-                        weekdaysShort: moment.localeData().weekdaysShort(),
-                    },
-                    format: "dddd, D MMMM YYYY",
-                    defaultDate: new Date(),
-                    minDate: new Date(),
-                    container: document.getElementById("datepicker-popup"),
-                    onSelect: function (value) {
-                        date = this.toString("YYYY-MM-DD");
-                        checkModalRequirement(date, courierID);
-                    },
-                });
-                picker.setDate(new Date());
-
-                $(document).on("click", ".datepicker-icon", function () {
-                    picker.show();
-                });
 
                 $("#selectCourier")
                     .select2({
@@ -784,49 +766,51 @@ $(function () {
                     })
                     .on("select2:select", function (e) {
                         courierID = $(e.currentTarget).val();
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(courierID);
                     })
                     .on("select2:unselect", function (e) {
                         courierID = "";
-                        checkModalRequirement(date, courierID);
+                        checkModalRequirement(courierID);
                     });
             })
             .catch(function (param) {
                 console.log(param);
             });
-
-        // Submit Data
-        $("#saveDelivery").on("click", function () {
-            $("#loader").addClass("d-flex");
-            $("#loader").removeClass("d-none");
-            $.ajax({
-                type: "POST",
-                url: "/pickCourier",
-                data: {
-                    _token: csrfToken,
-                    orderID: orderID,
-                    deliveryDate: date,
-                    courierID: courierID,
-                    operational: deliverySaku,
-                },
-                success: function (response) {
-                    if (response) {
-                        const modal = document.getElementById("exampleModal");
-                        bootstrap.Modal.getInstance(modal).hide();
-                        $("#loader").addClass("d-none");
-                        $("#loader").removeClass("d-flex");
-                        $(parent).next().hasClass("child")
-                            ? $(parent).next().remove()
-                            : "";
-                        $(parent).remove();
-                    } else {
-                        console.log("Error Submit");
-                    }
-                },
-                error: function (param) {
-                    console.log(param);
-                },
-            });
+    });
+    // Submit Data
+    $(document).on("click", "#saveDelivery", function () {
+        const orderID = $(this).attr("data-dia");
+        const date = $("#pickingDate").attr("attr-real");
+        const parent = $("#row_" + orderID);
+        $("#loader").addClass("d-flex");
+        $("#loader").removeClass("d-none");
+        $.ajax({
+            type: "POST",
+            url: "/pickCourier",
+            data: {
+                _token: csrfToken,
+                orderID: orderID,
+                deliveryDate: date,
+                courierID: courierID,
+                operational: deliverySaku,
+            },
+            success: function (response) {
+                if (response) {
+                    const modal = document.getElementById("exampleModal");
+                    bootstrap.Modal.getInstance(modal).hide();
+                    $(parent).next().hasClass("child")
+                        ? $(parent).next().remove()
+                        : "";
+                    $(parent).remove();
+                    $("#loader").addClass("d-none");
+                    $("#loader").removeClass("d-flex");
+                } else {
+                    console.log("Error Submit");
+                }
+            },
+            error: function (param) {
+                console.log(param);
+            },
         });
     });
     const columnOpenFix = () => {
@@ -842,16 +826,16 @@ $(function () {
             });
     };
 
-    const checkModalRequirement = (date, courier) => {
+    const checkModalRequirement = (courier) => {
         if (orderPaymentType == "cod") {
             const saku = $("#UangSaku").cleanVal();
-            if (date != "" && courier != "" && saku > 1000) {
+            if (courier != "" && saku > 1000) {
                 $("#saveDelivery").attr("disabled", false);
                 deliverySaku = saku;
                 return;
             }
         } else if (orderPaymentType == "saldo") {
-            if (date != "" && courier != "") {
+            if (courier != "") {
                 $("#saveDelivery").attr("disabled", false);
                 return;
             }

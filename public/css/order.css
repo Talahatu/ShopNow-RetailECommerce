@@ -78,3 +78,8 @@ li.paginate_button.page-item > a:focus {
 .bg-lighter {
     background-color: var(--text-color);
 }
+
+#pickingDate {
+    background-color: #2a3038;
+    color: white;
+}
