@@ -131,7 +131,7 @@ $(function () {
                     } else {
                         return `
                         <div class="d-flex flex-column btn-group-vertical">
-                        <button class="btn btn-block btn-lg btn-outline-success btn-chat p-2" data-dia="${data.id}">Kirim Pesan</button>
+                        <button type="button" class="btn btn-block btn-lg btn-outline-info btn-detail p-2" data-dia="${data.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Rincian</button>
                         </div>`;
                     }
                 },
