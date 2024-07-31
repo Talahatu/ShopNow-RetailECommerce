@@ -276,7 +276,7 @@ $(function () {
                     };
                 });
                 map.spin(true);
-                map.on("locationfound", function (e) {
+                map.once("locationfound", async function (e) {
                     console.log("Fetching coordinates...");
                     console.log(e.accuracy);
                     if (e.accuracy >= 500000000) {
@@ -289,7 +289,7 @@ $(function () {
                             13
                         );
 
-                        let optimalRoute = initBranchBound(
+                        let optimalRoute = await initBranchBound(
                             nodes,
                             currentPosition
                         );
@@ -381,6 +381,7 @@ $(function () {
         return angle * (Math.PI / 180);
     }
 
+    // Deprecated
     function haversineDistance(
         latitude,
         longitude,
@@ -460,7 +461,34 @@ $(function () {
         return [bestPath, bestCost];
     }
 
-    function initBranchBound(nodes, currentPosition) {
+    async function getRouteDistance(lat1, long1, lat2, long2) {
+        const query = new URLSearchParams({
+            key: "fc06c31b-e90b-47b4-941f-42b9c8971b33",
+        }).toString();
+
+        const resp = await fetch(
+            `https://graphhopper.com/api/1/route?${query}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    profile: "bike",
+                    points: [
+                        [long1, lat1],
+                        [long2, lat2],
+                    ],
+                    details: ["distance"],
+                }),
+            }
+        );
+
+        const data = await resp.json();
+        return data["paths"][0]["distance"];
+    }
+
+    async function initBranchBound(nodes, currentPosition) {
         console.log("Init Calculation...");
 
         let startNode = {
@@ -479,17 +507,30 @@ $(function () {
         // Calculate and populate distances matrix
         for (let i = 0; i < cities.length; i++) {
             for (let j = i + 1; j < cities.length; j++) {
-                const distance = haversineDistance(
+                // const distance = haversineDistance(
+                //     cities[i].latitude,
+                //     cities[i].longitude,
+                //     cities[j].latitude,
+                //     cities[j].longitude
+                // );
+
+                const distance = await getRouteDistance(
                     cities[i].latitude,
                     cities[i].longitude,
                     cities[j].latitude,
                     cities[j].longitude
                 );
+                console.log("Distance: ");
+                console.log(distance);
+
                 // distance is symmetric
                 distances[i][j] = distance;
                 distances[j][i] = distance;
             }
         }
+
+        console.log("Distances");
+        console.log(distances);
 
         const [bestPath, bestCost] = tspBranchBound(distances);
 

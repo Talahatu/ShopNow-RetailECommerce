@@ -144,16 +144,16 @@ $(function () {
             enableHighAccuracy: true,
         });
 
-        let counter = 0; // For lighter check (hopefully)
+        let once = false; // For lighter check (hopefully)
 
         map.on("locationfound", function (e) {
             console.log("Fetching location...");
             console.log("Accuracy: " + e.accuracy);
-            if (e.accuracy <= 50) {
+
+            if (e.accuracy <= 50 && !once) {
                 map.spin(false);
                 const currentPosition = e.latlng;
 
-                // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
                 if (!markerStart) {
                     markerStart = L.marker(
                         [currentPosition.lat, currentPosition.lng],
@@ -173,12 +173,10 @@ $(function () {
                     markerStart.setLatLng(e.latlng);
                 }
 
-                // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
                 markerStart.bindTooltip("<b>Lokasi Saat Ini</b>").openTooltip();
 
                 markerEnd.bindTooltip("<b>Alamat Tujuan</b>").openTooltip();
 
-                // // Don't remove!!!!!!!!!!!!!!!!!!!!!!
                 if (routeControl != null) {
                     routeControl.setWaypoints([
                         L.latLng(currentPosition.lat, currentPosition.lng),
@@ -204,40 +202,41 @@ $(function () {
                 sessionStorage.setItem("lat", currentPosition.lat);
                 sessionStorage.setItem("lng", currentPosition.lng);
 
-                const distance = haversineDistance(
-                    currentPosition.lat,
-                    currentPosition.lng,
-                    latitudeDestination,
-                    longitudeDestination
-                );
-                if (distance < 0.01 && !courierNear) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/nearDestination",
-                        data: {
-                            _token: csrfToken,
-                            orderID: orderID,
-                        },
-                        success: function (response) {
-                            courierNear = true;
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        },
-                    });
-                }
+                routeControl.on("routesfound", function (param) {
+                    const distance =
+                        param["routes"][0]["summary"]["totalDistance"];
 
-                counter = 0;
+                    console.log(distance, param);
+                    if (distance < 0.01 && !courierNear) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/nearDestination",
+                            data: {
+                                _token: csrfToken,
+                                orderID: orderID,
+                            },
+                            success: function (response) {
+                                courierNear = true;
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            },
+                        });
+                    }
+
+                    once = true;
+                });
             } else {
                 // For Debug Purposes
                 // console.log(
                 //     "Accuracy is not accurate! The accuracy radius is " +
                 //         e.accuracy
                 // );
+
+                if (once) return;
                 map.spin(true);
 
-                if (sessionStorage.getItem("lat") && counter <= 0) {
-                    console.log("TEST");
+                if (sessionStorage.getItem("lat")) {
                     let currentLatitude = sessionStorage.getItem("lat");
                     let currentLongitude = sessionStorage.getItem("lng");
                     if (!markerStart) {
@@ -284,7 +283,7 @@ $(function () {
                         addWaypoints: false,
                     }).addTo(map);
 
-                    counter++;
+                    once = true;
                 }
             }
         });
@@ -303,6 +302,7 @@ $(function () {
         return angle * (Math.PI / 180);
     }
 
+    // Deprecated
     function haversineDistance(
         latitude,
         longitude,

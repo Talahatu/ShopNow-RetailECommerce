@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use DateTimeZone;
+use Exception;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Jose\Component\Core\Util\Ecc\Math;
+use PhpParser\Node\Expr\Throw_;
 
 use function Ramsey\Uuid\v1;
 
@@ -173,8 +178,9 @@ class Product extends Model
 
     public static function getClosestProduct($latitude, $longitude, $query = '', $filter = null)
     {
+        Log::info("Get Closests Product");
         $modQuery = "%$query%";
-        return Product::select(
+        $products = Product::select(
             'products.id',
             'products.name as pname',
             "products.stock",
@@ -184,10 +190,10 @@ class Product extends Model
             'categories.name as cname',
             'brands.name as bname',
             DB::raw('MIN(images.name) as iname'),
-            DB::raw('
-            MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
-            COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance
-                ')
+            // DB::raw('
+            // MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
+            // COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance
+            //     ')
         )
             ->join('categories', 'categories.id', '=', 'products.category_id')
             ->join('brands', 'brands.id', '=', 'products.brand_id')
@@ -215,8 +221,19 @@ class Product extends Model
                     ->orWhere("brands.name", "LIKE", $modQuery);
             })
             ->groupBy(['products.id', 'pname', "products.stock", "products.rating", "products.weight", "products.price", 'cname', 'bname'])
-            ->orderBy('distance')
+            // ->orderBy('distance')
             ->get();
+
+        for ($i = 0; $i < count($products); $i++) {
+            $products[$i]->distance = Product::getDistance($products[$i]->id, $latitude, $longitude);
+        }
+
+        $collect = collect($products);
+        $sorted = $collect->sortBy("distance");
+        $result = $sorted->values()->all();
+        Log::info($result);
+
+        return $result;
     }
 
     public static function uncheckAllCartItem()
@@ -233,6 +250,8 @@ class Product extends Model
                     ["addresses.current", true],
                     ["addresses.user_id", Auth::user()->id]
                 ])->first(["lat", "long", "addresses.id"]);
+
+            // change using leaflet routing machine
             $distance = Product::getDistance($request->get("id"), $address->lat, $address->long);
 
             $existsCart = Cart::where([
@@ -260,6 +279,7 @@ class Product extends Model
 
     public static function getDistance($id, $latitude, $longitude)
     {
+
         // Forget
         // $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')->select(DB::raw('SQRT(
         //     POW((RADIANS(MIN(shops.long)) - RADIANS(' . $longitude . ')) * COS((RADIANS(' . $latitude . ') 
@@ -267,12 +287,56 @@ class Product extends Model
         //     POW((RADIANS(MIN(shops.lat)) - RADIANS(' . $latitude . ')), 2)
         //     ) * 6371 AS distance'))->where("products.id", $id)->first();
 
-        $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')
-            ->select(DB::raw(' MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
-            COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance'))
-            ->where("products.id", $id)->first();
+        // $product = Product::join('shops', 'shops.id', '=', 'products.shop_id')
+        //     ->select(DB::raw(' MIN(6371*2*ASIN(SQRT(( 1 - COS(RADIANS(shops.lat)-RADIANS(' . $latitude . ')) + COS(RADIANS(' . $latitude . ')) * 
+        //     COS(RADIANS(shops.lat)) * (1 - COS(RADIANS(shops.long) - RADIANS(' . $longitude . '))) )/2))) AS distance'))
+        //     ->where("products.id", $id)->first();
 
-        return $product->distance;
+        $product = Product::with("shop")->where("id", $id)->first();
+
+        $distance = null;
+        $query = array(
+            "key" => "fc06c31b-e90b-47b4-941f-42b9c8971b33"
+        );
+        $curl = curl_init();
+
+        // [longitude, latitude]
+        $payload = array(
+            "profile" => "bike",
+            "points" => array(
+                array(
+
+                    $longitude,
+                    $latitude
+                ),
+                array(
+                    $product->shop->long,
+                    $product->shop->lat
+                )
+            ),
+            "details" => array(
+                "distance"
+            )
+        );
+
+        curl_setopt_array($curl, [
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json"
+            ],
+            CURLOPT_POSTFIELDS => json_encode($payload),
+            CURLOPT_PORT => "",
+            CURLOPT_URL => "https://graphhopper.com/api/1/route?" . http_build_query($query),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+        ]);
+
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+
+        $result = json_decode($response, true);
+        $distance = $result["paths"][0]["distance"] / 1000;
+        return $distance;
     }
 
     public static function cartTotal($userID)

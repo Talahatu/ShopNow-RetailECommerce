@@ -25,6 +25,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 const products = response.products;
+                console.log(products);
                 let formatter = new Intl.NumberFormat("id-ID", {
                     style: "currency",
                     currency: "IDR",
@@ -62,9 +63,9 @@ $(document).ready(function () {
                                                 ? products[
                                                       index
                                                   ].distance.toFixed(2)
-                                                : Math.round(
-                                                      products[index].distance
-                                                  )
+                                                : products[
+                                                      index
+                                                  ].distance.toFixed(1)
                                         } KM</p>
                                         <p class="small"><a href="#!"
                                                 class="text-muted">${
