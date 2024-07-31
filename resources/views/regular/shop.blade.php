@@ -51,7 +51,7 @@
                 @foreach ($shop->products as $item)
                     @if ($item->status == 'live')
                         <div class="col-lg-3 col-md-6 col-sm-6 mb-4 mb-lg-4">
-                            <a href="/show-product/${products[index].id}">
+                            <a href="/show-product/{{ $item->id }}">
                                 <div class="card">
                                     <img src="{{ asset('productimages/' . $item->images[0]->name) }}" class="card-img-top"
                                         alt="Laptop" style="aspect-ratio:1/1; object-fit:cover" />
