@@ -1,8 +1,7 @@
 import $ from "jquery";
 document.onreadystatechange = function () {
     if (document.readyState == "complete") {
-        $("#loader").addClass("d-none");
-        $("#loader").removeClass("d-flex");
+        $("#loader").css("visibility", "hidden");
     }
 };
 $(function () {
@@ -29,6 +28,7 @@ $(function () {
         const qty = $("#qty-input").val();
         const price = $("#price").val();
 
+        $("#loader").css("visibility", "visible");
         $.ajax({
             type: "POST",
             url: "/cart/buynow",
@@ -47,6 +47,8 @@ $(function () {
         const id = $(this).attr("attr-dia");
         const qty = $("#qty-input").val();
         const price = $("#price").val();
+
+        $("#loader").css("visibility", "visible");
         $.ajax({
             type: "POST",
             url: "/cart/add",
@@ -64,6 +66,8 @@ $(function () {
                 $("#toastBody").html(`
                 ${data.name} telah berhasil masuk ke keranjang anda! <a href="/cart">Lihat disini!</a> 
                 `);
+
+                $("#loader").css("visibility", "hidden");
                 toast.show();
             },
             error: function (err) {

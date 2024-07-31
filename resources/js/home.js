@@ -15,6 +15,7 @@ $(document).ready(function () {
         const lat = position.coords.latitude;
         const long = position.coords.longitude;
 
+        $("#loader").css("visibility", "visible");
         $.ajax({
             type: "POST",
             url: "/loadProduct",
@@ -102,6 +103,8 @@ $(document).ready(function () {
                     `;
                 }
                 $("#products-row").html(content);
+
+                $("#loader").css("visibility", "hidden");
             },
             error: function (err) {
                 console.log(err);
