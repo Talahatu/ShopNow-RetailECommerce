@@ -123,7 +123,14 @@ class Order extends Model
                             throw new Exception("Melebihi jumlah stok barang", 1);
                         }
 
+                        if ($product->stock == 0) {
+                            $seller->notify(new OrderNotification("Pemberitahuan Seller!", "Produk anda " . $product->name . " telah habis!", route("order.index")));
+                        }
+
                         $product->stock = $product->stock - $item->qty;
+                        if ($product->stock == 0) {
+                            $seller->notify(new OrderNotification("Pemberitahuan Seller!", "Produk anda " . $product->name . " telah habis!", route("order.index")));
+                        }
                         $product->status = ($product->stock == 0 ? "out of stock" : $product->status);
                         $product->save();
 
