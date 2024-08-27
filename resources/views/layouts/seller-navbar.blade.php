@@ -1,7 +1,7 @@
 <nav class="navbar p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
         <a class="navbar-brand brand-logo-mini" href="{{ route('seller.index') }}"><img
-                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px; width:100%" />
+                src="{{ asset('images/logoshpnw2_ver4.png') }}" alt="logo" style="height: 35px; width:100%;" />
         </a>
     </div>
     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
@@ -111,8 +111,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                     <div class="navbar-profile">
-                        <img class="img-xs rounded-circle"
-                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : asset('corona/images/faces/face15.jpg') }}"
+                        <img class="img-xs rounded-circle" style="object-fit:cover;"
+                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('corona/images/faces/face15.jpg') : asset('corona/images/faces/face15.jpg') }}"
                             alt="Seller Profile Image">
                         <p class="mb-0 d-none d-sm-block navbar-profile-name">
                             {{ $shop->name }}</p>

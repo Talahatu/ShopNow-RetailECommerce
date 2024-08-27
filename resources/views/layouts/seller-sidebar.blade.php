@@ -8,8 +8,8 @@
             <div class="profile-desc">
                 <div class="profile-pic">
                     <div class="count-indicator">
-                        <img class="img-xs rounded-circle "
-                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('shopimages/' . $shop->logoImage) : asset('corona/images/faces/face15.jpg') }}">
+                        <img class="img-xs rounded-circle " style="object-fit:cover;"
+                            src="{{ file_exists(public_path('shopimages/' . $shop->logoImage)) ? asset('corona/images/faces/face15.jpg') : asset('corona/images/faces/face15.jpg') }}">
                         <span class="count bg-success"></span>
                     </div>
                     <div class="profile-name">
